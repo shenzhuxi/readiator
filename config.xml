@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.example.readiator" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Readiator</name>
+    <description>
+        An epub reader
+    </description>
+    <author email="shenzhuxi@gmail.com" href="http://shenzhuxi.com">
+        shenzhuxi
+    </author>
+    <content src="index.html" />
+    <icon src="icon.png" />
+    <access origin="*" />
+</widget>

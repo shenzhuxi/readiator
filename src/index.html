@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--html ng-app="epubLibrary"-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <!-- build:css css/index.css -->
+        <link rel="stylesheet" href="bower_components/angular/angular-csp.css">
+        <link rel="stylesheet" href="bower_components/onsenui/build/css/onsenui.css">  
+        <link rel="stylesheet" href="bower_components/onsenui/build/css/onsen-css-components.css">  
+        <link rel="stylesheet" href="bower_components/onsenui/build/css/font_awesome/css/font-awesome.min.css">
+        <!--link rel="stylesheet" type="text/css" href="css/index.css" /-->
+        <!-- endbuild -->
+        <title>Readiator</title>
+    </head>
+    <body ng-controller="LibraryCtrl">
+        <ons-page>
+          <ons-toolbar ng-cloak>
+            <ons-toolbar-button class="left" ng-click="upload()"><ons-icon icon="folder-open"></ons-icon></ons-toolbar-button>
+            <div class="center">Library</div>
+            <ons-toolbar-button class="right" ng-click="refresh()"><ons-icon icon="refresh"></ons-icon></ons-toolbar-button>
+          </ons-toolbar>
+          <ons-row>
+            <ons-col align="center">
+                <input type="file" accept=".epub" name="epub-file" id="epub-file" style="display:none;" epub-files-bind/>
+                <progress style="width:100%;" value="{{library.progress}}" max="100" ng-show="library.loading"></progress>
+                  <input type="search" class="search-input" ng-model="q" placeholder="Search">
+                  <ons-list class="book-list" ng-cloak>
+                    <ons-list-item class="animate-show" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide">
+                      <ons-row align="center" style="text-align: left">
+                        <ons-col width="25%">
+                          <a ng-href="{{book.url}}">
+                            <img class="cover" ng-src="{{book.cover}}" width="100%"></img>
+                          </a>
+                        </ons-col>
+                        <ons-col>
+                          <div class="book-title"><b>{{book.title}}</b></div>
+                          <div class="author">{{book.author}}</div>
+                        </ons-col>
+                        <ons-col class="right" width="30px">
+                          <ons-icon icon="times-circle" ng-click="hide=true;removeBook(book.name);"></ons-icon>
+                        </ons-col>
+                      </ons-row>
+                    </ons-list-item>
+                    <ons-list-item ng-if="library.books.length == 0">
+                      <ons-row align="center" style="text-align: left">
+                        <ons-col width="25%">
+                          <a ng-href="viewer.html?epub=books/epub30_spec/">
+                            <img class="cover" ng-src="books/epub30_spec/EPUB/img/epub_logo_color.jpg" width="100%"></img>
+                          </a>
+                        </ons-col>
+                        <ons-col>
+                          <div><b>EPUB 3.0 Specification</b></div>
+                          <div>Demo</div>
+                        </ons-col>
+                      </ons-row>
+                    </ons-list-item>
+                  </ons-list>
+            </ons-col>
+          </ons-row>
+        </ons-page>
+        <!-- build:js js/index.js -->
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/onsenui/build/js/onsenui.js"></script>
+        <script src="bower_components/ngCordova/dist/ng-cordova.js"></script>
+        <script src="bower_components/epub.js/build/epub.js"></script>
+        <script src="bower_components/rusha/rusha.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <!-- endbuild -->
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+        </script>
+    </body>
+</html>

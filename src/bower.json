@@ -1,0 +1,25 @@
+{
+  "name": "readiator",
+  "version": "0.0.1",
+  "keywords": [
+    "epub",
+    "cordova"
+  ],
+  "authors": [
+    "shenzhuxi"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ngCordova": "0.1.4-alpha",
+    "epub.js": "master",
+    "onsenui": "1.1.4",
+    "rusha": "0.7.7"
+  }
+}

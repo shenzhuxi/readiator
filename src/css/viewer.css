@@ -1,0 +1,133 @@
+a {
+    text-decoration: none;
+}
+
+/* Reader */
+textarea {
+    width: 100%;
+}
+
+.text-input {
+    width: 100%;
+}
+
+.page__content {
+    height: 100%;
+}
+
+iframe#epubjs-iframe, #book-render iframe {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+::-webkit-scrollbar {
+    display: block;
+    background-color: white;
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    /*border-radius: 10px;*/
+}
+
+::-webkit-scrollbar-track:hover {
+    background: #FFFFFF;
+    -webkit-box-shadow: inset 1px 1px 2px #E0E0E0;
+    border: 1px solid #D8D8D8;
+}
+
+::-webkit-scrollbar-thumb {
+    border: 0px solid white;
+    background-color: rgba(0,0,0,0.2);
+    -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,0.10),inset 0 -1px 0 rgba(0,0,0,0.07);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6E6E6E;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #585858;
+    -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.onsen-split-view__secondary *::-webkit-scrollbar:vertical {
+    display: block;
+}
+
+.book-title {
+  overflow: hidden;
+}
+
+/*
+ Tree structure using CSS:
+ http://stackoverflow.com/questions/14922247/how-to-get-a-tree-in-html-using-pure-css
+*/
+#book-toc * {
+  border: none;
+}
+
+#book-toc {
+  padding: 0 0 0 10px;
+}
+
+#book-toc a {
+  display: block;
+}
+
+#book-toc ons-list-item {
+  padding: 0px;
+}
+
+#book-toc ons-list{
+  list-style-type: none;
+  margin-left: 0 0 0 10px;
+  padding: 0;
+  position: relative;
+  overflow:hidden;
+}
+
+#book-toc ons-list-item{
+  margin: 0;
+  padding: 0 0 0 10px;
+  position: relative;
+}
+
+#book-toc ons-list-item::before, #book-toc ons-list-item::after{
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+/* horizontal line on inner list items */
+#book-toc ons-list-item::before{
+  border-top: 1px solid #999;
+  top: 22px;
+  width: 10px;
+  height: 0;
+}
+
+/* vertical line on list items */
+#book-toc ons-list-item:after{
+  border-left: 1px solid #999;
+  height: 100%;
+  width: 0px;
+  top: -22px;
+}
+
+/* lower line on list items from the first level because they don't have parents */
+#book-toc > ons-list-item::after{
+  top: 22px;
+}
+
+/* hide line from the last of the first level list items */
+#book-toc > ons-list-item:last-child::after{
+  display: none;
+}
+
+
+#book-toc ons-list:last-child ons-list-item:last-child:after{
+  height: 44px;
+}
