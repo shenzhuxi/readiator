@@ -20,6 +20,8 @@
     "ngCordova": "0.1.4-alpha",
     "epub.js": "master",
     "onsenui": "1.1.4",
-    "rusha": "0.7.7"
+    "rusha": "0.7.7",
+    "zip.js": "*",
+    "filer.js": "~0.4.3"
   }
 }

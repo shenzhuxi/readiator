@@ -34868,2677 +34868,2426 @@ limitations under the License.
 
 })();
 
-/*!
- * ngCordova
- * Copyright 2014 Drifty Co. http://drifty.com/
- * See LICENSE in this repository for license information
+/** 
+ * Copyright 2013 - Eric Bidelman
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ 
+ * @fileoverview
+ * Convenient wrapper library for the HTML5 Filesystem API, implementing
+ * familiar UNIX commands (cp, mv, ls) for its API.
+ * 
+ * @author Eric Bidelman (ebidel@gmail.com)
+ * @version: 0.4.3
  */
-(function(){
-
-angular.module('ngCordova', [
-  'ngCordova.plugins'
-]);
-
-// install  :     cordova plugin add com.google.cordova.admob
-// link     :     https://github.com/floatinghotpot/cordova-admob-pro
-
-angular.module('ngCordova.plugins.adMob', [])
-
-  .factory('$cordovaAdMob', [function () {
-
-    return {
-      createBannerView: function (options, success, fail) {
-        return window.plugins.AdMob.createBannerView(options, success, fail);
-      },
-      createInterstitialView: function (options, success, fail) {
-        return window.plugins.AdMob.createInterstitialView(options, success, fail);
-      },
-      requestAd: function (options, success, fail) {
-        return window.plugins.AdMob.requestAd(options, success, fail);
-      },
-      showAd: function (options, success, fail) {
-        return window.plugins.AdMob.showAd(options, success, fail);
-      },
-      requestInterstitialAd: function (options, success, fail) {
-        return window.plugins.AdMob.requestInterstitialAd(options, success, fail);
-      }
-    }
-  }]);
-// install  :     cordova plugin add https://github.com/ohh2ahh/AppAvailability.git
-// link     :     https://github.com/ohh2ahh/AppAvailability
-
-angular.module('ngCordova.plugins.appAvailability', [])
-
-.factory('$cordovaAppAvailability', ['$q', function ($q) {
-
-  return {
-    check: function(urlScheme) {
-      var q = $q.defer();
-
-      appAvailability.check(urlScheme, function (result) {
-        q.resolve(result);
-      }, function (err) {
-        q.reject(err);
-      });
-
-      return q.promise;
-    }
-  }
-}]);
-
-// install   :     cordova plugin add https://github.com/christocracy/cordova-plugin-background-geolocation.git
-// link      :     https://github.com/christocracy/cordova-plugin-background-geolocation
-
-angular.module('ngCordova.plugins.backgroundGeolocation', [])
-
-  .factory('$cordovaBackgroundGeolocation', ['$q', function ($q) {
-
-    return {
-
-      init: function () {
-        window.navigator.geolocation.getCurrentPosition(function (location) {
-          return location;
-        });
-      },
-
-      configure: function (options) {
-
-        this.init();
-        var q = $q.defer();
-
-        window.plugins.backgroundGeoLocation.configure(
-          function (result) {
-            q.resolve(result);
-            window.plugins.backgroundGeoLocation.finish();
-          },
-          function (err) {
-            q.reject(err);
-          }, options);
-
-        this.start();
-
-        return q.promise;
-      },
-
-      start: function () {
-        var q = $q.defer();
-
-        window.plugins.backgroundGeoLocation.start(
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-
-        return q.promise;
-      },
-
-      stop: function () {
-        var q = $q.defer();
-
-        window.plugins.backgroundGeoLocation.stop(
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-
-        return q.promise;
-      }
-    };
-  }
-  ]);
-
-// install  :    cordova plugin add https://github.com/wildabeast/BarcodeScanner.git
-// link     :    https://github.com/wildabeast/BarcodeScanner/#using-the-plugin
-
-angular.module('ngCordova.plugins.barcodeScanner', [])
-
-  .factory('$cordovaBarcodeScanner', ['$q', function ($q) {
-
-    return {
-      scan: function (options) {
-        var q = $q.defer();
-
-        cordova.plugins.barcodeScanner.scan(function (result) {
-          q.resolve(result);
-        }, function (err) {
-          q.reject(err);
-        });
-
-        return q.promise;
-      },
-
-      encode: function (type, data) {
-        var q = $q.defer();
-
-        /* TODO needs work for type:
-         make the default:  BarcodeScanner.Encode.TEXT_TYPE
-         other options: .EMAIL_TYPE, .PHONE_TYPE, .SMS_TYPE
-
-         docs: https://github.com/wildabeast/BarcodeScanner#encoding-a-barcode
-         */
-
-        cordova.plugins.barcodeScanner.encode(type, data, function (result) {
-          q.resolve(result);
-        }, function (err) {
-          q.reject(err);
-        });
-
-        return q.promise;
-      }
-    }
-  }]);
-
-//  install   :   cordova plugin add org.apache.cordova.battery-status
-//  link      :   https://github.com/apache/cordova-plugin-battery-status/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.battery-status', [])
-
-  .factory('$cordovaBatteryStatus', [function () {
-    return {
-      onBatteryStatus: function (handler) {
-        window.addEventListener('batterystatus', handler, false);
-      },
-      onBatteryCritical: function (handler) {
-        window.addEventListener('batterycritical', handler, false);
-      },
-      onBatteryLow: function (handler) {
-        window.addEventListener('batterylow', handler, false);
-      }
-    }
-  }]);
-// install   :
-// link      :
-
-angular.module('ngCordova.plugins.bluetoothSerial', [])
-
-  .factory('$cordovaBluetoothSerial', ['$q' , function ($q) {
-
-    var promise_f = function () {
-      var q = $q.defer();
-
-      // callbacks
-      var success = function (success) {
-        q.resolve(success);
-      };
-      var failure = function (failure) {
-        q.reject(failure);
-      };
-
-      // get func and set args
-      var f_name = arguments[0];
-      var args = Array.prototype.slice.call(arguments, 1, arguments.length);
-      args.push(success);
-      args.push(failure);
-
-      window.bluetoothSerial[f_name].apply(this, args);
-
-      return q.promise;
-    };
-
-    return {
-      connect: function (macAddress) {
-        return promise_f('connect', macAddress);
-      },
-      connectInsecure: function (macAddress) {
-        return promise_f('connectInsecure', macAddress);
-      },
-      disconnect: function () {
-        return promise_f('disconnect');
-      },
-      list: function () {
-        return promise_f('list');
-      },
-      isEnabled: function () {
-        return promise_f('isEnabled');
-      },
-      isConnected: function () {
-        return promise_f('isConnected');
-      },
-      available: function () {
-        return promise_f('available');
-      },
-      read: function () {
-        return promise_f('read');
-      },
-      readUntil: function (delimiter) {
-        return promise_f('readUntil', delimiter);
-      },
-      write: function (data) {
-        return promise_f('write', data);
-      },
-      subscribe: function (delimiter) {
-        return promise_f('subscribe', delimiter);
-      },
-      unsubscribe: function () {
-        return promise_f('unsubscribe');
-      },
-      clear: function () {
-        return promise_f('clear');
-      },
-      readRSSI: function () {
-        return promise_f('readRSSI');
-      }
-    };
-  }]);
-
-// install   :   cordova plugin add org.apache.cordova.camera
-// link      :   https://github.com/apache/cordova-plugin-camera/blob/master/doc/index.md#orgapachecordovacamera
-
-angular.module('ngCordova.plugins.camera', [])
-
-  .factory('$cordovaCamera', ['$q', function ($q) {
-
-    return {
-      getPicture: function (options) {
-        var q = $q.defer();
-
-        if (!navigator.camera) {
-          q.resolve(null);
-          return q.promise;
-        }
-
-        navigator.camera.getPicture(function (imageData) {
-          q.resolve(imageData);
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
-        return q.promise;
-      },
-
-      cleanup: function (options) {
-        var q = $q.defer();
-
-        navigator.camera.cleanup(function () {
-          q.resolve(arguments);
-        }, function (err) {
-          q.reject(err);
-        });
-
-        return q.promise;
-      }
-    }
-  }]);
-
-// install   :    cordova plugin add org.apache.cordova.media-capture
-// link      :    https://github.com/apache/cordova-plugin-media-capture/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.capture', [])
-
-  .factory('$cordovaCapture', ['$q', function ($q) {
-
-    return {
-      captureAudio: function (options) {
-        var q = $q.defer();
-
-        if (!navigator.device.capture) {
-          q.resolve(null);
-          return q.promise;
-        }
-
-        navigator.device.capture.captureAudio(function (audioData) {
-          q.resolve(audioData);
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
-        return q.promise;
-      },
-      captureImage: function (options) {
-        var q = $q.defer();
-
-        if (!navigator.device.capture) {
-          q.resolve(null);
-          return q.promise;
-        }
-
-        navigator.device.capture.captureImage(function (imageData) {
-          q.resolve(imageData);
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
-        return q.promise;
-      },
-      captureVideo: function (options) {
-        var q = $q.defer();
-
-        if (!navigator.device.capture) {
-          q.resolve(null);
-          return q.promise;
-        }
-
-        navigator.device.capture.captureVideo(function (videoData) {
-          q.resolve(videoData);
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
-        return q.promise;
-      }
-    }
-  }]);
-
-// install   :     cordova plugin add https://github.com/VersoSolutions/CordovaClipboard
-// link      :     https://github.com/VersoSolutions/CordovaClipboard
-
-angular.module('ngCordova.plugins.clipboard', [])
-
-  .factory('$cordovaClipboard', ['$q', function ($q) {
-
-    return {
-      copy: function (text) {
-        var q = $q.defer();
-
-        window.cordova.plugins.clipboard.copy(text,
-          function () {
-            q.resolve();
-          }, function () {
-            q.reject();
-          });
-
-        return q.promise;
-      },
-
-      paste: function () {
-        var q = $q.defer();
-
-        window.cordova.plugins.clipboard.paste(function (text) {
-          q.resolve(text);
-        }, function () {
-          q.reject();
-        });
-
-        return q.promise;
-      }
-    }
-  }]);
-
-// install   :     cordova plugin add org.apache.cordova.contacts
-// link      :     https://github.com/apache/cordova-plugin-contacts/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.contacts', [])
-
-  .factory('$cordovaContacts', ['$q', function ($q) {
-
-    return {
-      save: function (contact) {
-        var q = $q.defer();
-        var deviceContact = navigator.contacts.create(contact);
-
-        deviceContact.save(function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-        return q.promise;
-      },
-
-      remove: function (contact) {
-        var q = $q.defer();
-        var deviceContact = navigator.contacts.create(contact);
-
-        deviceContact.remove(function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-        return q.promise;
-      },
-
-      clone: function (contact) {
-        var deviceContact = navigator.contacts.create(contact);
-        return deviceContact.clone(contact)
-      },
-
-      find: function (options) {
-        var q = $q.defer();
-        var fields = options.fields || ['id', 'displayName'];
-        delete options.fields;
-
-        navigator.contacts.find(fields, function (results) {
-            q.resolve(results);
-          },
-          function (err) {
-            q.reject(err);
-          },
-          options);
-
-        return q.promise;
-      }
-
-      /*
-       getContact: function (contact) {
-       var q = $q.defer();
-
-       navigator.contacts.pickContact(function (contact) {
-
-       })
-
-       }
-       */
-
-      // TODO: method to set / get ContactAddress
-      // TODO: method to set / get ContactError
-      // TODO: method to set / get ContactField
-      // TODO: method to set / get ContactName
-      // TODO: method to set / get ContactOrganization
-
-    }
-
-  }]);
-
-angular.module('ngCordova.plugins.datePicker', [])
-
-  .factory('$cordovaDatePicker', ['$window', function ($window) {
-
-    return {
-      show: function(options, fn) {
-        return $window.datePicker.show(options, fn);
-      }
-    }
-
-  }]);
-
-// install   :     cordova plugin add org.apache.cordova.device
-// link      :     https://github.com/apache/cordova-plugin-device/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.device', [])
-
-  .factory('$cordovaDevice', [function () {
-
-    return {
-      getDevice: function () {
-        return device;
-      },
-
-      getCordova: function () {
-        return device.cordova;
-      },
-
-      getModel: function () {
-        return device.model;
-      },
-
-      // Warning: device.name is deprecated as of version 2.3.0. Use device.model instead.
-      getName: function () {
-        return device.name;
-      },
-
-      getPlatform: function () {
-        return device.platform;
-      },
-
-      getUUID: function () {
-        return device.uuid;
-      },
-
-      getVersion: function () {
-        return device.version;
-      }
-    }
-  }]);
-
-// install   :     cordova plugin add org.apache.cordova.device-motion
-// link      :     https://github.com/apache/cordova-plugin-device-motion/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.deviceMotion', [])
-
-  .factory('$cordovaDeviceMotion', ['$q', function ($q) {
-
-    return {
-      getCurrentAcceleration: function () {
-        var q = $q.defer();
-
-        navigator.accelerometer.getCurrentAcceleration(function (result) {
-          // Do any magic you need
-          q.resolve(result);
-        }, function (err) {
-          q.reject(err);
-        });
-
-        return q.promise;
-      },
-
-      watchAcceleration: function (options) {
-        var q = $q.defer();
-
-        var watchId = navigator.accelerometer.watchAcceleration(function (result) {
-          // Do any magic you need
-          //q.resolve(watchID);
-          q.notify(result);
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
-        return {
-          watchId: watchId,
-          promise: q.promise
-        }
-      },
-
-      clearWatch: function (watchID) {
-        return navigator.accelerometer.clearWatch(watchID);
-      }
-    }
-  }]);
-
-// install   :     cordova plugin add org.apache.cordova.device-orientation
-// link      :     https://github.com/apache/cordova-plugin-device-orientation/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.deviceOrientation', [])
-
-  .factory('$cordovaDeviceOrientation', ['$q', function ($q) {
-
-    return {
-      getCurrentHeading: function () {
-        var q = $q.defer();
-
-        navigator.compass.getCurrentHeading(function (heading) {
-          q.resolve(heading);
-        }, function (err) {
-          q.reject(err);
-        });
-
-        return q.promise;
-      },
-
-      watchHeading: function (options) {
-        var q = $q.defer();
-
-        var watchId = navigator.compass.watchHeading(function (result) {
-          q.notify(result);
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
-        return {
-          watchId: watchId,
-          promise: q.promise
-        }
-      },
-
-      clearWatch: function (watchID) {
-        navigator.compass.clearWatch(watchID);
-      }
-    }
-  }]);
-
-// install   :     cordova plugin add org.apache.cordova.dialogs
-// link      :     https://github.com/apache/cordova-plugin-dialogs/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.dialogs', [])
-
-  .factory('$cordovaDialogs', ['$q', function ($q) {
-
-    return {
-      alert: function (message, title, buttonName) {
-        var d = $q.defer();
-
-        navigator.notification.alert(message, function () {
-          d.resolve();
-        }, title, buttonName);
-
-        return d.promise;
-      },
-
-      confirm: function (message, title, buttonLabels) {
-        var d = $q.defer();
-
-        navigator.notification.confirm(message, function () {
-          d.resolve();
-        }, title, buttonLabels);
-
-        return d.promise;
-      },
-
-      prompt: function (message, title, buttonLabels, defaultText) {
-        var d = $q.defer();
-
-        navigator.notification.confirm(message, function () {
-          d.resolve();
-        }, title, buttonLabels, defaultText);
-
-        return d.promise;
-      },
-
-      beep: function (times) {
-        return navigator.notification.beep(times);
-      }
-    };
-  }]);
-
-// install   :
-// link      :
 
 'use strict';
-angular.module('ngCordova.plugins.facebookConnect', [])
-  .provider('$cordova', [
 
-    function () {
-      this.FacebookAppId = undefined;
+var self = this; // window or worker context.
 
-      this.setFacebookAppId = function (id) {
-        this.FacebookAppId = id;
-      };
+self.URL = self.URL || self.webkitURL;
+self.requestFileSystem = self.requestFileSystem || self.webkitRequestFileSystem;
+self.resolveLocalFileSystemURL = self.resolveLocalFileSystemURL ||
+                                 self.webkitResolveLocalFileSystemURL;
+navigator.temporaryStorage = navigator.temporaryStorage ||
+                             navigator.webkitTemporaryStorage;
+navigator.persistentStorage = navigator.persistentStorage ||
+                              navigator.webkitPersistentStorage;
+self.BlobBuilder = self.BlobBuilder || self.MozBlobBuilder ||
+                   self.WebKitBlobBuilder;
 
-      this.$get = [
-        function () {
-          var FbAppId = this.FacebookAppId;
-          return {
-            getFacebookAppId: function () {
-              return FbAppId;
-            }
-          };
-        }];
+// Prevent errors in browsers that don't support FileError.
+if (self.FileError === undefined) {
+  var FileError = function() {};
+  FileError.prototype.prototype = Error.prototype;
+}
+
+var Util = {
+
+  /**
+   * Turns a NodeList into an array.
+   *
+   * @param {NodeList} list The array-like object.
+   * @return {Array} The NodeList as an array.
+   */
+  toArray: function(list) {
+    return Array.prototype.slice.call(list || [], 0);
+  },
+
+  /*toDataURL: function(contentType, uint8Array) {
+    return 'data:' + contentType + ';base64,' +
+        self.btoa(this.arrayToBinaryString(uint8Array));
+  },*/
+
+  /**
+   * Creates a data: URL from string data.
+   *
+   * @param {string} str The content to encode the data: URL from.
+   * @param {string} contentType The mimetype of the data str represents.
+   * @param {bool=} opt_isBinary Whether the string data is a binary string
+   *     (and therefore should be base64 encoded). True by default.
+   * @return {string} The created data: URL.
+   */
+  strToDataURL: function(str, contentType, opt_isBinary) {
+    var isBinary = opt_isBinary != undefined ? opt_isBinary : true;
+    if (isBinary) {
+      return 'data:' + contentType + ';base64,' + self.btoa(str);
+    } else {
+      return 'data:' + contentType + ',' + str;
     }
-  ])
-  .factory('$cordovaFacebookConnect', ['$q', '$cordova', function ($q, $cordova) {
+  },
 
-    return {
-      init: function (appId) {
-        if (!window.cordova) {
-          facebookConnectPlugin.browserInit(appId);
-        }
-      },
+  /**
+   * Creates a blob: URL from a binary str.
+   *
+   * @param {string} binStr The content as a binary string.
+   * @param {string=} opt_contentType An optional mimetype of the data.
+   * @return {string} A new blob: URL.
+   */
+  strToObjectURL: function(binStr, opt_contentType) {
 
-      login: function (o) {
-        this.init($cordova.getFacebookAppId());
+    var ui8a = new Uint8Array(binStr.length);
+    for (var i = 0; i < ui8a.length; ++i) { 
+      ui8a[i] = binStr.charCodeAt(i);
+    }
 
-        var q = $q.defer();
-        facebookConnectPlugin.login(o,
-          function (res) {
-            q.resolve(res);
-          }, function (res) {
-            q.reject(res);
-          });
+    var blob = new Blob([ui8a],
+                        opt_contentType ? {type: opt_contentType} : {});
 
-        return q.promise;
-      },
+    return self.URL.createObjectURL(blob);
+  },
 
-      showDialog: function (o) {
+  /**
+   * Creates a blob: URL from a File or Blob object.
+   *
+   * @param {Blob|File} blob The File or Blob data.
+   * @return {string} A new blob: URL.
+   */
+  fileToObjectURL: function(blob) {
+    return self.URL.createObjectURL(blob);
+  },
 
-        var q = $q.defer();
-        facebookConnectPlugin.showDialog(o,
-          function (res) {
-            q.resolve(res);
-          },
-          function (err) {
-            q.reject(err);
-          });
-
-        return q.promise;
-      },
-
-      api: function (path, permission) {
-
-        var q = $q.defer();
-        facebookConnectPlugin.api(path, permission,
-          function (res) {
-            q.resolve(res);
-          },
-          function (err) {
-            q.reject(err);
-          });
-
-        return q.promise;
-      },
-
-      getAccessToken: function () {
-        var q = $q.defer();
-        facebookConnectPlugin.getAccessToken(function (res) {
-            q.resolve(res);
-          },
-          function (err) {
-            q.reject(err);
-          });
-
-        return q.promise;
-      },
-
-      getLoginStatus: function () {
-        var q = $q.defer();
-        facebookConnectPlugin.getLoginStatus(function (res) {
-            q.resolve(res);
-          },
-          function (err) {
-            q.reject(err);
-          });
-
-        return q.promise;
-
-      },
-
-      logout: function () {
-        var q = $q.defer();
-        facebookConnectPlugin.logout(function (res) {
-            q.resolve(res);
-          },
-          function (err) {
-            q.reject(err);
-          });
-
-        return q.promise;
-
+  /**
+   * Reads a File or Blob object and returns it as an ArrayBuffer.
+   *
+   * @param {Blob|File} blob The File or Blob data.
+   * @param {Function} callback Success callback passed the array buffer.
+   * @param {Function=} opt_error Optional error callback if the read fails.
+   */
+  fileToArrayBuffer: function(blob, callback, opt_errorCallback) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      callback(e.target.result);
+    };
+    reader.onerror = function(e) {
+      if (opt_errorCallback) {
+        opt_errorCallback(e);
       }
     };
-  }]);
 
-// install   :     cordova plugin add org.apache.cordova.file
-// link      :     https://github.com/apache/cordova-plugin-file/blob/master/doc/index.md
-
-// TODO: add functionality to define storage size in the getFilesystem() -> requestFileSystem() method
-// TODO: add documentation for FileError types
-// TODO: add abort() option to downloadFile and uploadFile methods.
-// TODO: add support for downloadFile and uploadFile options. (or detailed documentation) -> for fileKey, fileName, mimeType, headers
-// TODO: add support for onprogress property
-
-
-angular.module('ngCordova.plugins.file', [])
-
-//Filesystem (checkDir, createDir, checkFile, creatFile, removeFile, writeFile, readFile)
-  .factory('$cordovaFile', ['$q', function ($q) {
-
-    return {
-      checkDir: function (dir) {
-        var q = $q.defer();
-
-        getFilesystem().then(
-          function (filesystem) {
-            filesystem.root.getDirectory(dir, {create: false},
-              //Dir exists
-              function (entry) {
-                q.resolve(entry);
-              },
-              //Dir doesn't exist
-              function (error_code) {
-                q.reject(error_code);
-              }
-            );
-          }
-        );
-
-        return q.promise;
-      },
-
-      createDir: function (dir, replaceBOOL) {
-        var q = $q.defer();
-
-        getFilesystem().then(
-          function (filesystem) {
-            filesystem.root.getDirectory(dir, {create: true, exclusive: replaceBOOL},
-              //Dir exists or is created successfully
-              function (entry) {
-                q.resolve(entry);
-              },
-              //Dir doesn't exist and is not created
-              function (error_code) {
-                q.reject(error_code);
-              }
-            );
-          }
-        );
-        return q.promise;
-      },
-
-      listDir: function (filePath) {
-        var q = $q.defer();
-
-        getFilesystem().then(
-          function (filesystem) {
-            filesystem.root.getDirectory(filePath, {create: false}, function (parent) {
-              var reader = parent.createReader();
-              reader.readEntries(
-                function (entries) {
-                  q.resolve(entries);
-                },
-                function () {
-                  q.reject('DIR_READ_ERROR : ' + filePath);
-                }
-              );
-            }, function () {
-              q.reject('DIR_NOT_FOUND : ' + filePath);
-            });
-          }
-        );
-
-        return q.promise;
-      },
-
-      checkFile: function (filePath) {
-        var q = $q.defer();
-
-        // Backward compatibility for previous function checkFile(dir, file)
-        if (arguments.length == 2) {
-          filePath = '/' + filePath + '/' + arguments[1];
-        }
-
-        getFilesystem().then(
-          function (filesystem) {
-            filesystem.root.getFile(filePath, {create: false},
-              // File exists
-              function (file) {
-                q.resolve(file);
-              },
-              // File doesn't exist
-              function (error_code) {
-                q.reject(error_code);
-              }
-            );
-          }
-        );
-
-        return q.promise;
-      },
-
-      createFile: function (filePath, replaceBOOL) {
-        // Backward compatibility for previous function createFile(filepath replaceBOOL)
-        var q = $q.defer();
-
-        if (arguments.length == 3) {
-          filePath = '/' + filePath + '/' + arguments[1];
-          replaceBOOL = arguments[2];
-        }
-
-        getFilesystem().then(
-          function (filesystem) {
-            filesystem.root.getFile(filePath, {create: true, exclusive: replaceBOOL},
-              function (success) {
-                q.resolve(success);
-              },
-              function (err) {
-                q.reject(err);
-              });
-          }
-        );
-
-        return q.promise;
-      },
-
-      removeFile: function (filePath) {
-        var q = $q.defer();
-
-        // Backward compatibility for previous function removeFile(dir, file)
-        if (arguments.length == 2) {
-          filePath = '/' + filePath + '/' + arguments[1];
-        }
-
-        getFilesystem().then(
-          function (filesystem) {
-            filesystem.root.getFile(filePath, {create: false}, function (fileEntry) {
-              fileEntry.remove(function () {
-                q.resolve();
-              });
-            });
-          }
-        );
-
-        return q.promise;
-      },
-
-      writeFile: function (filePath, data) {
-        var q = $q.defer();
-
-        getFilesystem().then(
-          function (filesystem) {
-            filesystem.root.getFile(filePath, {create: true},
-              function (fileEntry) {
-                fileEntry.createWriter(
-                  function (fileWriter) {
-                    fileWriter.onwriteend = function (evt) {
-                      q.resolve(evt);
-                    };
-                    fileWriter.write(data);
-                  },
-                  function (error) {
-                    q.reject(error);
-                  }
-                );
-              },
-              function (error) {
-                q.reject(error);
-              }
-            );
-          },
-          function (error) {
-            q.reject(error);
-          }
-        );
-
-        return q.promise;
-      },
-
-      readFile: function (filePath) {  /// now deprecated in new ng-cordova version
-        var q = $q.defer();
-        console.log('readFile is now deprecated as of v0.1.4-alpha, use readAsText instead');
-
-        // Backward compatibility for previous function readFile(dir, file)
-        if (arguments.length == 2) {
-          filePath = '/' + filePath + '/' + arguments[1];
-        }
-
-        getFilesystem().then(
-          function (filesystem) {
-
-            filesystem.root.getFile(filePath, {create: false},
-              // success
-              function (fileEntry) {
-                fileEntry.file(function (file) {
-                  var reader = new FileReader();
-                  reader.onloadend = function () {
-                    q.resolve(this.result);
-                  };
-
-                  reader.readAsText(file);
-                });
-              },
-              // error
-              function (error) {
-                q.reject(error);
-              });
-          }
-        );
-
-        return q.promise;
-      },
-
-      readAsText: function (filePath) {
-        var q = $q.defer();
-
-        // Backward compatibility for previous function readFile(dir, file)
-        if (arguments.length == 2) {
-          filePath = '/' + filePath + '/' + arguments[1];
-        }
-
-        getFilesystem().then(
-          function (filesystem) {
-
-            filesystem.root.getFile(filePath, {create: false},
-              // success
-              function (fileEntry) {
-                fileEntry.file(function (file) {
-                  var reader = new FileReader();
-                  reader.onloadend = function () {
-                    q.resolve(this.result);
-                  };
-
-                  reader.readAsText(file);
-                });
-              },
-              // error
-              function (error) {
-                q.reject(error);
-              });
-          }
-        );
-
-        return q.promise;
-      },
-
-
-      readAsDataURL: function (filePath) {
-        var q = $q.defer();
-
-        // Backward compatibility for previous function readFile(dir, file)
-        if (arguments.length == 2) {
-          filePath = '/' + filePath + '/' + arguments[1];
-        }
-
-        getFilesystem().then(
-          function (filesystem) {
-
-            filesystem.root.getFile(filePath, {create: false},
-              // success
-              function (fileEntry) {
-                fileEntry.file(function (file) {
-                  var reader = new FileReader();
-                  reader.onloadend = function () {
-                    q.resolve(this.result);
-                  };
-
-                  reader.readAsDataURL(file);
-                });
-              },
-              // error
-              function (error) {
-                q.reject(error);
-              });
-          }
-        );
-
-        return q.promise;
-      },
-
-      readAsBinaryString: function (filePath) {
-        var q = $q.defer();
-
-        // Backward compatibility for previous function readFile(dir, file)
-        if (arguments.length == 2) {
-          filePath = '/' + filePath + '/' + arguments[1];
-        }
-
-        getFilesystem().then(
-          function (filesystem) {
-
-            filesystem.root.getFile(filePath, {create: false},
-              // success
-              function (fileEntry) {
-                fileEntry.file(function (file) {
-                  var reader = new FileReader();
-                  reader.onloadend = function () {
-                    q.resolve(this.result);
-                  };
-
-                  reader.readAsBinaryString(file);
-                });
-              },
-              // error
-              function (error) {
-                q.reject(error);
-              });
-          }
-        );
-
-        return q.promise;
-      },
-
-      readAsArrayBuffer: function (filePath) {
-        var q = $q.defer();
-
-        // Backward compatibility for previous function readFile(dir, file)
-        if (arguments.length == 2) {
-          filePath = '/' + filePath + '/' + arguments[1];
-        }
-
-        getFilesystem().then(
-          function (filesystem) {
-
-            filesystem.root.getFile(filePath, {create: false},
-              // success
-              function (fileEntry) {
-                fileEntry.file(function (file) {
-                  var reader = new FileReader();
-                  reader.onloadend = function () {
-                    q.resolve(this.result);
-                  };
-
-                  reader.readAsArrayBuffer(file);
-                });
-              },
-              // error
-              function (error) {
-                q.reject(error);
-              });
-          }
-        );
-
-        return q.promise;
-      },
-
-      readFileMetadata: function (filePath) {
-        var q = $q.defer();
-
-        getFilesystem().then(
-          function (filesystem) {
-            filesystem.root.getFile(filePath, {create: false},
-              // success
-              function (fileEntry) {
-                fileEntry.file(function (file) {
-                  q.resolve(file);
-                });
-              },
-              // error
-              function (error) {
-                q.reject(error);
-              });
-          }
-        );
-
-        return q.promise;
-      },
-
-      readFileAbsolute: function () {
-        var q = $q.defer();
-        window.resolveLocalFileSystemURI(filePath,
-          function (fileEntry) {
-            fileEntry.file(function (file) {
-              var reader = new FileReader();
-              reader.onloadend = function () {
-                q.resolve(this.result);
-              };
-
-              reader.readAsText(file);
-            })
-          },
-          function (error) {
-            q.reject(error);
-          }
-        );
-      },
-
-      readFileMetadataAbsolute: function (filePath) {
-        var q = $q.defer();
-        window.resolveLocalFileSystemURI(filePath,
-          function (fileEntry) {
-            fileEntry.file(function (file) {
-              q.resolve(file);
-            })
-          },
-          function (error) {
-            q.reject(error);
-          }
-        );
-
-        return q.promise;
-      },
-
-      downloadFile: function (source, filePath, trustAllHosts, options) {
-        var q = $q.defer();
-        var fileTransfer = new FileTransfer();
-        var uri = encodeURI(source);
-
-        fileTransfer.onprogress = function (progressEvent) {
-          q.notify(progressEvent);
-        };
-
-        fileTransfer.download(
-          uri,
-          filePath,
-          function (entry) {
-            q.resolve(entry);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          trustAllHosts, options);
-
-        return q.promise;
-      },
-
-      uploadFile: function (server, filePath, options) {
-        var q = $q.defer();
-        var fileTransfer = new FileTransfer();
-        var uri = encodeURI(server);
-
-        fileTransfer.onprogress = function (progressEvent) {
-          q.notify(progressEvent);
-        };
-
-        fileTransfer.upload(
-          filePath,
-          uri,
-          function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          options);
-
-        return q.promise
+    reader.readAsArrayBuffer(blob);
+  },
+
+  /**
+   * Creates and returns a blob from a data URL (either base64 encoded or not).
+   *
+   * @param {string} dataURL The data URL to convert.
+   * @return {Blob} A blob representing the array buffer data.
+   */
+  dataURLToBlob: function(dataURL) {
+    var BASE64_MARKER = ';base64,';
+    if (dataURL.indexOf(BASE64_MARKER) == -1) {
+      var parts = dataURL.split(',');
+      var contentType = parts[0].split(':')[1];
+      var raw = parts[1];
+
+      return new Blob([raw], {type: contentType});
+    }
+
+    var parts = dataURL.split(BASE64_MARKER);
+    var contentType = parts[0].split(':')[1];
+    var raw = window.atob(parts[1]);
+    var rawLength = raw.length;
+
+    var uInt8Array = new Uint8Array(rawLength);
+
+    for (var i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], {type: contentType});
+  },
+
+  /**
+   * Reads an ArrayBuffer as returns its contents as a binary string.
+   *
+   * @param {ArrayBuffer} buffer The buffer of data.
+   * @param {string=} opt_contentType An optional mimetype of the data.
+   * @return {Blob} A blob representing the array buffer data.
+   */
+  arrayBufferToBlob: function(buffer, opt_contentType) {
+    var uInt8Array = new Uint8Array(buffer);
+    return new Blob([uInt8Array],
+                    opt_contentType ? {type: opt_contentType} : {});
+  },
+
+  /**
+   * Reads an ArrayBuffer as returns its contents as a binary string.
+   *
+   * @param {ArrayBuffer} buffer The buffer of data.
+   * @param {Function} callback Success callback passed the binary string.
+   * @param {Function=} opt_error Optional error callback if the read fails.
+   */
+  arrayBufferToBinaryString: function(buffer, callback, opt_errorCallback) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      callback(e.target.result);
+    };
+    reader.onerror = function(e) {
+      if (opt_errorCallback) {
+        opt_errorCallback(e);
       }
-
     };
 
-    function getFilesystem() {
-      var q = $q.defer();
+    var uInt8Array = new Uint8Array(buffer);
+    reader.readAsBinaryString(new Blob([uInt8Array]));
+  },
 
-      window.requestFileSystem(LocalFileSystem.PERSISTENT, 1024 * 1024, function (filesystem) {
-          q.resolve(filesystem);
-        },
-        function (err) {
-          q.reject(err);
-        });
-
-      return q.promise;
+  /**
+   * Create a binary string out of an array of numbers (bytes), each varying
+   * from 0-255.
+   *
+   * @param {Array} bytes The array of numbers to transform into a binary str.
+   * @return {string} The byte array as a string.
+   */
+  arrayToBinaryString: function(bytes) {
+    if (typeof bytes != typeof []) {
+      return null;
     }
-  }]);
-
-// install   :     cordova plugin add https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin.git
-// link      :     https://github.com/EddyVerbruggen/Flashlight-PhoneGap-Plugin
-
-angular.module('ngCordova.plugins.flashlight', [])
-
-  .factory('$cordovaFlashlight', ['$q', function ($q) {
-
-    return {
-      available: function () {
-        var q = $q.defer();
-        window.plugins.flashlight.available(function (isAvailable) {
-          q.resolve(isAvailable);
-        });
-        return q.promise;
-      },
-
-      switchOn: function () {
-        var q = $q.defer();
-        window.plugins.flashlight.switchOn(function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
-      },
-
-      switchOff: function () {
-        var q = $q.defer();
-        window.plugins.flashlight.switchOff(function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
-      }
+    var i = bytes.length;
+    var bstr = new Array(i);
+    while (i--) {
+      bstr[i] = String.fromCharCode(bytes[i]);
     }
-  }]);
-// install   :     cordova plugin add https://github.com/phonegap-build/GAPlugin.git
-// link      :     https://github.com/phonegap-build/GAPlugin
-
-angular.module('ngCordova.plugins.ga', [])
-
-  .factory('$cordovaGA', ['$q', function ($q) {
-
-    return {
-      init: function (id, mingap) {
-        var q = $q.defer();
-        mingap = (mingap >= 0) ? mingap : 10;
-        window.plugins.gaPlugin.init(function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          id, mingap);
-        return q.promise;
-      },
-
-      trackEvent: function (success, fail, category, eventAction, eventLabel, eventValue) {
-        var q = $q.defer();
-        window.plugins.gaPlugin.trackEvent(function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          category, eventAction, eventLabel, eventValue);
-        return q.promise;
-      },
-
-      trackPage: function (success, fail, pageURL) {
-        var q = $q.defer();
-        window.plugins.gaPlugin.trackPage(function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          pageURL);
-        return q.promise;
-      },
-
-      setVariable: function (success, fail, index, value) {
-        var q = $q.defer();
-        window.plugins.gaPlugin.setVariable(function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          index, value);
-        return q.promise;
-      },
-
-      exit: function (success, fail) {
-        var q = $q.defer();
-        window.plugins.gaPlugin.exit(function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          });
-        return q.promise;
-      }
-    };
-  }]);
-// install   :     cordova plugin add org.apache.cordova.geolocation
-// link      :     https://github.com/apache/cordova-plugin-geolocation/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.geolocation', [])
-
-  .factory('$cordovaGeolocation', ['$q', function ($q) {
-
-    return {
-      getCurrentPosition: function (options) {
-        var q = $q.defer();
-
-        navigator.geolocation.getCurrentPosition(function (result) {
-          // Do any magic you need
-          q.resolve(result);
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
-        return q.promise;
-      },
-      watchPosition: function (options) {
-        var q = $q.defer();
-
-        var watchId = navigator.geolocation.watchPosition(function (result) {
-          // Do any magic you need
-          q.notify(result);
-
-        }, function (err) {
-          q.reject(err);
-        }, options);
-
-        return {
-          watchId: watchId,
-          promise: q.promise
-        }
-      },
-
-      clearWatch: function (watchID) {
-        return navigator.geolocation.clearWatch(watchID);
-      }
-    }
-  }]);
-
-// install   :      cordova plugin add org.apache.cordova.globalization
-// link      :      https://github.com/apache/cordova-plugin-globalization/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.globalization', [])
-
-  .factory('$cordovaGlobalization', ['$q', function ($q) {
-
-    return {
-      getPreferredLanguage: function () {
-        var q = $q.defer();
-
-        navigator.globalization.getPreferredLanguage(function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-        return q.promise;
-      },
-
-      getLocaleName: function () {
-        var q = $q.defer();
-
-        navigator.globalization.getLocaleName(function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-        return q.promise;
-      },
-
-      getFirstDayOfWeek: function () {
-        var q = $q.defer();
-
-        navigator.globalization.getFirstDayOfWeek(function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-        return q.promise;
-      },
-
-      // "date" parameter must be a JavaScript Date Object.
-      dateToString: function (date, options) {
-        var q = $q.defer();
-
-        navigator.globalization.dateToString(
-          date,
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          },
-          options);
-        return q.promise;
-      },
-
-      stringToDate: function (dateString, options) {
-        var q = $q.defer();
-
-        navigator.globalization.stringToDate(
-          dateString,
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          },
-          options);
-        return q.promise;
-      },
-
-      getDatePattern: function (options) {
-        var q = $q.defer();
-
-        navigator.globalization.getDatePattern(
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          },
-          options);
-        return q.promise;
-      },
-
-      getDateNames: function (options) {
-        var q = $q.defer();
-
-        navigator.globalization.getDateNames(
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          },
-          options);
-        return q.promise;
-      },
-
-      // "date" parameter must be a JavaScript Date Object.
-      isDayLightSavingsTime: function (date) {
-        var q = $q.defer();
-
-        navigator.globalization.isDayLightSavingsTime(
-          date,
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-        return q.promise;
-      },
-
-      numberToString: function (number, options) {
-        var q = $q.defer();
-
-        navigator.globalization.numberToString(
-          number,
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          },
-          options);
-        return q.promise;
-      },
-
-      stringToNumber: function (numberString, options) {
-        var q = $q.defer();
-
-        navigator.globalization.stringToNumber(
-          numberString,
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          },
-          options);
-        return q.promise;
-      },
-
-      getNumberPattern: function (options) {
-        var q = $q.defer();
-
-        navigator.globalization.getNumberPattern(
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          },
-          options);
-        return q.promise;
-      },
-
-      getCurrencyPattern: function (currencyCode) {
-        var q = $q.defer();
-
-        navigator.globalization.getCurrencyPattern(
-          currencyCode,
-          function (result) {
-            q.resolve(result);
-          },
-          function (err) {
-            q.reject(err);
-          });
-        return q.promise;
-      }
-
-    }
-
-  }]);
-
-// install   :
-// link      :
-
-// Google Maps needs ALOT of work!
-// Not for production use
-
-angular.module('ngCordova.plugins.googleMap', [])
-
-  .factory('$cordovaGoogleMap', ['$q', function ($q) {
-
-    var map = null;
-
-    return {
-      getMap: function (options) {
-        var q = $q.defer();
-
-        if (!window.plugin.google.maps) {
-          q.reject(null);
-        }
-        else {
-          var div = document.getElementById("map_canvas");
-          map = window.plugin.google.maps.Map.getMap(options);
-          map.setDiv(div);
-          q.resolve(map);
-        }
-        return q.promise;
-      },
-
-
-      isMapLoaded: function () { // check if an instance of the map exists
-        return !!map;
-      },
-      addMarker: function (markerOptions) { // add a marker to the map with given markerOptions
-        var q = $q.defer();
-        map.addMarker(markerOptions, function (marker) {
-          q.resolve(marker);
-        });
-
-        return q.promise;
-      },
-      getMapTypeIds: function () {
-        return window.plugin.google.maps.mapTypeId;
-      },
-      setVisible: function (isVisible) {
-        var q = $q.defer();
-        map.setVisible(isVisible);
-        return q.promise;
-      },
-      // I don't know how to deallocate te map and the google map plugin.
-      cleanup: function () {
-        map = null;
-        // delete map;
-      }
-    }
-  }]);
-
-// install   :      cordova plugin add https://github.com/driftyco/ionic-plugins-keyboard.git
-// link      :      https://github.com/driftyco/ionic-plugins-keyboard
-
-//TODO: add support for native.keyboardshow + native.keyboardhide
-
-angular.module('ngCordova.plugins.keyboard', [])
-
-  .factory('$cordovaKeyboard', [function () {
-
-    return {
-      hideAccessoryBar: function (bool) {
-        return cordova.plugins.Keyboard.hideKeyboardAccessoryBar(bool);
-      },
-
-      close: function () {
-        return cordova.plugins.Keyboard.close();
-      },
-
-      disableScroll: function (bool) {
-        return cordova.plugins.Keyboard.disableScroll(bool);
-      },
-
-      isVisible: function () {
-        return cordova.plugins.Keyboard.isVisible
-      }
-    }
-  }]);
-
-// install   :      cordova plugin add https://github.com/shazron/KeychainPlugin.git
-// link      :      https://github.com/shazron/KeychainPlugin
-
-angular.module('ngCordova.plugins.keychain', [])
-
-  .factory('$cordovaKeychain', ['$q', function ($q) {
-
-    var kc = new Keychain();
-
-    return {
-      getForKey: function (key, serviceName) {
-        var defer = $q.defer();
-
-        kc.getForKey(function (value) {
-          defer.resolve(value);
-        }, function (error) {
-          defer.reject(error);
-        }, key, serviceName);
-
-        return defer.promise;
-      },
-
-      setForKey: function (key, serviceName, value) {
-        var defer = $q.defer();
-
-        kc.setForKey(function () {
-          defer.resolve();
-        }, function (error) {
-          defer.reject(error);
-        }, key, serviceName, value);
-
-        return defer.promise;
-      },
-
-      removeForKey: function (ey, serviceName) {
-        var defer = $q.defer();
-
-        kc.removeForKey(function () {
-          defer.resolve();
-        }, function (error) {
-          defer.reject(error);
-        }, key, serviceName);
-
-        return defer.promise;
-      }
-    }
-  }]);
-// install   :
-// link      :
-
-angular.module('ngCordova.plugins.localNotification', [])
-
-  .factory('$cordovaLocalNotification', ['$q',
-    function ($q) {
-
-      return {
-        add: function (options, scope) {
-          var q = $q.defer();
-          window.plugin.notification.local.add(
-            options,
-            function (result) {
-              q.resolve(result);
-            },
-            scope);
-          return q.promise;
-        },
-
-        cancel: function (id, scope) {
-          var q = $q.defer();
-          window.plugin.notification.local.cancel(
-            id, function (result) {
-              q.resolve(result);
-            }, scope);
-
-          return q.promise;
-        },
-
-        cancelAll: function (scope) {
-          var q = $q.defer();
-
-          window.plugin.notification.local.cancelAll(
-            function (result) {
-              q.resolve(result);
-            }, scope);
-
-          return q.promise;
-        },
-
-        isScheduled: function (id, scope) {
-          var q = $q.defer();
-
-          window.plugin.notification.local.isScheduled(
-            id,
-            function (result) {
-              q.resolve(result);
-            }, scope);
-
-          return q.promise;
-        },
-
-        getScheduledIds: function (scope) {
-          var q = $q.defer();
-
-          window.plugin.notification.local.getScheduledIds(
-            function (result) {
-              q.resolve(result);
-            }, scope);
-
-          return q.promise;
-        },
-
-        isTriggered: function (id, scope) {
-          var q = $q.defer();
-
-          window.plugin.notification.local.isTriggered(
-            id, function (result) {
-              q.resolve(result);
-            }, scope);
-
-          return q.promise;
-        },
-
-        getTriggeredIds: function (scope) {
-          var q = $q.defer();
-
-          window.plugin.notification.local.getTriggeredIds(
-            function (result) {
-              q.resolve(result);
-            }, scope);
-
-          return q.promise;
-        },
-
-        getDefaults: function () {
-          return window.plugin.notification.local.getDefaults();
-        },
-
-        setDefaults: function (Object) {
-          window.plugin.notification.local.setDefaults(Object);
-        },
-
-        onadd: function () {
-          return window.plugin.notification.local.onadd;
-        },
-
-        ontrigger: function () {
-          return window.plugin.notification.local.ontrigger;
-        },
-
-        onclick: function () {
-          return window.plugin.notification.local.onclick;
-        },
-
-        oncancel: function () {
-          return window.plugin.notification.local.oncancel;
-        }
-      }
-    }
-  ]);
-// install   :
-// link      :
-
-angular.module('ngCordova.plugins.media', [])
-
-  .factory('$cordovaMedia', ['$q', function ($q) {
-
-    return {
-      newMedia: function (src) {
-        var q = $q.defer();
-        var mediaStatus = null;
-
-        var media = new Media(src,
-          function (success) {
-            q.resolve(success);
-          }, function (error) {
-            q.reject(error);
-          }, function (status) {
-            mediaStatus = status;
-          });
-
-        return {
-          media: media,
-          mediaStatus: mediaStatus,
-          promise: q.promise
-        }
-
-      },
-
-      getCurrentPosition: function (source) {
-        var q = $q.defer();
-
-        source.getCurrentPosition(function (success) {
-          q.resolve(success);
-
-        }, function (error) {
-          q.reject(error);
-        });
-
-        return q.promise;
-      },
-
-      getDuration: function (source) {
-
-        return source.getDuration();
-      },
-
-      play: function (source) {
-        return source.play();
-
-        // iOS quirks :
-        // -  myMedia.play({ numberOfLoops: 2 }) -> looping
-        // -  myMedia.play({ playAudioWhenScreenIsLocked : false })
-      },
-
-      pause: function (source) {
-        return source.pause();
-      },
-
-      release: function (source) {
-        return source.release();
-      },
-
-
-      seekTo: function (source, milliseconds) {
-
-        return source.seekTo(milliseconds);
-      },
-
-      setVolume: function (source, volume) {
-        return source.setVolume(volume);
-      },
-
-      startRecord: function (source) {
-
-        return source.startRecord();
-      },
-
-      stopRecord: function (source) {
-
-        return source.stopRecord();
-      },
-
-      stop: function (source) {
-
-        return source.stop();
-      }
-    }
-  }]);
-angular.module('ngCordova.plugins', [
-  'ngCordova.plugins.deviceMotion',
-  'ngCordova.plugins.camera',
-  'ngCordova.plugins.geolocation',
-  'ngCordova.plugins.deviceOrientation',
-  'ngCordova.plugins.dialogs',
-  'ngCordova.plugins.vibration',
-  'ngCordova.plugins.network',
-  'ngCordova.plugins.device',
-  'ngCordova.plugins.barcodeScanner',
-  'ngCordova.plugins.splashscreen',
-  'ngCordova.plugins.keyboard',
-  'ngCordova.plugins.contacts',
-  'ngCordova.plugins.statusbar',
-  'ngCordova.plugins.file',
-  'ngCordova.plugins.socialSharing',
-  'ngCordova.plugins.globalization',
-  'ngCordova.plugins.sqlite',
-  'ngCordova.plugins.ga',
-  'ngCordova.plugins.push',
-  'ngCordova.plugins.spinnerDialog',
-  'ngCordova.plugins.sms',
-  'ngCordova.plugins.pinDialog',
-  'ngCordova.plugins.localNotification',
-  'ngCordova.plugins.toast',
-  'ngCordova.plugins.flashlight',
-  'ngCordova.plugins.capture',
-  'ngCordova.plugins.appAvailability',
-  'ngCordova.plugins.prefs',
-  'ngCordova.plugins.printer',
-  'ngCordova.plugins.bluetoothSerial',
-  'ngCordova.plugins.backgroundGeolocation',
-  'ngCordova.plugins.facebookConnect',
-  'ngCordova.plugins.adMob',
-  'ngCordova.plugins.googleMap',
-  'ngCordova.plugins.clipboard',
-  'ngCordova.plugins.nativeAudio',
-  'ngCordova.plugins.media',
-  'ngCordova.plugins.battery-status',
-  'ngCordova.plugins.keychain',
-  'ngCordova.plugins.progressIndicator',
-  'ngCordova.plugins.datePicker'
-]);
-
-// install   : cordova plugin add https://github.com/sidneys/cordova-plugin-nativeaudio.git
-// link      : https://github.com/sidneys/cordova-plugin-nativeaudio
-
-angular.module('ngCordova.plugins.nativeAudio', [])
-
-  .factory('$cordovaNativeAudio', ['$q', function ($q) {
-
-    return {
-      preloadSimple: function (id, assetPath) {
-        var q = $q.defer();
-        window.plugins.NativeAudio.preloadSimple(id, assetPath,
-          function (result) {
-            q.resolve(result)
-          },
-          function (err) {
-            q.reject(err);
-          }
-        );
-
-        return q.promise;
-      },
-
-      preloadComplex: function (id, assetPath, volume, voices) {
-        var q = $q.defer();
-        window.plugins.NativeAudio.preloadComplex(id, assetPath, volume, voices,
-          function (result) {
-            q.resolve(result)
-          },
-          function (err) {
-            q.reject(err);
-          }
-        );
-
-        return q.promise;
-      },
-
-      play: function (id, completeCallback) {
-        var q = $q.defer();
-        window.plugins.NativeAudio.play(id, completeCallback,
-          function (result) {
-            q.resolve(result)
-          },
-          function (err) {
-            q.reject(err);
-          }
-        );
-
-        return q.promise;
-      },
-
-      stop: function (id) {
-        var q = $q.defer();
-        window.plugins.NativeAudio.stop(id,
-          function (result) {
-            q.resolve(result)
-          },
-          function (err) {
-            q.reject(err);
-          }
-        );
-        return q.promise;
-      },
-
-      loop: function (id) {
-        var q = $q.defer();
-        window.plugins.NativeAudio.loop(id,
-          function (result) {
-            q.resolve(result)
-          },
-          function (err) {
-            q.reject(err);
-          }
-        );
-
-        return q.promise;
-      },
-
-      unload: function (id) {
-        var q = $q.defer();
-        window.plugins.NativeAudio.unload(id,
-          function (result) {
-            q.resolve(result)
-          },
-          function (err) {
-            q.reject(err);
-          }
-        );
-
-        return q.promise;
-      },
-
-      setVolumeForComplexAsset: function (id, volume) {
-        var q = $q.defer();
-        window.plugins.NativeAudio.setVolumeForComplexAsset(id, volume,
-          function (result) {
-            q.resolve(result)
-          },
-          function (err) {
-            q.reject(err);
-          }
-        );
-
-        return q.promise;
-      }
-    }
-  }]);
-// install   :      cordova plugin add org.apache.cordova.network-information
-// link      :      https://github.com/apache/cordova-plugin-network-information/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.network', [])
-
-  .factory('$cordovaNetwork', [function () {
-
-    return {
-
-      getNetwork: function () {
-        return navigator.connection.type;
-      },
-
-      isOnline: function () {
-        var networkState = navigator.connection.type;
-        return networkState !== Connection.UNKNOWN && networkState !== Connection.NONE;
-      },
-
-      isOffline: function () {
-        var networkState = navigator.connection.type;
-        return networkState === Connection.UNKNOWN || networkState === Connection.NONE;
-      }
-    }
-  }]);
-
-// install   :      cordova plugin add https://github.com/Paldom/PinDialog.git
-// link      :      https://github.com/Paldom/PinDialog
-
-angular.module('ngCordova.plugins.pinDialog', [])
-
-  .factory('$cordovaPinDialog', [function () {
-
-    return {
-      prompt: function (message, promptCallback, title, buttonLabels, defaultText) {
-        return window.plugins.pinDialog.prompt.apply(navigator.notification, arguments);
-      }
-    }
-
-  }]);
-// install   :
-// link      :
-
-angular.module('ngCordova.plugins.prefs', [])
-
-  .factory('$cordovaPreferences', ['$window', '$q', function ($window, $q) {
-
-    return {
-
-      set: function (key, value) {
-        var q = $q.defer();
-
-        $window.applicationPreferences.set(key, value, function (result) {
-          q.resolve(result);
-        }, function (err) {
-          q.reject(err);
-        });
-
-        return q.promise;
-      },
-
-
-      get: function (key) {
-        var q = $q.defer();
-
-        $window.applicationPreferences.get(key, function (value) {
-          q.resolve(value);
-        }, function (err) {
-          q.reject(err);
-        });
-
-        return q.promise;
-      }
-
-    }
-  }]);
-
-// install   : cordova plugin add de.appplant.cordova.plugin.printer
-// link      : https://github.com/katzer/cordova-plugin-printer
-
-angular.module('ngCordova.plugins.printer', [])
-
-  .factory('$cordovaPrinter', ['$q', function ($q) {
-
-    return {
-      isAvailable: function () {
-        var d = $q.defer();
-
-        window.plugin.printer.isServiceAvailable(function (isAvailable) {
-          d.resolve(isAvailable);
-        });
-
-        return d.promise;
-      },
-
-      print: function (doc) {
-        window.plugin.printer.print(doc);
-      }
+    return bstr.join('');
+  },
+
+  /**
+   * Returns the file extension for a given filename.
+   *
+   * @param {string} filename The filename.
+   * @return {string} The file's extension.
+   */
+  getFileExtension: function(filename) {
+    var idx = filename.lastIndexOf('.');
+    return idx != -1 ? filename.substring(idx) : '';
+  }
+};
+
+
+var MyFileError = function(obj) {
+  this.prototype = FileError.prototype;
+  this.code = obj.code;
+  this.name = obj.name;
+};
+//MyFileError.prototype.__proto__ = FileError.prototype;
+
+// Extend FileError with custom errors and a convenience method to get error
+// code mnemonic.
+FileError.BROWSER_NOT_SUPPORTED = 1000;
+
+// TODO: remove when FileError.name is implemented (crbug.com/86014).
+FileError.prototype.__defineGetter__('name', function() {
+  var keys = Object.keys(FileError);
+  for (var i = 0, key; key = keys[i]; ++i) {
+    if (FileError[key] == this.code) {
+      return key;
     }
   }
-  ]);
-// install   :      cordova plugin add org.pbernasconi.progressindicator
-// link      :      http://pbernasconi.github.io/cordova-progressIndicator/
-
-angular.module('ngCordova.plugins.progressIndicator', [])
-
-  .factory('$cordovaProgressIndicator', ['$q', function ($q) {
-
-    return {
-      showSimple: function (_dim) {
-        var dim = _dim || false;
-        return ProgressIndicator.showSimple(dim)
-      },
-
-      showSimpleWithLabel: function (_dim, _label) {
-        var dim = _dim || false;
-        var label = _label || "Loading...";
-        return ProgressIndicator.showSimpleWithLabel(dim, label);
-      },
-
-      showSimpleWithLabelDetail: function (_dim, _label, _detail) {
-        var dim = _dim || false;
-        var label = _label || "Loading...";
-        var detail = _detail || "Please wait";
-        return ProgressIndicator.showSimpleWithLabelDetail(dim, label, detail);
-      },
-
-      showDeterminate: function (_dim, _timeout) {
-        var dim = _dim || false;
-        var timeout = _timeout || 50000;
-        return ProgressIndicator.showDeterminate(dim, timeout)
-      },
-
-      showDeterminateWithLabel: function (_dim, _timeout, _label) {
-        var dim = _dim || false;
-        var timeout = _timeout || 50000;
-        var label = _label || "Loading...";
-
-        return ProgressIndicator.showDeterminateWithLabel(dim, timeout, label)
-      },
-
-      showAnnular: function (_dim, _timeout) {
-        var dim = _dim || false;
-        var timeout = _timeout || 50000;
-        return ProgressIndicator.showAnnular(dim, timeout)
-      },
-
-      showAnnularWithLabel: function (_dim, _timeout, _label) {
-        var dim = _dim || false;
-        var timeout = _timeout || 50000;
-        var label = _label || "Loading...";
-        return ProgressIndicator.showAnnularWithLabel(dim, timeout, label)
-      },
-
-      showBar: function (_dim, _timeout) {
-        var dim = _dim || false;
-        var timeout = _timeout || 50000;
-        return ProgressIndicator.showBar(dim, timeout)
-      },
-
-      showBarWithLabel: function (_dim, _timeout, _label) {
-        var dim = _dim || false;
-        var timeout = _timeout || 50000;
-        var label = _label || "Loading...";
-        return ProgressIndicator.showBarWithLabel(dim, timeout, label)
-      },
-
-      showSuccess: function (_dim) {
-        var dim = _dim || false;
-        return ProgressIndicator.showSuccess(dim)
-      },
-
-      showText: function (_dim, _text, _position) {
-        var dim = _dim || false;
-        var text = _text || "Warning";
-        var position = _position || "center";
-        return ProgressIndicator.showText(dim, text, position);
-      },
-
-      hide: function () {
-        return ProgressIndicator.hide();
-      }
-    }
-
-  }]);
-// install   :      cordova plugin add https://github.com/phonegap-build/PushPlugin.git
-// link      :      https://github.com/phonegap-build/PushPlugin
-
-angular.module('ngCordova.plugins.push', [])
-
-  .factory('$cordovaPush', ['$q', function ($q) {
-    return {
-      register: function (config) {
-        var q = $q.defer();
-        window.plugins.pushNotification.register(
-          function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          config);
-
-        return q.promise;
-      },
-
-      unregister: function (options) {
-        var q = $q.defer();
-        window.plugins.pushNotification.unregister(
-          function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          options);
-
-        return q.promise;
-      },
-
-      // iOS only
-      setBadgeNumber: function (number) {
-        var q = $q.defer();
-        window.plugins.pushNotification.setApplicationIconBadgeNumber(
-          function (result) {
-            q.resolve(result);
-          },
-          function (error) {
-            q.reject(error);
-          },
-          number);
-        return q.promise;
-      }
-    };
-  }]);
-// install   :      cordova plugin add https://github.com/aharris88/phonegap-sms-plugin.git
-// link      :      https://github.com/aharris88/phonegap-sms-plugin
-
-angular.module('ngCordova.plugins.sms', [])
-
-  .factory('$cordovaSms', ['$q', function ($q) {
-
-    return {
-      send: function (number, message, intent) {
-        var q = $q.defer();
-        sms.send(number, message, intent, function (res) {
-          q.resolve(res);
-        }, function (err) {
-          q.reject(err)
-        });
-        return q.promise;
-      }
-    }
-
-  }]);
-// install   :      cordova plugin add https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git
-// link      :      https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin
-
-// NOTE: shareViaEmail -> if user cancels sharing email, success is still called
-// NOTE: shareViaEmail -> TO, CC, BCC must be an array, Files can be either null, string or array
-// TODO: add support for iPad
-// TODO: detailed docs for each social sharing types (each social platform has different requirements)
-
-angular.module('ngCordova.plugins.socialSharing', [])
-
-  .factory('$cordovaSocialSharing', ['$q', function ($q) {
-
-    return {
-      share: function (message, subject, file, link) {
-        var q = $q.defer();
-        window.plugins.socialsharing.share(message, subject, file, link,
-          function () {
-            q.resolve(true); // success
-          },
-          function () {
-            q.reject(false); // error
-          });
-        return q.promise;
-      },
-
-      shareViaTwitter: function (message, file, link) {
-        var q = $q.defer();
-        window.plugins.socialsharing.shareViaTwitter(message, file, link,
-          function () {
-            q.resolve(true); // success
-          },
-          function () {
-            q.reject(false); // error
-          });
-        return q.promise;
-      },
-
-      shareViaWhatsApp: function (message, file, link) {
-        var q = $q.defer();
-        window.plugins.socialsharing.shareViaWhatsApp(message, file, link,
-          function () {
-            q.resolve(true); // success
-          },
-          function () {
-            q.reject(false); // error
-          });
-        return q.promise;
-      },
-
-      shareViaFacebook: function (message, file, link) {
-        var q = $q.defer();
-        window.plugins.socialsharing.shareViaFacebook(message, file, link,
-          function () {
-            q.resolve(true); // success
-          },
-          function () {
-            q.reject(false); // error
-          });
-        return q.promise;
-      },
-
-      shareViaSMS: function (message, commaSeparatedPhoneNumbers) {
-        var q = $q.defer();
-        window.plugins.socialsharing.shareViaSMS(message, commaSeparatedPhoneNumbers,
-          function () {
-            q.resolve(true); // success
-          },
-          function () {
-            q.reject(false); // error
-          });
-        return q.promise;
-      },
-
-      shareViaEmail: function (message, subject, toArr, ccArr, bccArr, fileArr) {
-        var q = $q.defer();
-        window.plugins.socialsharing.shareViaEmail(message, subject, toArr, ccArr, bccArr, fileArr,
-          function () {
-            q.resolve(true); // success
-          },
-          function () {
-            q.reject(false); // error
-          });
-        return q.promise;
-      },
-
-      canShareViaEmail: function () {
-        var q = $q.defer();
-        window.plugins.socialsharing.canShareViaEmail(
-          function () {
-            q.resolve(true); // success
-          },
-          function () {
-            q.reject(false); // error
-          });
-        return q.promise;
-      },
-
-      canShareVia: function (via, message, subject, file, link) {
-        var q = $q.defer();
-        window.plugins.socialsharing.canShareVia(via, message, subject, file, link,
-          function (success) {
-            q.resolve(success); // success
-          },
-          function (error) {
-            q.reject(error); // error
-          });
-        return q.promise;
-      },
-
-      shareVia: function (via, message, subject, file, link) {
-        var q = $q.defer();
-        window.plugins.socialsharing.shareVia(via, message, subject, file, link,
-          function () {
-            q.resolve(true); // success
-          },
-          function () {
-            q.reject(false); // error
-          });
-        return q.promise;
-      }
-
-    }
-  }]);
-
-// install   :       cordova plugin add https://github.com/Paldom/SpinnerDialog.git
-// link      :       https://github.com/Paldom/SpinnerDialog
-
-angular.module('ngCordova.plugins.spinnerDialog', [])
-
-  .factory('$cordovaSpinnerDialog', [function () {
-
-    return {
-      show: function (title, message) {
-        return window.plugins.spinnerDialog.show(title, message);
-      },
-      hide: function () {
-        return window.plugins.spinnerDialog.hide();
-      }
-    }
-
-  }]);
-// install   :      cordova plugin add org.apache.cordova.splashscreen
-// link      :      https://github.com/apache/cordova-plugin-splashscreen/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.splashscreen', [])
-
-  .factory('$cordovaSplashscreen', [ function () {
-
-    return {
-      hide: function () {
-        return navigator.splashscreen.hide();
-      },
-
-      show: function () {
-        return navigator.splashscreen.show();
-      }
-    };
-
-  }]);
-
-// install   :      cordova plugin add https://github.com/brodysoft/Cordova-SQLitePlugin.git
-// link      :      https://github.com/brodysoft/Cordova-SQLitePlugin/blob/master/README.md
-
-angular.module('ngCordova.plugins.sqlite', [])
-
-  .factory('$cordovaSQLite', ['$q', function ($q) {
-
-    return  {
-      openDB: function (dbName) {
-        return  window.sqlitePlugin.openDatabase({name: dbName});
-      },
-
-
-      openDBBackground: function (dbName) {
-        return window.sqlitePlugin.openDatabase({name: dbName, bgType: 1});
-      },
-
-      execute: function (db, query, binding) {
-        var q = $q.defer();
-        db.transaction(function (tx) {
-          tx.executeSql(query, binding, function (tx, result) {
-              q.resolve(result);
-            },
-            function (transaction, error) {
-              q.reject(error);
-            });
-        });
-        return q.promise;
-      },
-
-      nestedExecute: function (db, query1, query2, binding1, binding2) {
-        var q = $q.defer();
-
-        db.transaction(function (tx) {
-            tx.executeSql(query1, binding1, function (tx, result) {
-              q.resolve(result);
-              tx.executeSql(query2, binding2, function (tx, res) {
-                q.resolve(res);
-              })
-            })
-          },
-          function (transaction, error) {
-            q.reject(error);
-          });
-
-        return q.promise;
-      }
-
-      // more methods here
-    }
-  }]);
-
-// install   :      cordova plugin add org.apache.cordova.statusbar
-// link      :      https://github.com/apache/cordova-plugin-statusbar/blob/master/doc/index.md
-
-angular.module('ngCordova.plugins.statusbar', [])
-
-  .factory('$cordovaStatusbar', [function () {
-
-    return {
-      overlaysWebView: function (bool) {
-        return StatusBar.overlaysWebView(true);
-      },
-
-      // styles: Default, LightContent, BlackTranslucent, BlackOpaque
-      style: function (style) {
-        switch (style) {
-          case 0:     // Default
-            return StatusBar.styleDefault();
-            break;
-
-          case 1:     // LightContent
-            return StatusBar.styleLightContent();
-            break;
-
-          case 2:     // BlackTranslucent
-            return StatusBar.styleBlackTranslucent();
-            break;
-
-          case 3:     // BlackOpaque
-            return StatusBar.styleBlackOpaque();
-            break;
-
-          default:  // Default
-            return StatusBar.styleDefault();
+  return 'Unknown Error';
+});
+
+
+var Filer = new function() {
+
+  var FS_INIT_ERROR_MSG = 'Filesystem has not been initialized.';
+  var NOT_IMPLEMENTED_MSG = 'Not implemented.';
+  var NOT_A_DIRECTORY = 'Path was not a directory.';
+  var INCORRECT_ARGS = 'These method arguments are not supported.';
+  var FS_URL_SCHEME = 'filesystem:';
+  var DEFAULT_FS_SIZE = 1024 * 1024; // 1MB.
+
+  var fs_ = null;
+  var cwd_ = null;
+  var isOpen_ = false;
+
+  var isFsURL_ = function(path) {
+    return path.indexOf(FS_URL_SCHEME) == 0;
+  };
+
+  // Path can be relative or absolute. If relative, it's taken from the cwd_.
+  // If a filesystem URL is passed it, it is simple returned
+  var pathToFsURL_ = function(path) {
+    if (!isFsURL_(path)) {
+      if (path[0] == '/') {
+        path = fs_.root.toURL() + path.substring(1);
+      } else if (path.indexOf('./') == 0 || path.indexOf('../') == 0) {
+        if (path == '../' && cwd_ != fs_.root) {
+          path = cwd_.toURL() + '/' + path;
+        } else {
+          path = cwd_.toURL() + path;
         }
-      },
-
-
-      // supported names: black, darkGray, lightGray, white, gray, red, green, blue, cyan, yellow, magenta, orange, purple, brown
-      styleColor: function (color) {
-        return StatusBar.backgroundColorByName(color);
-      },
-
-      styleHex: function (colorHex) {
-        return StatusBar.backgroundColorByHexString(colorHex);
-      },
-
-      hide: function () {
-        return StatusBar.hide();
-      },
-
-      show: function () {
-        return StatusBar.show()
-      },
-
-      isVisible: function () {
-        return StatusBar.isVisible();
-      }
-    }
-  }]);
-
-// install   :      cordova plugin add https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git
-// link      :      https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin
-
-angular.module('ngCordova.plugins.toast', [])
-
-  .factory('$cordovaToast', ['$q', function ($q) {
-
-    return {
-      showShortTop: function (message) {
-        var q = $q.defer();
-        window.plugins.toast.showShortTop(message, function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
-      },
-
-      showShortCenter: function (message) {
-        var q = $q.defer();
-        window.plugins.toast.showShortCenter(message, function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
-      },
-
-      showShortBottom: function (message) {
-        var q = $q.defer();
-        window.plugins.toast.showShortBottom(message, function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
-      },
-
-      showLongTop: function (message) {
-        var q = $q.defer();
-        window.plugins.toast.showLongTop(message, function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
-      },
-
-      showLongCenter: function (message) {
-        var q = $q.defer();
-        window.plugins.toast.showLongCenter(message, function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
-      },
-
-      showLongBottom: function (message) {
-        var q = $q.defer();
-        window.plugins.toast.showLongBottom(message, function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
-      },
-
-
-      show: function (message, duration, position) {
-        var q = $q.defer();
-        window.plugins.toast.show(message, duration, position, function (response) {
-          q.resolve(response);
-        }, function (error) {
-          q.reject(error)
-        });
-        return q.promise;
+      } else {
+        path = cwd_.toURL() + '/' + path;
       }
     }
 
-  }]);
-// install   :      cordova plugin add org.apache.cordova.vibration
-// link      :      https://github.com/apache/cordova-plugin-vibration/blob/master/doc/index.md
+    return path;
+  };
 
-angular.module('ngCordova.plugins.vibration', [])
+  /**
+   * Looks up a FileEntry or DirectoryEntry for a given path.
+   *
+   * @param {function(...FileEntry|DirectorEntry)} callback A callback to be
+   *     passed the entry/entries that were fetched. The ordering of the
+   *     entries passed to the callback correspond to the same order passed
+   *     to this method.
+   * @param {...string} var_args 1-2 paths to lookup and return entries for.
+   *     These can be paths or filesystem: URLs.
+   */
+  var getEntry_ = function(callback, var_args) {
+    var srcStr = arguments[1];
+    var destStr = arguments[2];
 
-  .factory('$cordovaVibration', [function () {
-
-    return {
-      vibrate: function (times) {
-        return navigator.notification.vibrate(times);
-      },
-      vibrateWithPattern: function (pattern, repeat) {
-        return navigator.notification.vibrateWithPattern(pattern, repeat);
-      },
-      cancelVibration: function () {
-        return navigator.notification.cancelVibration();
+    var onError = function(e) {
+      if (e.code == FileError.NOT_FOUND_ERR) {
+        if (destStr) {
+          throw new Error('"' + srcStr + '" or "' + destStr +
+                          '" does not exist.');
+        } else {
+          throw new Error('"' + srcStr + '" does not exist.');
+        }
+      } else {
+        throw new Error('Problem getting Entry for one or more paths.');
       }
+    };
+
+    // Build a filesystem: URL manually if we need to.
+    var src = pathToFsURL_(srcStr);
+
+    if (arguments.length == 3) {
+      var dest = pathToFsURL_(destStr);
+      self.resolveLocalFileSystemURL(src, function(srcEntry) {
+        self.resolveLocalFileSystemURL(dest, function(destEntry) {
+          callback(srcEntry, destEntry);
+        }, onError);
+      }, onError);
+    } else {
+      self.resolveLocalFileSystemURL(src, callback, onError);
     }
-  }]);
+  };
+
+  /**
+   * Copy or moves a file or directory to a destination.
+   *
+   * See public method's description (Filer.cp()) for rest of params.
+   * @param {Boolean=} opt_deleteOrig True if the original entry should be
+   *     deleted after the copy takes place, essentially making the operation
+   *     a move instead of a copy. Defaults to false.
+   */
+  var copyOrMove_ = function(src, dest, opt_newName, opt_successCallback,
+                             opt_errorHandler, opt_deleteOrig) {
+    var self = this;
+
+    if (!fs_) {
+      throw new Error(FS_INIT_ERROR_MSG);
+    }
+
+    if (typeof src != typeof dest) {
+      throw new Error(INCORRECT_ARGS);
+    }
+
+    var newName = opt_newName || null;
+    var deleteOrig = opt_deleteOrig != undefined ? opt_deleteOrig : false;
+
+    if ((src.isFile || dest.isDirectory) && dest.isDirectory) {
+      if (deleteOrig) {
+        src.moveTo(dest, newName, opt_successCallback, opt_errorHandler);
+      } else {
+        src.copyTo(dest, newName, opt_successCallback, opt_errorHandler);
+      }
+    } else {
+      getEntry_(function(srcEntry, destDir) {
+        if (!destDir.isDirectory) {
+          var e = new Error('Oops! "' + destDir.name + ' is not a directory!');
+          if (opt_errorHandler) {
+            opt_errorHandler(e);
+          } else {
+            throw e;
+          }
+          return;
+        }
+        if (deleteOrig) {
+          srcEntry.moveTo(destDir, newName, opt_successCallback, opt_errorHandler);
+        } else {
+          srcEntry.copyTo(destDir, newName, opt_successCallback, opt_errorHandler);
+        }
+      }, src, dest);
+    }
+  }
+
+  function Filer(fs) {
+    fs_  = fs || null;
+    if (fs_) {
+      cwd_ = fs_.root;
+      isOpen_ = true; // TODO: this may not be the case.
+    }
+  }
+
+  Filer.DEFAULT_FS_SIZE = DEFAULT_FS_SIZE;
+  Filer.version = '0.4.3';
+
+  Filer.prototype = {
+    get fs() {
+      return fs_;
+    },
+    get isOpen() {
+      return isOpen_;
+    },
+    get cwd() {
+      return cwd_;
+    }
+  }
+
+  /**
+   * Constructs and returns a filesystem: URL given a path.
+   *
+   * @param {string=} path The path to construct a URL for.
+   *     size {int=} The storage size (in bytes) to open the filesystem with.
+   *         Defaults to DEFAULT_FS_SIZE.
+   * @return {string} The filesystem: URL.
+   */
+  Filer.prototype.pathToFilesystemURL = function(path) {
+    return pathToFsURL_(path);
+  }
+
+  /**
+   * Initializes (opens) the file system.
+   *
+   * @param {object=} opt_initObj Optional object literal with the following
+   *     properties. Note: If {} or null is passed, default values are used.
+   *     persistent {Boolean=} Whether the browser should use persistent quota.
+   *         Default is false.
+   *     size {int=} The storage size (in bytes) to open the filesystem with.
+   *         Defaults to DEFAULT_FS_SIZE.
+   * @param {Function=} opt_successCallback Optional success handler passed a
+   *      DOMFileSystem object.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.init = function(opt_initObj, opt_successCallback,
+                                  opt_errorHandler) {
+    if (!self.requestFileSystem) {
+      throw new MyFileError({
+        code: FileError.BROWSER_NOT_SUPPORTED,
+        name: 'BROWSER_NOT_SUPPORTED'
+      });
+    }
+
+    var initObj = opt_initObj ? opt_initObj : {}; // Use defaults if obj is null.
+
+    var size = initObj.size || DEFAULT_FS_SIZE;
+    this.type = self.TEMPORARY;
+    if ('persistent' in initObj && initObj.persistent) {
+      this.type = self.PERSISTENT;
+    }
+
+    var init = function(fs) {
+      this.size = size;
+      fs_ = fs;
+      cwd_ = fs_.root;
+      isOpen_ = true;
+
+      opt_successCallback && opt_successCallback(fs);
+    };
+
+    if (this.type == self.PERSISTENT && !!navigator.persistentStorage) {
+      navigator.persistentStorage.requestQuota(size, function(grantedBytes) {  
+        self.requestFileSystem(
+            this.type, grantedBytes, init.bind(this), opt_errorHandler);
+      }.bind(this), opt_errorHandler);
+    } else {
+      self.requestFileSystem(
+          this.type, size, init.bind(this), opt_errorHandler);
+    }
+  };
+
+  /**
+   * Reads the contents of a directory.
+   *
+   * @param {string|DirectoryEntry} dirEntryOrPath A path relative to the
+   *     current working directory. In most cases that is the root entry, unless
+   *     cd() has been called. A DirectoryEntry or filesystem URL can also be
+   *     passed, in which case, the folder's contents will be returned.
+   * @param {Function} successCallback Success handler passed an Array<Entry>.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.ls = function(dirEntryOrPath, successCallback,
+                                opt_errorHandler) {
+    if (!fs_) {
+      throw new Error(FS_INIT_ERROR_MSG);
+    }
+
+    var callback = function(dirEntry) {
+
+      cwd_ = dirEntry;
+
+      // Read contents of current working directory. According to spec, need to
+      // keep calling readEntries() until length of result array is 0. We're
+      // guarenteed the same entry won't be returned again.
+      var entries_ = [];
+      var reader = cwd_.createReader();
+
+      var readEntries = function() {
+        reader.readEntries(function(results) {
+          if (!results.length) {
+            // By default, sort the list by name.
+            entries_.sort(function(a, b) {
+              return a.name < b.name ? -1 : b.name < a.name ? 1 : 0;
+            });
+            successCallback(entries_);
+          } else {
+            entries_ = entries_.concat(Util.toArray(results));
+            readEntries();
+          }
+        }, opt_errorHandler);
+      };
+
+      readEntries();
+    };
+
+    if (dirEntryOrPath.isDirectory) { // passed a DirectoryEntry.
+      callback(dirEntryOrPath);
+    } else if (isFsURL_(dirEntryOrPath)) { // passed a filesystem URL.
+      getEntry_(callback, pathToFsURL_(dirEntryOrPath));
+    } else { // Passed a path. Look up DirectoryEntry and proceeed.
+      // TODO: Find way to use getEntry_(callback, dirEntryOrPath); with cwd_.
+      cwd_.getDirectory(dirEntryOrPath, {}, callback, opt_errorHandler);
+    }
+  };
+
+  /**
+   * Creates a new directory.
+   *
+   * @param {string} path The name of the directory to create. If a path is
+   *     given, each intermediate dir is created (e.g. similar to mkdir -p).
+   * @param {bool=} opt_exclusive True if an error should be thrown if
+   *     one or more of the directories already exists. False by default.
+   * @param {Function} opt_successCallback Success handler passed the
+   *     DirectoryEntry that was created. If we were passed a path, the last
+   *     directory that was created is passed back.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.mkdir = function(path, opt_exclusive, opt_successCallback,
+                                   opt_errorHandler) {
+    if (!fs_) {
+      throw new Error(FS_INIT_ERROR_MSG);
+    }
+
+    var exclusive = opt_exclusive != null ? opt_exclusive : false;
+
+    var folderParts = path.split('/');
+
+    var createDir = function(rootDir, folders) {
+      // Throw out './' or '/' and move on. Prevents: '/foo/.//bar'.
+      if (folders[0] == '.' || folders[0] == '') {
+        folders = folders.slice(1);
+      }
+
+      rootDir.getDirectory(folders[0], {create: true, exclusive: exclusive},
+        function (dirEntry) {
+          if (dirEntry.isDirectory) { // TODO: check shouldn't be necessary.
+            // Recursively add the new subfolder if we have more to create and
+            // There was more than one folder to create.
+            if (folders.length && folderParts.length != 1) {
+              createDir(dirEntry, folders.slice(1));
+            } else {
+              // Return the last directory that was created.
+              if (opt_successCallback) opt_successCallback(dirEntry);
+            }
+          } else {
+            var e = new Error(path + ' is not a directory');
+            if (opt_errorHandler) {
+              opt_errorHandler(e);
+            } else {
+              throw e;
+            }
+          }
+        },
+        function(e) {
+          if (e.code == FileError.INVALID_MODIFICATION_ERR) {
+            e.message = "'" + path + "' already exists";
+            if (opt_errorHandler) {
+              opt_errorHandler(e);
+            } else {
+              throw e;
+            }
+          }
+        }
+      );
+    };
+
+    createDir(cwd_, folderParts);
+  };
+
+  /**
+   * Looks up and return a File for a given file entry.
+   *
+   * @param {string|FileEntry} entryOrPath A path, filesystem URL, or FileEntry
+   *     of the file to lookup.
+   * @param {Function} successCallback Success callback passed the File object.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.open = function(entryOrPath, successCallback, opt_errorHandler) {
+    if (!fs_) {
+      throw new Error(FS_INIT_ERROR_MSG);
+    }
+
+    if (entryOrPath.isFile) {
+      entryOrPath.file(successCallback, opt_errorHandler);
+    } else {
+      getEntry_(function(fileEntry) {
+        fileEntry.file(successCallback, opt_errorHandler);
+      }, pathToFsURL_(entryOrPath));
+    }
+  };
+
+  /**
+   * Creates an empty file.
+   *
+   * @param {string} path The relative path of the file to create, from the
+   *     current working directory.
+   * @param {bool=} opt_exclusive True (default) if an error should be thrown if
+   *     the file already exists.
+   * @param {Function} successCallback A success callback, which is passed
+   *     the new FileEntry.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.create = function(path, opt_exclusive, successCallback,
+                                    opt_errorHandler) {
+    if (!fs_) {
+      throw new Error(FS_INIT_ERROR_MSG);
+    }
+
+    var exclusive = opt_exclusive != null ? opt_exclusive : true;
+
+    cwd_.getFile(path, {create: true,  exclusive: exclusive}, successCallback,
+      function(e) {
+        if (e.code == FileError.INVALID_MODIFICATION_ERR) {
+          e.message = "'" + path + "' already exists";
+        }
+        if (opt_errorHandler) {
+          opt_errorHandler(e);
+        } else {
+          throw e;
+        }
+      }
+    );
+  };
+
+  /**
+    * Moves a file or directory.
+    *
+    * @param {string|FileEntry|DirectoryEntry} src The file/directory
+    *     to move. If src is a string, a path or filesystem: URL is accepted.
+    * @param {string|DirectoryEntry} dest The directory to move the src into.
+    *     If dest is a string, a path or filesystem: URL is accepted.
+    *     Note: dest needs to be the same type as src.
+    * @param {string=} opt_newName An optional new name for the moved entry.
+    * @param {Function=} opt_successCallback Optional callback passed the moved
+    *     entry on a successful move.
+    * @param {Function=} opt_errorHandler Optional error callback.
+    */
+  Filer.prototype.mv = function(src, dest, opt_newName, opt_successCallback,
+                                opt_errorHandler) {
+    copyOrMove_.bind(this, src, dest, opt_newName, opt_successCallback,
+                     opt_errorHandler, true)();
+  };
+
+  /**
+   * Deletes a file or directory entry.
+   *
+   * @param {string|FileEntry|DirectoryEntry} entryOrPath The file or directory
+   *     to remove. If entry is a DirectoryEntry, its contents are removed
+   *     recursively. If entryOrPath is a string, a path or filesystem: URL is
+   *     accepted.
+   * @param {Function} successCallback Zero arg callback invoked on
+   *     successful removal.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.rm = function(entryOrPath, successCallback,
+                                opt_errorHandler) {
+    if (!fs_) {
+      throw new Error(FS_INIT_ERROR_MSG);
+    }
+
+    var removeIt = function(entry) {
+      if (entry.isFile) {
+        entry.remove(successCallback, opt_errorHandler);
+      } else if (entry.isDirectory) {
+        entry.removeRecursively(successCallback, opt_errorHandler);
+      }
+    };
+
+    if (entryOrPath.isFile || entryOrPath.isDirectory) {
+      removeIt(entryOrPath);
+    } else {
+      getEntry_(removeIt, entryOrPath);
+    }
+  };
+
+  /**
+   * Changes the current working directory.
+   *
+   * @param {string|DirectoryEntry} dirEntryOrPath A DirectoryEntry to move into
+   *     or a path relative to the current working directory. A filesystem: URL
+   *     is also accepted
+   * @param {Function=} opt_successCallback Optional success callback, which is
+   *     passed the DirectoryEntry of the new current directory.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.cd = function(dirEntryOrPath, opt_successCallback,
+                                opt_errorHandler) {
+    if (!fs_) {
+      throw new Error(FS_INIT_ERROR_MSG);
+    }
+
+    if (dirEntryOrPath.isDirectory) {
+      cwd_ = dirEntryOrPath;
+      opt_successCallback && opt_successCallback(cwd_);
+    } else {
+      // Build a filesystem: URL manually if we need to.
+      var dirEntryOrPath = pathToFsURL_(dirEntryOrPath);
+
+      getEntry_(function(dirEntry) {
+        if (dirEntry.isDirectory) {
+          cwd_ = dirEntry;
+          opt_successCallback && opt_successCallback(cwd_);
+        } else {
+          var e = new Error(NOT_A_DIRECTORY);
+          if (opt_errorHandler) {
+            opt_errorHandler(e);
+          } else {
+            throw e;
+          }
+        }
+      }, dirEntryOrPath);
+    }
+  };
+
+  /**
+    * Copies a file or directory to a destination.
+    *
+    * @param {string|FileEntry|DirectoryEntry} src The file/directory
+    *     to copy. If src is a string, a path or filesystem: URL is accepted.
+    * @param {string|DirectoryEntry} dest The directory to copy the src into.
+    *     If dest is a string, a path or filesystem: URL is accepted.
+    *     Note: dest needs to be the same type as src.
+    * @param {string=} opt_newName An optional name for the copied entry.
+    * @param {Function=} opt_successCallback Optional callback passed the moved
+    *     entry on a successful copy.
+    * @param {Function=} opt_errorHandler Optional error callback.
+    */
+  Filer.prototype.cp = function(src, dest, opt_newName, opt_successCallback,
+                                opt_errorHandler) {
+    copyOrMove_.bind(this, src, dest, opt_newName, opt_successCallback,
+                     opt_errorHandler)();
+  };
+
+  /**
+   * Writes data to a file.
+   *
+   * If the file already exists, its contents are overwritten.
+   *
+   * @param {string|FileEntry} entryOrPath A path, filesystem URL, or FileEntry
+    *     of the file to lookup.
+   * @param {object} dataObj The data to write. Example:
+   *     {data: string|Blob|File|ArrayBuffer, type: mimetype, append: true}
+   *     If append is specified, data is appended to the end of the file.
+   * @param {Function} opt_successCallback Success callback, which is passed
+   *     the created FileEntry and FileWriter object used to write the data.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.write = function(entryOrPath, dataObj, opt_successCallback,
+                                   opt_errorHandler) {
+    if (!fs_) {
+      throw new Error(FS_INIT_ERROR_MSG);
+    }
+
+    var writeFile_ = function(fileEntry) {
+      fileEntry.createWriter(function(fileWriter) {
+
+        fileWriter.onerror = opt_errorHandler;
+
+        if (dataObj.append) {
+          fileWriter.onwriteend = function(e) {
+            if (opt_successCallback) opt_successCallback(fileEntry, this);
+          };
+
+          fileWriter.seek(fileWriter.length); // Start write position at EOF.
+        } else {
+          var truncated = false;
+          fileWriter.onwriteend = function(e) {
+            // Truncate file to newly written file size.
+            if (!truncated) {
+              truncated = true;
+              this.truncate(this.position);
+              return;
+            }
+            if (opt_successCallback) opt_successCallback(fileEntry, this);
+          };
+        }
+
+        // Blob() takes ArrayBufferView, not ArrayBuffer.
+        if (dataObj.data.__proto__ == ArrayBuffer.prototype) {
+          dataObj.data = new Uint8Array(dataObj.data);
+        }
+        var blob = new Blob([dataObj.data],
+                            dataObj.type ? {type: dataObj.type} : {});
+
+        fileWriter.write(blob);
+
+      }, opt_errorHandler);
+    };
+
+    if (entryOrPath.isFile) {
+      writeFile_(entryOrPath);
+    } else if (isFsURL_(entryOrPath)) {
+      getEntry_(writeFile_, entryOrPath);
+    } else {
+      cwd_.getFile(entryOrPath, {create: true, exclusive: false}, writeFile_,
+                   opt_errorHandler);
+    }
+  };
+  
+  /**
+   * Displays disk space usage.
+   *
+   * @param {Function} successCallback Success callback, which is passed
+   *     Used space, Free space and Currently allocated total space in bytes.
+   * @param {Function=} opt_errorHandler Optional error callback.
+   */
+  Filer.prototype.df = function(successCallback, opt_errorHandler) {
+    var queryCallback = function(byteUsed, byteCap) {
+      successCallback(byteUsed, byteCap - byteUsed, byteCap);
+    }
+    
+    if (!(navigator.temporaryStorage.queryUsageAndQuota && navigator.persistentStorage.queryUsageAndQuota)) {
+      throw new Error(NOT_IMPLEMENTED_MSG);
+    }
+
+    if (self.TEMPORARY == this.type) {
+      navigator.temporaryStorage.queryUsageAndQuota(queryCallback, opt_errorHandler);
+    } else if (self.PERSISTENT == this.type) {
+      navigator.persistentStorage.queryUsageAndQuota(queryCallback, opt_errorHandler);
+    }
+  };
+                                   
+  return Filer;
+};
+
+/*
+ Copyright (c) 2013 Gildas Lormeau. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+
+ 1. Redistributions of source code must retain the above copyright notice,
+ this list of conditions and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright
+ notice, this list of conditions and the following disclaimer in
+ the documentation and/or other materials provided with the distribution.
+
+ 3. The names of the authors may not be used to endorse or promote products
+ derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,
+ INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL JCRAFT,
+ INC. OR ANY CONTRIBUTORS TO THIS SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+(function(obj) {
+
+	var ERR_BAD_FORMAT = "File format is not recognized.";
+	var ERR_ENCRYPTED = "File contains encrypted entry.";
+	var ERR_ZIP64 = "File is using Zip64 (4gb+ file size).";
+	var ERR_READ = "Error while reading zip file.";
+	var ERR_WRITE = "Error while writing zip file.";
+	var ERR_WRITE_DATA = "Error while writing file data.";
+	var ERR_READ_DATA = "Error while reading file data.";
+	var ERR_DUPLICATED_NAME = "File already exists.";
+	var CHUNK_SIZE = 512 * 1024;
+
+	var INFLATE_JS = "inflate.js";
+	var DEFLATE_JS = "deflate.js";
+	
+	var TEXT_PLAIN = "text/plain";
+	
+	var MESSAGE_EVENT = "message";
+
+	var appendABViewSupported;
+	try {
+		appendABViewSupported = new Blob([ new DataView(new ArrayBuffer(0)) ]).size === 0;
+	} catch (e) {
+	}
+
+	function Crc32() {
+		var crc = -1, that = this;
+		that.append = function(data) {
+			var offset, table = that.table;
+			for (offset = 0; offset < data.length; offset++)
+				crc = (crc >>> 8) ^ table[(crc ^ data[offset]) & 0xFF];
+		};
+		that.get = function() {
+			return ~crc;
+		};
+	}
+	Crc32.prototype.table = (function() {
+		var i, j, t, table = [];
+		for (i = 0; i < 256; i++) {
+			t = i;
+			for (j = 0; j < 8; j++)
+				if (t & 1)
+					t = (t >>> 1) ^ 0xEDB88320;
+				else
+					t = t >>> 1;
+			table[i] = t;
+		}
+		return table;
+	})();
+
+	function blobSlice(blob, index, length) {
+		if (blob.slice)
+			return blob.slice(index, index + length);
+		else if (blob.webkitSlice)
+			return blob.webkitSlice(index, index + length);
+		else if (blob.mozSlice)
+			return blob.mozSlice(index, index + length);
+		else if (blob.msSlice)
+			return blob.msSlice(index, index + length);
+	}
+
+	function getDataHelper(byteLength, bytes) {
+		var dataBuffer, dataArray;
+		dataBuffer = new ArrayBuffer(byteLength);
+		dataArray = new Uint8Array(dataBuffer);
+		if (bytes)
+			dataArray.set(bytes, 0);
+		return {
+			buffer : dataBuffer,
+			array : dataArray,
+			view : new DataView(dataBuffer)
+		};
+	}
+
+	// Readers
+	function Reader() {
+	}
+
+	function TextReader(text) {
+		var that = this, blobReader;
+
+		function init(callback, onerror) {
+			var blob = new Blob([ text ], {
+				type : TEXT_PLAIN
+			});
+			blobReader = new BlobReader(blob);
+			blobReader.init(function() {
+				that.size = blobReader.size;
+				callback();
+			}, onerror);
+		}
+
+		function readUint8Array(index, length, callback, onerror) {
+			blobReader.readUint8Array(index, length, callback, onerror);
+		}
+
+		that.size = 0;
+		that.init = init;
+		that.readUint8Array = readUint8Array;
+	}
+	TextReader.prototype = new Reader();
+	TextReader.prototype.constructor = TextReader;
+
+	function Data64URIReader(dataURI) {
+		var that = this, dataStart;
+
+		function init(callback) {
+			var dataEnd = dataURI.length;
+			while (dataURI.charAt(dataEnd - 1) == "=")
+				dataEnd--;
+			dataStart = dataURI.indexOf(",") + 1;
+			that.size = Math.floor((dataEnd - dataStart) * 0.75);
+			callback();
+		}
+
+		function readUint8Array(index, length, callback) {
+			var i, data = getDataHelper(length);
+			var start = Math.floor(index / 3) * 4;
+			var end = Math.ceil((index + length) / 3) * 4;
+			var bytes = obj.atob(dataURI.substring(start + dataStart, end + dataStart));
+			var delta = index - Math.floor(start / 4) * 3;
+			for (i = delta; i < delta + length; i++)
+				data.array[i - delta] = bytes.charCodeAt(i);
+			callback(data.array);
+		}
+
+		that.size = 0;
+		that.init = init;
+		that.readUint8Array = readUint8Array;
+	}
+	Data64URIReader.prototype = new Reader();
+	Data64URIReader.prototype.constructor = Data64URIReader;
+
+	function BlobReader(blob) {
+		var that = this;
+
+		function init(callback) {
+			this.size = blob.size;
+			callback();
+		}
+
+		function readUint8Array(index, length, callback, onerror) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				callback(new Uint8Array(e.target.result));
+			};
+			reader.onerror = onerror;
+			reader.readAsArrayBuffer(blobSlice(blob, index, length));
+		}
+
+		that.size = 0;
+		that.init = init;
+		that.readUint8Array = readUint8Array;
+	}
+	BlobReader.prototype = new Reader();
+	BlobReader.prototype.constructor = BlobReader;
+
+	// Writers
+
+	function Writer() {
+	}
+	Writer.prototype.getData = function(callback) {
+		callback(this.data);
+	};
+
+	function TextWriter(encoding) {
+		var that = this, blob;
+
+		function init(callback) {
+			blob = new Blob([], {
+				type : TEXT_PLAIN
+			});
+			callback();
+		}
+
+		function writeUint8Array(array, callback) {
+			blob = new Blob([ blob, appendABViewSupported ? array : array.buffer ], {
+				type : TEXT_PLAIN
+			});
+			callback();
+		}
+
+		function getData(callback, onerror) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				callback(e.target.result);
+			};
+			reader.onerror = onerror;
+			reader.readAsText(blob, encoding);
+		}
+
+		that.init = init;
+		that.writeUint8Array = writeUint8Array;
+		that.getData = getData;
+	}
+	TextWriter.prototype = new Writer();
+	TextWriter.prototype.constructor = TextWriter;
+
+	function Data64URIWriter(contentType) {
+		var that = this, data = "", pending = "";
+
+		function init(callback) {
+			data += "data:" + (contentType || "") + ";base64,";
+			callback();
+		}
+
+		function writeUint8Array(array, callback) {
+			var i, delta = pending.length, dataString = pending;
+			pending = "";
+			for (i = 0; i < (Math.floor((delta + array.length) / 3) * 3) - delta; i++)
+				dataString += String.fromCharCode(array[i]);
+			for (; i < array.length; i++)
+				pending += String.fromCharCode(array[i]);
+			if (dataString.length > 2)
+				data += obj.btoa(dataString);
+			else
+				pending = dataString;
+			callback();
+		}
+
+		function getData(callback) {
+			callback(data + obj.btoa(pending));
+		}
+
+		that.init = init;
+		that.writeUint8Array = writeUint8Array;
+		that.getData = getData;
+	}
+	Data64URIWriter.prototype = new Writer();
+	Data64URIWriter.prototype.constructor = Data64URIWriter;
+
+	function BlobWriter(contentType) {
+		var blob, that = this;
+
+		function init(callback) {
+			blob = new Blob([], {
+				type : contentType
+			});
+			callback();
+		}
+
+		function writeUint8Array(array, callback) {
+			blob = new Blob([ blob, appendABViewSupported ? array : array.buffer ], {
+				type : contentType
+			});
+			callback();
+		}
+
+		function getData(callback) {
+			callback(blob);
+		}
+
+		that.init = init;
+		that.writeUint8Array = writeUint8Array;
+		that.getData = getData;
+	}
+	BlobWriter.prototype = new Writer();
+	BlobWriter.prototype.constructor = BlobWriter;
+
+	// inflate/deflate core functions
+
+	function launchWorkerProcess(worker, reader, writer, offset, size, onappend, onprogress, onend, onreaderror, onwriteerror) {
+		var chunkIndex = 0, index, outputSize;
+
+		function onflush() {
+			worker.removeEventListener(MESSAGE_EVENT, onmessage, false);
+			onend(outputSize);
+		}
+
+		function onmessage(event) {
+			var message = event.data, data = message.data;
+
+			if (message.onappend) {
+				outputSize += data.length;
+				writer.writeUint8Array(data, function() {
+					onappend(false, data);
+					step();
+				}, onwriteerror);
+			}
+			if (message.onflush)
+				if (data) {
+					outputSize += data.length;
+					writer.writeUint8Array(data, function() {
+						onappend(false, data);
+						onflush();
+					}, onwriteerror);
+				} else
+					onflush();
+			if (message.progress && onprogress)
+				onprogress(index + message.current, size);
+		}
+
+		function step() {
+			index = chunkIndex * CHUNK_SIZE;
+			if (index < size)
+				reader.readUint8Array(offset + index, Math.min(CHUNK_SIZE, size - index), function(array) {
+					worker.postMessage({
+						append : true,
+						data : array
+					});
+					chunkIndex++;
+					if (onprogress)
+						onprogress(index, size);
+					onappend(true, array);
+				}, onreaderror);
+			else
+				worker.postMessage({
+					flush : true
+				});
+		}
+
+		outputSize = 0;
+		worker.addEventListener(MESSAGE_EVENT, onmessage, false);
+		step();
+	}
+
+	function launchProcess(process, reader, writer, offset, size, onappend, onprogress, onend, onreaderror, onwriteerror) {
+		var chunkIndex = 0, index, outputSize = 0;
+
+		function step() {
+			var outputData;
+			index = chunkIndex * CHUNK_SIZE;
+			if (index < size)
+				reader.readUint8Array(offset + index, Math.min(CHUNK_SIZE, size - index), function(inputData) {
+					var outputData = process.append(inputData, function() {
+						if (onprogress)
+							onprogress(offset + index, size);
+					});
+					outputSize += outputData.length;
+					onappend(true, inputData);
+					writer.writeUint8Array(outputData, function() {
+						onappend(false, outputData);
+						chunkIndex++;
+						setTimeout(step, 1);
+					}, onwriteerror);
+					if (onprogress)
+						onprogress(index, size);
+				}, onreaderror);
+			else {
+				outputData = process.flush();
+				if (outputData) {
+					outputSize += outputData.length;
+					writer.writeUint8Array(outputData, function() {
+						onappend(false, outputData);
+						onend(outputSize);
+					}, onwriteerror);
+				} else
+					onend(outputSize);
+			}
+		}
+
+		step();
+	}
+
+	function inflate(reader, writer, offset, size, computeCrc32, onend, onprogress, onreaderror, onwriteerror) {
+		var worker, crc32 = new Crc32();
+
+		function oninflateappend(sending, array) {
+			if (computeCrc32 && !sending)
+				crc32.append(array);
+		}
+
+		function oninflateend(outputSize) {
+			onend(outputSize, crc32.get());
+		}
+
+		if (obj.zip.useWebWorkers) {
+			worker = new Worker(obj.zip.workerScriptsPath + INFLATE_JS);
+			launchWorkerProcess(worker, reader, writer, offset, size, oninflateappend, onprogress, oninflateend, onreaderror, onwriteerror);
+		} else
+			launchProcess(new obj.zip.Inflater(), reader, writer, offset, size, oninflateappend, onprogress, oninflateend, onreaderror, onwriteerror);
+		return worker;
+	}
+
+	function deflate(reader, writer, level, onend, onprogress, onreaderror, onwriteerror) {
+		var worker, crc32 = new Crc32();
+
+		function ondeflateappend(sending, array) {
+			if (sending)
+				crc32.append(array);
+		}
+
+		function ondeflateend(outputSize) {
+			onend(outputSize, crc32.get());
+		}
+
+		function onmessage() {
+			worker.removeEventListener(MESSAGE_EVENT, onmessage, false);
+			launchWorkerProcess(worker, reader, writer, 0, reader.size, ondeflateappend, onprogress, ondeflateend, onreaderror, onwriteerror);
+		}
+
+		if (obj.zip.useWebWorkers) {
+			worker = new Worker(obj.zip.workerScriptsPath + DEFLATE_JS);
+			worker.addEventListener(MESSAGE_EVENT, onmessage, false);
+			worker.postMessage({
+				init : true,
+				level : level
+			});
+		} else
+			launchProcess(new obj.zip.Deflater(), reader, writer, 0, reader.size, ondeflateappend, onprogress, ondeflateend, onreaderror, onwriteerror);
+		return worker;
+	}
+
+	function copy(reader, writer, offset, size, computeCrc32, onend, onprogress, onreaderror, onwriteerror) {
+		var chunkIndex = 0, crc32 = new Crc32();
+
+		function step() {
+			var index = chunkIndex * CHUNK_SIZE;
+			if (index < size)
+				reader.readUint8Array(offset + index, Math.min(CHUNK_SIZE, size - index), function(array) {
+					if (computeCrc32)
+						crc32.append(array);
+					if (onprogress)
+						onprogress(index, size, array);
+					writer.writeUint8Array(array, function() {
+						chunkIndex++;
+						step();
+					}, onwriteerror);
+				}, onreaderror);
+			else
+				onend(size, crc32.get());
+		}
+
+		step();
+	}
+
+	// ZipReader
+
+	function decodeASCII(str) {
+		var i, out = "", charCode, extendedASCII = [ '\u00C7', '\u00FC', '\u00E9', '\u00E2', '\u00E4', '\u00E0', '\u00E5', '\u00E7', '\u00EA', '\u00EB',
+				'\u00E8', '\u00EF', '\u00EE', '\u00EC', '\u00C4', '\u00C5', '\u00C9', '\u00E6', '\u00C6', '\u00F4', '\u00F6', '\u00F2', '\u00FB', '\u00F9',
+				'\u00FF', '\u00D6', '\u00DC', '\u00F8', '\u00A3', '\u00D8', '\u00D7', '\u0192', '\u00E1', '\u00ED', '\u00F3', '\u00FA', '\u00F1', '\u00D1',
+				'\u00AA', '\u00BA', '\u00BF', '\u00AE', '\u00AC', '\u00BD', '\u00BC', '\u00A1', '\u00AB', '\u00BB', '_', '_', '_', '\u00A6', '\u00A6',
+				'\u00C1', '\u00C2', '\u00C0', '\u00A9', '\u00A6', '\u00A6', '+', '+', '\u00A2', '\u00A5', '+', '+', '-', '-', '+', '-', '+', '\u00E3',
+				'\u00C3', '+', '+', '-', '-', '\u00A6', '-', '+', '\u00A4', '\u00F0', '\u00D0', '\u00CA', '\u00CB', '\u00C8', 'i', '\u00CD', '\u00CE',
+				'\u00CF', '+', '+', '_', '_', '\u00A6', '\u00CC', '_', '\u00D3', '\u00DF', '\u00D4', '\u00D2', '\u00F5', '\u00D5', '\u00B5', '\u00FE',
+				'\u00DE', '\u00DA', '\u00DB', '\u00D9', '\u00FD', '\u00DD', '\u00AF', '\u00B4', '\u00AD', '\u00B1', '_', '\u00BE', '\u00B6', '\u00A7',
+				'\u00F7', '\u00B8', '\u00B0', '\u00A8', '\u00B7', '\u00B9', '\u00B3', '\u00B2', '_', ' ' ];
+		for (i = 0; i < str.length; i++) {
+			charCode = str.charCodeAt(i) & 0xFF;
+			if (charCode > 127)
+				out += extendedASCII[charCode - 128];
+			else
+				out += String.fromCharCode(charCode);
+		}
+		return out;
+	}
+
+	function decodeUTF8(string) {
+		return decodeURIComponent(escape(string));
+	}
+
+	function getString(bytes) {
+		var i, str = "";
+		for (i = 0; i < bytes.length; i++)
+			str += String.fromCharCode(bytes[i]);
+		return str;
+	}
+
+	function getDate(timeRaw) {
+		var date = (timeRaw & 0xffff0000) >> 16, time = timeRaw & 0x0000ffff;
+		try {
+			return new Date(1980 + ((date & 0xFE00) >> 9), ((date & 0x01E0) >> 5) - 1, date & 0x001F, (time & 0xF800) >> 11, (time & 0x07E0) >> 5,
+					(time & 0x001F) * 2, 0);
+		} catch (e) {
+		}
+	}
+
+	function readCommonHeader(entry, data, index, centralDirectory, onerror) {
+		entry.version = data.view.getUint16(index, true);
+		entry.bitFlag = data.view.getUint16(index + 2, true);
+		entry.compressionMethod = data.view.getUint16(index + 4, true);
+		entry.lastModDateRaw = data.view.getUint32(index + 6, true);
+		entry.lastModDate = getDate(entry.lastModDateRaw);
+		if ((entry.bitFlag & 0x01) === 0x01) {
+			onerror(ERR_ENCRYPTED);
+			return;
+		}
+		if (centralDirectory || (entry.bitFlag & 0x0008) != 0x0008) {
+			entry.crc32 = data.view.getUint32(index + 10, true);
+			entry.compressedSize = data.view.getUint32(index + 14, true);
+			entry.uncompressedSize = data.view.getUint32(index + 18, true);
+		}
+		if (entry.compressedSize === 0xFFFFFFFF || entry.uncompressedSize === 0xFFFFFFFF) {
+			onerror(ERR_ZIP64);
+			return;
+		}
+		entry.filenameLength = data.view.getUint16(index + 22, true);
+		entry.extraFieldLength = data.view.getUint16(index + 24, true);
+	}
+
+	function createZipReader(reader, onerror) {
+		function Entry() {
+		}
+
+		Entry.prototype.getData = function(writer, onend, onprogress, checkCrc32) {
+			var that = this, worker;
+
+			function terminate(callback, param) {
+				if (worker)
+					worker.terminate();
+				worker = null;
+				if (callback)
+					callback(param);
+			}
+
+			function testCrc32(crc32) {
+				var dataCrc32 = getDataHelper(4);
+				dataCrc32.view.setUint32(0, crc32);
+				return that.crc32 == dataCrc32.view.getUint32(0);
+			}
+
+			function getWriterData(uncompressedSize, crc32) {
+				if (checkCrc32 && !testCrc32(crc32))
+					onreaderror();
+				else
+					writer.getData(function(data) {
+						terminate(onend, data);
+					});
+			}
+
+			function onreaderror() {
+				terminate(onerror, ERR_READ_DATA);
+			}
+
+			function onwriteerror() {
+				terminate(onerror, ERR_WRITE_DATA);
+			}
+
+			reader.readUint8Array(that.offset, 30, function(bytes) {
+				var data = getDataHelper(bytes.length, bytes), dataOffset;
+				if (data.view.getUint32(0) != 0x504b0304) {
+					onerror(ERR_BAD_FORMAT);
+					return;
+				}
+				readCommonHeader(that, data, 4, false, onerror);
+				dataOffset = that.offset + 30 + that.filenameLength + that.extraFieldLength;
+				writer.init(function() {
+					if (that.compressionMethod === 0)
+						copy(reader, writer, dataOffset, that.compressedSize, checkCrc32, getWriterData, onprogress, onreaderror, onwriteerror);
+					else
+						worker = inflate(reader, writer, dataOffset, that.compressedSize, checkCrc32, getWriterData, onprogress, onreaderror, onwriteerror);
+				}, onwriteerror);
+			}, onreaderror);
+		};
+
+		function seekEOCDR(offset, entriesCallback) {
+			reader.readUint8Array(reader.size - offset, offset, function(bytes) {
+				var dataView = getDataHelper(bytes.length, bytes).view;
+				if (dataView.getUint32(0) != 0x504b0506) {
+					seekEOCDR(offset + 1, entriesCallback);
+				} else {
+					entriesCallback(dataView);
+				}
+			}, function() {
+				onerror(ERR_READ);
+			});
+		}
+
+		return {
+			getEntries : function(callback) {
+				if (reader.size < 22) {
+					onerror(ERR_BAD_FORMAT);
+					return;
+				}
+				// look for End of central directory record
+				seekEOCDR(22, function(dataView) {
+					var datalength, fileslength;
+					datalength = dataView.getUint32(16, true);
+					fileslength = dataView.getUint16(8, true);
+					reader.readUint8Array(datalength, reader.size - datalength, function(bytes) {
+						var i, index = 0, entries = [], entry, filename, comment, data = getDataHelper(bytes.length, bytes);
+						for (i = 0; i < fileslength; i++) {
+							entry = new Entry();
+							if (data.view.getUint32(index) != 0x504b0102) {
+								onerror(ERR_BAD_FORMAT);
+								return;
+							}
+							readCommonHeader(entry, data, index + 6, true, onerror);
+							entry.commentLength = data.view.getUint16(index + 32, true);
+							entry.directory = ((data.view.getUint8(index + 38) & 0x10) == 0x10);
+							entry.offset = data.view.getUint32(index + 42, true);
+							filename = getString(data.array.subarray(index + 46, index + 46 + entry.filenameLength));
+							entry.filename = ((entry.bitFlag & 0x0800) === 0x0800) ? decodeUTF8(filename) : decodeASCII(filename);
+							if (!entry.directory && entry.filename.charAt(entry.filename.length - 1) == "/")
+								entry.directory = true;
+							comment = getString(data.array.subarray(index + 46 + entry.filenameLength + entry.extraFieldLength, index + 46
+									+ entry.filenameLength + entry.extraFieldLength + entry.commentLength));
+							entry.comment = ((entry.bitFlag & 0x0800) === 0x0800) ? decodeUTF8(comment) : decodeASCII(comment);
+							entries.push(entry);
+							index += 46 + entry.filenameLength + entry.extraFieldLength + entry.commentLength;
+						}
+						callback(entries);
+					}, function() {
+						onerror(ERR_READ);
+					});
+				});
+			},
+			close : function(callback) {
+				if (callback)
+					callback();
+			}
+		};
+	}
+
+	// ZipWriter
+
+	function encodeUTF8(string) {
+		return unescape(encodeURIComponent(string));
+	}
+
+	function getBytes(str) {
+		var i, array = [];
+		for (i = 0; i < str.length; i++)
+			array.push(str.charCodeAt(i));
+		return array;
+	}
+
+	function createZipWriter(writer, onerror, dontDeflate) {
+		var worker, files = {}, filenames = [], datalength = 0;
+
+		function terminate(callback, message) {
+			if (worker)
+				worker.terminate();
+			worker = null;
+			if (callback)
+				callback(message);
+		}
+
+		function onwriteerror() {
+			terminate(onerror, ERR_WRITE);
+		}
+
+		function onreaderror() {
+			terminate(onerror, ERR_READ_DATA);
+		}
+
+		return {
+			add : function(name, reader, onend, onprogress, options) {
+				var header, filename, date;
+
+				function writeHeader(callback) {
+					var data;
+					date = options.lastModDate || new Date();
+					header = getDataHelper(26);
+					files[name] = {
+						headerArray : header.array,
+						directory : options.directory,
+						filename : filename,
+						offset : datalength,
+						comment : getBytes(encodeUTF8(options.comment || ""))
+					};
+					header.view.setUint32(0, 0x14000808);
+					if (options.version)
+						header.view.setUint8(0, options.version);
+					if (!dontDeflate && options.level !== 0 && !options.directory)
+						header.view.setUint16(4, 0x0800);
+					header.view.setUint16(6, (((date.getHours() << 6) | date.getMinutes()) << 5) | date.getSeconds() / 2, true);
+					header.view.setUint16(8, ((((date.getFullYear() - 1980) << 4) | (date.getMonth() + 1)) << 5) | date.getDate(), true);
+					header.view.setUint16(22, filename.length, true);
+					data = getDataHelper(30 + filename.length);
+					data.view.setUint32(0, 0x504b0304);
+					data.array.set(header.array, 4);
+					data.array.set(filename, 30);
+					datalength += data.array.length;
+					writer.writeUint8Array(data.array, callback, onwriteerror);
+				}
+
+				function writeFooter(compressedLength, crc32) {
+					var footer = getDataHelper(16);
+					datalength += compressedLength || 0;
+					footer.view.setUint32(0, 0x504b0708);
+					if (typeof crc32 != "undefined") {
+						header.view.setUint32(10, crc32, true);
+						footer.view.setUint32(4, crc32, true);
+					}
+					if (reader) {
+						footer.view.setUint32(8, compressedLength, true);
+						header.view.setUint32(14, compressedLength, true);
+						footer.view.setUint32(12, reader.size, true);
+						header.view.setUint32(18, reader.size, true);
+					}
+					writer.writeUint8Array(footer.array, function() {
+						datalength += 16;
+						terminate(onend);
+					}, onwriteerror);
+				}
+
+				function writeFile() {
+					options = options || {};
+					name = name.trim();
+					if (options.directory && name.charAt(name.length - 1) != "/")
+						name += "/";
+					if (files.hasOwnProperty(name)) {
+						onerror(ERR_DUPLICATED_NAME);
+						return;
+					}
+					filename = getBytes(encodeUTF8(name));
+					filenames.push(name);
+					writeHeader(function() {
+						if (reader)
+							if (dontDeflate || options.level === 0)
+								copy(reader, writer, 0, reader.size, true, writeFooter, onprogress, onreaderror, onwriteerror);
+							else
+								worker = deflate(reader, writer, options.level, writeFooter, onprogress, onreaderror, onwriteerror);
+						else
+							writeFooter();
+					}, onwriteerror);
+				}
+
+				if (reader)
+					reader.init(writeFile, onreaderror);
+				else
+					writeFile();
+			},
+			close : function(callback) {
+				var data, length = 0, index = 0, indexFilename, file;
+				for (indexFilename = 0; indexFilename < filenames.length; indexFilename++) {
+					file = files[filenames[indexFilename]];
+					length += 46 + file.filename.length + file.comment.length;
+				}
+				data = getDataHelper(length + 22);
+				for (indexFilename = 0; indexFilename < filenames.length; indexFilename++) {
+					file = files[filenames[indexFilename]];
+					data.view.setUint32(index, 0x504b0102);
+					data.view.setUint16(index + 4, 0x1400);
+					data.array.set(file.headerArray, index + 6);
+					data.view.setUint16(index + 32, file.comment.length, true);
+					if (file.directory)
+						data.view.setUint8(index + 38, 0x10);
+					data.view.setUint32(index + 42, file.offset, true);
+					data.array.set(file.filename, index + 46);
+					data.array.set(file.comment, index + 46 + file.filename.length);
+					index += 46 + file.filename.length + file.comment.length;
+				}
+				data.view.setUint32(index, 0x504b0506);
+				data.view.setUint16(index + 8, filenames.length, true);
+				data.view.setUint16(index + 10, filenames.length, true);
+				data.view.setUint32(index + 12, length, true);
+				data.view.setUint32(index + 16, datalength, true);
+				writer.writeUint8Array(data.array, function() {
+					terminate(function() {
+						writer.getData(callback);
+					});
+				}, onwriteerror);
+			}
+		};
+	}
+
+	obj.zip = {
+		Reader : Reader,
+		Writer : Writer,
+		BlobReader : BlobReader,
+		Data64URIReader : Data64URIReader,
+		TextReader : TextReader,
+		BlobWriter : BlobWriter,
+		Data64URIWriter : Data64URIWriter,
+		TextWriter : TextWriter,
+		createReader : function(reader, callback, onerror) {
+			reader.init(function() {
+				callback(createZipReader(reader, onerror));
+			}, onerror);
+		},
+		createWriter : function(writer, callback, onerror, dontDeflate) {
+			writer.init(function() {
+				callback(createZipWriter(writer, onerror, dontDeflate));
+			}, onerror);
+		},
+		workerScriptsPath : "",
+		useWebWorkers : true
+	};
+
+})(this);
+
+/*
+ Copyright (c) 2013 Gildas Lormeau. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+
+ 1. Redistributions of source code must retain the above copyright notice,
+ this list of conditions and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright 
+ notice, this list of conditions and the following disclaimer in 
+ the documentation and/or other materials provided with the distribution.
+
+ 3. The names of the authors may not be used to endorse or promote products
+ derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,
+ INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL JCRAFT,
+ INC. OR ANY CONTRIBUTORS TO THIS SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+(function() {
+
+	var CHUNK_SIZE = 512 * 1024;
+
+	var TextWriter = zip.TextWriter, //
+	BlobWriter = zip.BlobWriter, //
+	Data64URIWriter = zip.Data64URIWriter, //
+	Reader = zip.Reader, //
+	TextReader = zip.TextReader, //
+	BlobReader = zip.BlobReader, //
+	Data64URIReader = zip.Data64URIReader, //
+	createReader = zip.createReader, //
+	createWriter = zip.createWriter;
+
+	function ZipBlobReader(entry) {
+		var that = this, blobReader;
+
+		function init(callback) {
+			this.size = entry.uncompressedSize;
+			callback();
+		}
+
+		function getData(callback) {
+			if (that.data)
+				callback();
+			else
+				entry.getData(new BlobWriter(), function(data) {
+					that.data = data;
+					blobReader = new BlobReader(data);
+					callback();
+				}, null, that.checkCrc32);
+		}
+
+		function readUint8Array(index, length, callback, onerror) {
+			getData(function() {
+				blobReader.readUint8Array(index, length, callback, onerror);
+			}, onerror);
+		}
+
+		that.size = 0;
+		that.init = init;
+		that.readUint8Array = readUint8Array;
+	}
+	ZipBlobReader.prototype = new Reader();
+	ZipBlobReader.prototype.constructor = ZipBlobReader;
+	ZipBlobReader.prototype.checkCrc32 = false;
+
+	function getTotalSize(entry) {
+		var size = 0;
+
+		function process(entry) {
+			size += entry.uncompressedSize || 0;
+			entry.children.forEach(process);
+		}
+
+		process(entry);
+		return size;
+	}
+
+	function initReaders(entry, onend, onerror) {
+		var index = 0;
+
+		function next() {
+			index++;
+			if (index < entry.children.length)
+				process(entry.children[index]);
+			else
+				onend();
+		}
+
+		function process(child) {
+			if (child.directory)
+				initReaders(child, next, onerror);
+			else {
+				child.reader = new child.Reader(child.data, onerror);
+				child.reader.init(function() {
+					child.uncompressedSize = child.reader.size;
+					next();
+				});
+			}
+		}
+
+		if (entry.children.length)
+			process(entry.children[index]);
+		else
+			onend();
+	}
+
+	function detach(entry) {
+		var children = entry.parent.children;
+		children.forEach(function(child, index) {
+			if (child.id == entry.id)
+				children.splice(index, 1);
+		});
+	}
+
+	function exportZip(zipWriter, entry, onend, onprogress, totalSize) {
+		var currentIndex = 0;
+
+		function process(zipWriter, entry, onend, onprogress, totalSize) {
+			var childIndex = 0;
+
+			function exportChild() {
+				var child = entry.children[childIndex];
+				if (child)
+					zipWriter.add(child.getFullname(), child.reader, function() {
+						currentIndex += child.uncompressedSize || 0;
+						process(zipWriter, child, function() {
+							childIndex++;
+							exportChild();
+						}, onprogress, totalSize);
+					}, function(index) {
+						if (onprogress)
+							onprogress(currentIndex + index, totalSize);
+					}, {
+						directory : child.directory,
+						version : child.zipVersion
+					});
+				else
+					onend();
+			}
+
+			exportChild();
+		}
+
+		process(zipWriter, entry, onend, onprogress, totalSize);
+	}
+
+	function addFileEntry(zipEntry, fileEntry, onend, onerror) {
+		function getChildren(fileEntry, callback) {
+			if (fileEntry.isDirectory)
+				fileEntry.createReader().readEntries(callback);
+			if (fileEntry.isFile)
+				callback([]);
+		}
+
+		function process(zipEntry, fileEntry, onend) {
+			getChildren(fileEntry, function(children) {
+				var childIndex = 0;
+
+				function addChild(child) {
+					function nextChild(childFileEntry) {
+						process(childFileEntry, child, function() {
+							childIndex++;
+							processChild();
+						});
+					}
+
+					if (child.isDirectory)
+						nextChild(zipEntry.addDirectory(child.name));
+					if (child.isFile)
+						child.file(function(file) {
+							var childZipEntry = zipEntry.addBlob(child.name, file);
+							childZipEntry.uncompressedSize = file.size;
+							nextChild(childZipEntry);
+						}, onerror);
+				}
+
+				function processChild() {
+					var child = children[childIndex];
+					if (child)
+						addChild(child);
+					else
+						onend();
+				}
+
+				processChild();
+			});
+		}
+
+		if (fileEntry.isDirectory)
+			process(zipEntry, fileEntry, onend);
+		else
+			fileEntry.file(function(file) {
+				zipEntry.addBlob(fileEntry.name, file);
+				onend();
+			}, onerror);
+	}
+
+	function getFileEntry(fileEntry, entry, onend, onprogress, onerror, totalSize, checkCrc32) {
+		var currentIndex = 0;
+
+		function process(fileEntry, entry, onend, onprogress, onerror, totalSize) {
+			var childIndex = 0;
+
+			function addChild(child) {
+				function nextChild(childFileEntry) {
+					currentIndex += child.uncompressedSize || 0;
+					process(childFileEntry, child, function() {
+						childIndex++;
+						processChild();
+					}, onprogress, onerror, totalSize);
+				}
+
+				if (child.directory)
+					fileEntry.getDirectory(child.name, {
+						create : true
+					}, nextChild, onerror);
+				else
+					fileEntry.getFile(child.name, {
+						create : true
+					}, function(file) {
+						child.getData(new zip.FileWriter(file, zip.getMimeType(child.name)), nextChild, function(index) {
+							if (onprogress)
+								onprogress(currentIndex + index, totalSize);
+						}, checkCrc32);
+					}, onerror);
+			}
+
+			function processChild() {
+				var child = entry.children[childIndex];
+				if (child)
+					addChild(child);
+				else
+					onend();
+			}
+
+			processChild();
+		}
+
+		if (entry.directory)
+			process(fileEntry, entry, onend, onprogress, onerror, totalSize);
+		else
+			entry.getData(new zip.FileWriter(fileEntry, zip.getMimeType(entry.name)), onend, onprogress, checkCrc32);
+	}
+
+	function resetFS(fs) {
+		fs.entries = [];
+		fs.root = new ZipDirectoryEntry(fs);
+	}
+
+	function bufferedCopy(reader, writer, onend, onprogress, onerror) {
+		var chunkIndex = 0;
+
+		function stepCopy() {
+			var index = chunkIndex * CHUNK_SIZE;
+			if (onprogress)
+				onprogress(index, reader.size);
+			if (index < reader.size)
+				reader.readUint8Array(index, Math.min(CHUNK_SIZE, reader.size - index), function(array) {
+					writer.writeUint8Array(new Uint8Array(array), function() {
+						chunkIndex++;
+						stepCopy();
+					});
+				}, onerror);
+			else
+				writer.getData(onend);
+		}
+
+		stepCopy();
+	}
+
+	function getEntryData(writer, onend, onprogress, onerror) {
+		var that = this;
+		if (!writer || (writer.constructor == that.Writer && that.data))
+			onend(that.data);
+		else {
+			if (!that.reader)
+				that.reader = new that.Reader(that.data, onerror);
+			that.reader.init(function() {
+				writer.init(function() {
+					bufferedCopy(that.reader, writer, onend, onprogress, onerror);
+				}, onerror);
+			});
+		}
+	}
+
+	function addChild(parent, name, params, directory) {
+		if (parent.directory)
+			return directory ? new ZipDirectoryEntry(parent.fs, name, params, parent) : new ZipFileEntry(parent.fs, name, params, parent);
+		else
+			throw "Parent entry is not a directory.";
+	}
+
+	function ZipEntry() {
+	}
+
+	ZipEntry.prototype = {
+		init : function(fs, name, params, parent) {
+			var that = this;
+			if (fs.root && parent && parent.getChildByName(name))
+				throw "Entry filename already exists.";
+			if (!params)
+				params = {};
+			that.fs = fs;
+			that.name = name;
+			that.id = fs.entries.length;
+			that.parent = parent;
+			that.children = [];
+			that.zipVersion = params.zipVersion || 0x14;
+			that.uncompressedSize = 0;
+			fs.entries.push(that);
+			if (parent)
+				that.parent.children.push(that);
+		},
+		getFileEntry : function(fileEntry, onend, onprogress, onerror, checkCrc32) {
+			var that = this;
+			initReaders(that, function() {
+				getFileEntry(fileEntry, that, onend, onprogress, onerror, getTotalSize(that), checkCrc32);
+			}, onerror);
+		},
+		moveTo : function(target) {
+			var that = this;
+			if (target.directory) {
+				if (!target.isDescendantOf(that)) {
+					if (that != target) {
+						if (target.getChildByName(that.name))
+							throw "Entry filename already exists.";
+						detach(that);
+						that.parent = target;
+						target.children.push(that);
+					}
+				} else
+					throw "Entry is a ancestor of target entry.";
+			} else
+				throw "Target entry is not a directory.";
+		},
+		getFullname : function() {
+			var that = this, fullname = that.name, entry = that.parent;
+			while (entry) {
+				fullname = (entry.name ? entry.name + "/" : "") + fullname;
+				entry = entry.parent;
+			}
+			return fullname;
+		},
+		isDescendantOf : function(ancestor) {
+			var entry = this.parent;
+			while (entry && entry.id != ancestor.id)
+				entry = entry.parent;
+			return !!entry;
+		}
+	};
+	ZipEntry.prototype.constructor = ZipEntry;
+
+	var ZipFileEntryProto;
+
+	function ZipFileEntry(fs, name, params, parent) {
+		var that = this;
+		ZipEntry.prototype.init.call(that, fs, name, params, parent);
+		that.Reader = params.Reader;
+		that.Writer = params.Writer;
+		that.data = params.data;
+		that.getData = params.getData || getEntryData;
+	}
+
+	ZipFileEntry.prototype = ZipFileEntryProto = new ZipEntry();
+	ZipFileEntryProto.constructor = ZipFileEntry;
+	ZipFileEntryProto.getText = function(onend, onprogress, checkCrc32, encoding) {
+		this.getData(new TextWriter(encoding), onend, onprogress, checkCrc32);
+	};
+	ZipFileEntryProto.getBlob = function(mimeType, onend, onprogress, checkCrc32) {
+		this.getData(new BlobWriter(mimeType), onend, onprogress, checkCrc32);
+	};
+	ZipFileEntryProto.getData64URI = function(mimeType, onend, onprogress, checkCrc32) {
+		this.getData(new Data64URIWriter(mimeType), onend, onprogress, checkCrc32);
+	};
+
+	var ZipDirectoryEntryProto;
+
+	function ZipDirectoryEntry(fs, name, params, parent) {
+		var that = this;
+		ZipEntry.prototype.init.call(that, fs, name, params, parent);
+		that.directory = true;
+	}
+
+	ZipDirectoryEntry.prototype = ZipDirectoryEntryProto = new ZipEntry();
+	ZipDirectoryEntryProto.constructor = ZipDirectoryEntry;
+	ZipDirectoryEntryProto.addDirectory = function(name) {
+		return addChild(this, name, null, true);
+	};
+	ZipDirectoryEntryProto.addText = function(name, text) {
+		return addChild(this, name, {
+			data : text,
+			Reader : TextReader,
+			Writer : TextWriter
+		});
+	};
+	ZipDirectoryEntryProto.addBlob = function(name, blob) {
+		return addChild(this, name, {
+			data : blob,
+			Reader : BlobReader,
+			Writer : BlobWriter
+		});
+	};
+	ZipDirectoryEntryProto.addData64URI = function(name, dataURI) {
+		return addChild(this, name, {
+			data : dataURI,
+			Reader : Data64URIReader,
+			Writer : Data64URIWriter
+		});
+	};
+	ZipDirectoryEntryProto.addFileEntry = function(fileEntry, onend, onerror) {
+		addFileEntry(this, fileEntry, onend, onerror);
+	};
+	ZipDirectoryEntryProto.addData = function(name, params) {
+		return addChild(this, name, params);
+	};
+	ZipDirectoryEntryProto.importBlob = function(blob, onend, onerror) {
+		this.importZip(new BlobReader(blob), onend, onerror);
+	};
+	ZipDirectoryEntryProto.importText = function(text, onend, onerror) {
+		this.importZip(new TextReader(text), onend, onerror);
+	};
+	ZipDirectoryEntryProto.importData64URI = function(dataURI, onend, onerror) {
+		this.importZip(new Data64URIReader(dataURI), onend, onerror);
+	};
+	ZipDirectoryEntryProto.exportBlob = function(onend, onprogress, onerror) {
+		this.exportZip(new BlobWriter("application/zip"), onend, onprogress, onerror);
+	};
+	ZipDirectoryEntryProto.exportText = function(onend, onprogress, onerror) {
+		this.exportZip(new TextWriter(), onend, onprogress, onerror);
+	};
+	ZipDirectoryEntryProto.exportFileEntry = function(fileEntry, onend, onprogress, onerror) {
+		this.exportZip(new zip.FileWriter(fileEntry, "application/zip"), onend, onprogress, onerror);
+	};
+	ZipDirectoryEntryProto.exportData64URI = function(onend, onprogress, onerror) {
+		this.exportZip(new Data64URIWriter("application/zip"), onend, onprogress, onerror);
+	};
+	ZipDirectoryEntryProto.importZip = function(reader, onend, onerror) {
+		var that = this;
+		createReader(reader, function(zipReader) {
+			zipReader.getEntries(function(entries) {
+				entries.forEach(function(entry) {
+					var parent = that, path = entry.filename.split("/"), name = path.pop();
+					path.forEach(function(pathPart) {
+						parent = parent.getChildByName(pathPart) || new ZipDirectoryEntry(that.fs, pathPart, null, parent);
+					});
+					if (!entry.directory)
+						addChild(parent, name, {
+							data : entry,
+							Reader : ZipBlobReader
+						});
+				});
+				onend();
+			});
+		}, onerror);
+	};
+	ZipDirectoryEntryProto.exportZip = function(writer, onend, onprogress, onerror) {
+		var that = this;
+		initReaders(that, function() {
+			createWriter(writer, function(zipWriter) {
+				exportZip(zipWriter, that, function() {
+					zipWriter.close(onend);
+				}, onprogress, getTotalSize(that));
+			}, onerror);
+		}, onerror);
+	};
+	ZipDirectoryEntryProto.getChildByName = function(name) {
+		var childIndex, child, that = this;
+		for (childIndex = 0; childIndex < that.children.length; childIndex++) {
+			child = that.children[childIndex];
+			if (child.name == name)
+				return child;
+		}
+	};
+
+	function FS() {
+		resetFS(this);
+	}
+	FS.prototype = {
+		remove : function(entry) {
+			detach(entry);
+			this.entries[entry.id] = null;
+		},
+		find : function(fullname) {
+			var index, path = fullname.split("/"), node = this.root;
+			for (index = 0; node && index < path.length; index++)
+				node = node.getChildByName(path[index]);
+			return node;
+		},
+		getById : function(id) {
+			return this.entries[id];
+		},
+		importBlob : function(blob, onend, onerror) {
+			resetFS(this);
+			this.root.importBlob(blob, onend, onerror);
+		},
+		importText : function(text, onend, onerror) {
+			resetFS(this);
+			this.root.importText(text, onend, onerror);
+		},
+		importData64URI : function(dataURI, onend, onerror) {
+			resetFS(this);
+			this.root.importData64URI(dataURI, onend, onerror);
+		},
+		exportBlob : function(onend, onprogress, onerror) {
+			this.root.exportBlob(onend, onprogress, onerror);
+		},
+		exportText : function(onend, onprogress, onerror) {
+			this.root.exportText(onend, onprogress, onerror);
+		},
+		exportFileEntry : function(fileEntry, onend, onprogress, onerror) {
+			this.root.exportFileEntry(fileEntry, onend, onprogress, onerror);
+		},
+		exportData64URI : function(onend, onprogress, onerror) {
+			this.root.exportData64URI(onend, onprogress, onerror);
+		}
+	};
+
+	zip.fs = {
+		FS : FS,
+		ZipDirectoryEntry : ZipDirectoryEntry,
+		ZipFileEntry : ZipFileEntry
+	};
+
+	zip.getMimeType = function() {
+		return "application/octet-stream";
+	};
 
 })();
+
+/*
+ Copyright (c) 2013 Gildas Lormeau. All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+
+ 1. Redistributions of source code must retain the above copyright notice,
+ this list of conditions and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright
+ notice, this list of conditions and the following disclaimer in
+ the documentation and/or other materials provided with the distribution.
+
+ 3. The names of the authors may not be used to endorse or promote products
+ derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED WARRANTIES,
+ INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL JCRAFT,
+ INC. OR ANY CONTRIBUTORS TO THIS SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+(function() {
+
+	var ERR_HTTP_RANGE = "HTTP Range not supported.";
+
+	var Reader = zip.Reader;
+	var Writer = zip.Writer;
+	
+	var ZipDirectoryEntry;
+
+	var appendABViewSupported;
+	try {
+		appendABViewSupported = new Blob([ new DataView(new ArrayBuffer(0)) ]).size === 0;
+	} catch (e) {
+	}
+
+	function HttpReader(url) {
+		var that = this;
+
+		function getData(callback, onerror) {
+			var request;
+			if (!that.data) {
+				request = new XMLHttpRequest();
+				request.addEventListener("load", function() {
+					if (!that.size)
+						that.size = Number(request.getResponseHeader("Content-Length"));
+					that.data = new Uint8Array(request.response);
+					callback();
+				}, false);
+				request.addEventListener("error", onerror, false);
+				request.open("GET", url);
+				request.responseType = "arraybuffer";
+				request.send();
+			} else
+				callback();
+		}
+
+		function init(callback, onerror) {
+			var request = new XMLHttpRequest();
+			request.addEventListener("load", function() {
+				that.size = Number(request.getResponseHeader("Content-Length"));
+				callback();
+			}, false);
+			request.addEventListener("error", onerror, false);
+			request.open("HEAD", url);
+			request.send();
+		}
+
+		function readUint8Array(index, length, callback, onerror) {
+			getData(function() {
+				callback(new Uint8Array(that.data.subarray(index, index + length)));
+			}, onerror);
+		}
+
+		that.size = 0;
+		that.init = init;
+		that.readUint8Array = readUint8Array;
+	}
+	HttpReader.prototype = new Reader();
+	HttpReader.prototype.constructor = HttpReader;
+
+	function HttpRangeReader(url) {
+		var that = this;
+
+		function init(callback, onerror) {
+			var request = new XMLHttpRequest();
+			request.addEventListener("load", function() {
+				that.size = Number(request.getResponseHeader("Content-Length"));
+				if (request.getResponseHeader("Accept-Ranges") == "bytes")
+					callback();
+				else
+					onerror(ERR_HTTP_RANGE);
+			}, false);
+			request.addEventListener("error", onerror, false);
+			request.open("HEAD", url);
+			request.send();
+		}
+
+		function readArrayBuffer(index, length, callback, onerror) {
+			var request = new XMLHttpRequest();
+			request.open("GET", url);
+			request.responseType = "arraybuffer";
+			request.setRequestHeader("Range", "bytes=" + index + "-" + (index + length - 1));
+			request.addEventListener("load", function() {
+				callback(request.response);
+			}, false);
+			request.addEventListener("error", onerror, false);
+			request.send();
+		}
+
+		function readUint8Array(index, length, callback, onerror) {
+			readArrayBuffer(index, length, function(arraybuffer) {
+				callback(new Uint8Array(arraybuffer));
+			}, onerror);
+		}
+
+		that.size = 0;
+		that.init = init;
+		that.readUint8Array = readUint8Array;
+	}
+	HttpRangeReader.prototype = new Reader();
+	HttpRangeReader.prototype.constructor = HttpRangeReader;
+
+	function ArrayBufferReader(arrayBuffer) {
+		var that = this;
+
+		function init(callback, onerror) {
+			that.size = arrayBuffer.byteLength;
+			callback();
+		}
+
+		function readUint8Array(index, length, callback, onerror) {
+			callback(new Uint8Array(arrayBuffer.slice(index, index + length)));
+		}
+
+		that.size = 0;
+		that.init = init;
+		that.readUint8Array = readUint8Array;
+	}
+	ArrayBufferReader.prototype = new Reader();
+	ArrayBufferReader.prototype.constructor = ArrayBufferReader;
+
+	function ArrayBufferWriter() {
+		var array, that = this;
+
+		function init(callback, onerror) {
+			array = new Uint8Array();
+			callback();
+		}
+
+		function writeUint8Array(arr, callback, onerror) {
+			var tmpArray = new Uint8Array(array.length + arr.length);
+			tmpArray.set(array);
+			tmpArray.set(arr, array.length);
+			array = tmpArray;
+			callback();
+		}
+
+		function getData(callback) {
+			callback(array.buffer);
+		}
+
+		that.init = init;
+		that.writeUint8Array = writeUint8Array;
+		that.getData = getData;
+	}
+	ArrayBufferWriter.prototype = new Writer();
+	ArrayBufferWriter.prototype.constructor = ArrayBufferWriter;
+
+	function FileWriter(fileEntry, contentType) {
+		var writer, that = this;
+
+		function init(callback, onerror) {
+			fileEntry.createWriter(function(fileWriter) {
+				writer = fileWriter;
+				callback();
+			}, onerror);
+		}
+
+		function writeUint8Array(array, callback, onerror) {
+			var blob = new Blob([ appendABViewSupported ? array : array.buffer ], {
+				type : contentType
+			});
+			writer.onwrite = function() {
+				writer.onwrite = null;
+				callback();
+			};
+			writer.onerror = onerror;
+			writer.write(blob);
+		}
+
+		function getData(callback) {
+			fileEntry.file(callback);
+		}
+
+		that.init = init;
+		that.writeUint8Array = writeUint8Array;
+		that.getData = getData;
+	}
+	FileWriter.prototype = new Writer();
+	FileWriter.prototype.constructor = FileWriter;
+
+	zip.FileWriter = FileWriter;
+	zip.HttpReader = HttpReader;
+	zip.HttpRangeReader = HttpRangeReader;
+	zip.ArrayBufferReader = ArrayBufferReader;
+	zip.ArrayBufferWriter = ArrayBufferWriter;
+
+	if (zip.fs) {
+		ZipDirectoryEntry = zip.fs.ZipDirectoryEntry;
+		ZipDirectoryEntry.prototype.addHttpContent = function(name, URL, useRangeHeader) {
+			function addChild(parent, name, params, directory) {
+				if (parent.directory)
+					return directory ? new ZipDirectoryEntry(parent.fs, name, params, parent) : new zip.fs.ZipFileEntry(parent.fs, name, params, parent);
+				else
+					throw "Parent entry is not a directory.";
+			}
+
+			return addChild(this, name, {
+				data : URL,
+				Reader : useRangeHeader ? HttpRangeReader : HttpReader
+			});
+		};
+		ZipDirectoryEntry.prototype.importHttpContent = function(URL, useRangeHeader, onend, onerror) {
+			this.importZip(useRangeHeader ? new HttpRangeReader(URL) : new HttpReader(URL), onend, onerror);
+		};
+		zip.fs.FS.prototype.importHttpContent = function(URL, useRangeHeader, onend, onerror) {
+			this.entries = [];
+			this.root = new ZipDirectoryEntry(this);
+			this.root.importHttpContent(URL, useRangeHeader, onend, onerror);
+		};
+	}
+
+})();
+
 (function(){var n=this,t=n._,r={},e=Array.prototype,u=Object.prototype,i=Function.prototype,a=e.push,o=e.slice,c=e.concat,l=u.toString,f=u.hasOwnProperty,s=e.forEach,p=e.map,h=e.reduce,v=e.reduceRight,d=e.filter,g=e.every,m=e.some,y=e.indexOf,b=e.lastIndexOf,x=Array.isArray,_=Object.keys,j=i.bind,w=function(n){return n instanceof w?n:this instanceof w?(this._wrapped=n,void 0):new w(n)};"undefined"!=typeof exports?("undefined"!=typeof module&&module.exports&&(exports=module.exports=w),exports._=w):n._=w,w.VERSION="1.4.4";var A=w.each=w.forEach=function(n,t,e){if(null!=n)if(s&&n.forEach===s)n.forEach(t,e);else if(n.length===+n.length){for(var u=0,i=n.length;i>u;u++)if(t.call(e,n[u],u,n)===r)return}else for(var a in n)if(w.has(n,a)&&t.call(e,n[a],a,n)===r)return};w.map=w.collect=function(n,t,r){var e=[];return null==n?e:p&&n.map===p?n.map(t,r):(A(n,function(n,u,i){e[e.length]=t.call(r,n,u,i)}),e)};var O="Reduce of empty array with no initial value";w.reduce=w.foldl=w.inject=function(n,t,r,e){var u=arguments.length>2;if(null==n&&(n=[]),h&&n.reduce===h)return e&&(t=w.bind(t,e)),u?n.reduce(t,r):n.reduce(t);if(A(n,function(n,i,a){u?r=t.call(e,r,n,i,a):(r=n,u=!0)}),!u)throw new TypeError(O);return r},w.reduceRight=w.foldr=function(n,t,r,e){var u=arguments.length>2;if(null==n&&(n=[]),v&&n.reduceRight===v)return e&&(t=w.bind(t,e)),u?n.reduceRight(t,r):n.reduceRight(t);var i=n.length;if(i!==+i){var a=w.keys(n);i=a.length}if(A(n,function(o,c,l){c=a?a[--i]:--i,u?r=t.call(e,r,n[c],c,l):(r=n[c],u=!0)}),!u)throw new TypeError(O);return r},w.find=w.detect=function(n,t,r){var e;return E(n,function(n,u,i){return t.call(r,n,u,i)?(e=n,!0):void 0}),e},w.filter=w.select=function(n,t,r){var e=[];return null==n?e:d&&n.filter===d?n.filter(t,r):(A(n,function(n,u,i){t.call(r,n,u,i)&&(e[e.length]=n)}),e)},w.reject=function(n,t,r){return w.filter(n,function(n,e,u){return!t.call(r,n,e,u)},r)},w.every=w.all=function(n,t,e){t||(t=w.identity);var u=!0;return null==n?u:g&&n.every===g?n.every(t,e):(A(n,function(n,i,a){return(u=u&&t.call(e,n,i,a))?void 0:r}),!!u)};var E=w.some=w.any=function(n,t,e){t||(t=w.identity);var u=!1;return null==n?u:m&&n.some===m?n.some(t,e):(A(n,function(n,i,a){return u||(u=t.call(e,n,i,a))?r:void 0}),!!u)};w.contains=w.include=function(n,t){return null==n?!1:y&&n.indexOf===y?n.indexOf(t)!=-1:E(n,function(n){return n===t})},w.invoke=function(n,t){var r=o.call(arguments,2),e=w.isFunction(t);return w.map(n,function(n){return(e?t:n[t]).apply(n,r)})},w.pluck=function(n,t){return w.map(n,function(n){return n[t]})},w.where=function(n,t,r){return w.isEmpty(t)?r?null:[]:w[r?"find":"filter"](n,function(n){for(var r in t)if(t[r]!==n[r])return!1;return!0})},w.findWhere=function(n,t){return w.where(n,t,!0)},w.max=function(n,t,r){if(!t&&w.isArray(n)&&n[0]===+n[0]&&65535>n.length)return Math.max.apply(Math,n);if(!t&&w.isEmpty(n))return-1/0;var e={computed:-1/0,value:-1/0};return A(n,function(n,u,i){var a=t?t.call(r,n,u,i):n;a>=e.computed&&(e={value:n,computed:a})}),e.value},w.min=function(n,t,r){if(!t&&w.isArray(n)&&n[0]===+n[0]&&65535>n.length)return Math.min.apply(Math,n);if(!t&&w.isEmpty(n))return 1/0;var e={computed:1/0,value:1/0};return A(n,function(n,u,i){var a=t?t.call(r,n,u,i):n;e.computed>a&&(e={value:n,computed:a})}),e.value},w.shuffle=function(n){var t,r=0,e=[];return A(n,function(n){t=w.random(r++),e[r-1]=e[t],e[t]=n}),e};var k=function(n){return w.isFunction(n)?n:function(t){return t[n]}};w.sortBy=function(n,t,r){var e=k(t);return w.pluck(w.map(n,function(n,t,u){return{value:n,index:t,criteria:e.call(r,n,t,u)}}).sort(function(n,t){var r=n.criteria,e=t.criteria;if(r!==e){if(r>e||r===void 0)return 1;if(e>r||e===void 0)return-1}return n.index<t.index?-1:1}),"value")};var F=function(n,t,r,e){var u={},i=k(t||w.identity);return A(n,function(t,a){var o=i.call(r,t,a,n);e(u,o,t)}),u};w.groupBy=function(n,t,r){return F(n,t,r,function(n,t,r){(w.has(n,t)?n[t]:n[t]=[]).push(r)})},w.countBy=function(n,t,r){return F(n,t,r,function(n,t){w.has(n,t)||(n[t]=0),n[t]++})},w.sortedIndex=function(n,t,r,e){r=null==r?w.identity:k(r);for(var u=r.call(e,t),i=0,a=n.length;a>i;){var o=i+a>>>1;u>r.call(e,n[o])?i=o+1:a=o}return i},w.toArray=function(n){return n?w.isArray(n)?o.call(n):n.length===+n.length?w.map(n,w.identity):w.values(n):[]},w.size=function(n){return null==n?0:n.length===+n.length?n.length:w.keys(n).length},w.first=w.head=w.take=function(n,t,r){return null==n?void 0:null==t||r?n[0]:o.call(n,0,t)},w.initial=function(n,t,r){return o.call(n,0,n.length-(null==t||r?1:t))},w.last=function(n,t,r){return null==n?void 0:null==t||r?n[n.length-1]:o.call(n,Math.max(n.length-t,0))},w.rest=w.tail=w.drop=function(n,t,r){return o.call(n,null==t||r?1:t)},w.compact=function(n){return w.filter(n,w.identity)};var R=function(n,t,r){return A(n,function(n){w.isArray(n)?t?a.apply(r,n):R(n,t,r):r.push(n)}),r};w.flatten=function(n,t){return R(n,t,[])},w.without=function(n){return w.difference(n,o.call(arguments,1))},w.uniq=w.unique=function(n,t,r,e){w.isFunction(t)&&(e=r,r=t,t=!1);var u=r?w.map(n,r,e):n,i=[],a=[];return A(u,function(r,e){(t?e&&a[a.length-1]===r:w.contains(a,r))||(a.push(r),i.push(n[e]))}),i},w.union=function(){return w.uniq(c.apply(e,arguments))},w.intersection=function(n){var t=o.call(arguments,1);return w.filter(w.uniq(n),function(n){return w.every(t,function(t){return w.indexOf(t,n)>=0})})},w.difference=function(n){var t=c.apply(e,o.call(arguments,1));return w.filter(n,function(n){return!w.contains(t,n)})},w.zip=function(){for(var n=o.call(arguments),t=w.max(w.pluck(n,"length")),r=Array(t),e=0;t>e;e++)r[e]=w.pluck(n,""+e);return r},w.object=function(n,t){if(null==n)return{};for(var r={},e=0,u=n.length;u>e;e++)t?r[n[e]]=t[e]:r[n[e][0]]=n[e][1];return r},w.indexOf=function(n,t,r){if(null==n)return-1;var e=0,u=n.length;if(r){if("number"!=typeof r)return e=w.sortedIndex(n,t),n[e]===t?e:-1;e=0>r?Math.max(0,u+r):r}if(y&&n.indexOf===y)return n.indexOf(t,r);for(;u>e;e++)if(n[e]===t)return e;return-1},w.lastIndexOf=function(n,t,r){if(null==n)return-1;var e=null!=r;if(b&&n.lastIndexOf===b)return e?n.lastIndexOf(t,r):n.lastIndexOf(t);for(var u=e?r:n.length;u--;)if(n[u]===t)return u;return-1},w.range=function(n,t,r){1>=arguments.length&&(t=n||0,n=0),r=arguments[2]||1;for(var e=Math.max(Math.ceil((t-n)/r),0),u=0,i=Array(e);e>u;)i[u++]=n,n+=r;return i},w.bind=function(n,t){if(n.bind===j&&j)return j.apply(n,o.call(arguments,1));var r=o.call(arguments,2);return function(){return n.apply(t,r.concat(o.call(arguments)))}},w.partial=function(n){var t=o.call(arguments,1);return function(){return n.apply(this,t.concat(o.call(arguments)))}},w.bindAll=function(n){var t=o.call(arguments,1);return 0===t.length&&(t=w.functions(n)),A(t,function(t){n[t]=w.bind(n[t],n)}),n},w.memoize=function(n,t){var r={};return t||(t=w.identity),function(){var e=t.apply(this,arguments);return w.has(r,e)?r[e]:r[e]=n.apply(this,arguments)}},w.delay=function(n,t){var r=o.call(arguments,2);return setTimeout(function(){return n.apply(null,r)},t)},w.defer=function(n){return w.delay.apply(w,[n,1].concat(o.call(arguments,1)))},w.throttle=function(n,t){var r,e,u,i,a=0,o=function(){a=new Date,u=null,i=n.apply(r,e)};return function(){var c=new Date,l=t-(c-a);return r=this,e=arguments,0>=l?(clearTimeout(u),u=null,a=c,i=n.apply(r,e)):u||(u=setTimeout(o,l)),i}},w.debounce=function(n,t,r){var e,u;return function(){var i=this,a=arguments,o=function(){e=null,r||(u=n.apply(i,a))},c=r&&!e;return clearTimeout(e),e=setTimeout(o,t),c&&(u=n.apply(i,a)),u}},w.once=function(n){var t,r=!1;return function(){return r?t:(r=!0,t=n.apply(this,arguments),n=null,t)}},w.wrap=function(n,t){return function(){var r=[n];return a.apply(r,arguments),t.apply(this,r)}},w.compose=function(){var n=arguments;return function(){for(var t=arguments,r=n.length-1;r>=0;r--)t=[n[r].apply(this,t)];return t[0]}},w.after=function(n,t){return 0>=n?t():function(){return 1>--n?t.apply(this,arguments):void 0}},w.keys=_||function(n){if(n!==Object(n))throw new TypeError("Invalid object");var t=[];for(var r in n)w.has(n,r)&&(t[t.length]=r);return t},w.values=function(n){var t=[];for(var r in n)w.has(n,r)&&t.push(n[r]);return t},w.pairs=function(n){var t=[];for(var r in n)w.has(n,r)&&t.push([r,n[r]]);return t},w.invert=function(n){var t={};for(var r in n)w.has(n,r)&&(t[n[r]]=r);return t},w.functions=w.methods=function(n){var t=[];for(var r in n)w.isFunction(n[r])&&t.push(r);return t.sort()},w.extend=function(n){return A(o.call(arguments,1),function(t){if(t)for(var r in t)n[r]=t[r]}),n},w.pick=function(n){var t={},r=c.apply(e,o.call(arguments,1));return A(r,function(r){r in n&&(t[r]=n[r])}),t},w.omit=function(n){var t={},r=c.apply(e,o.call(arguments,1));for(var u in n)w.contains(r,u)||(t[u]=n[u]);return t},w.defaults=function(n){return A(o.call(arguments,1),function(t){if(t)for(var r in t)null==n[r]&&(n[r]=t[r])}),n},w.clone=function(n){return w.isObject(n)?w.isArray(n)?n.slice():w.extend({},n):n},w.tap=function(n,t){return t(n),n};var I=function(n,t,r,e){if(n===t)return 0!==n||1/n==1/t;if(null==n||null==t)return n===t;n instanceof w&&(n=n._wrapped),t instanceof w&&(t=t._wrapped);var u=l.call(n);if(u!=l.call(t))return!1;switch(u){case"[object String]":return n==t+"";case"[object Number]":return n!=+n?t!=+t:0==n?1/n==1/t:n==+t;case"[object Date]":case"[object Boolean]":return+n==+t;case"[object RegExp]":return n.source==t.source&&n.global==t.global&&n.multiline==t.multiline&&n.ignoreCase==t.ignoreCase}if("object"!=typeof n||"object"!=typeof t)return!1;for(var i=r.length;i--;)if(r[i]==n)return e[i]==t;r.push(n),e.push(t);var a=0,o=!0;if("[object Array]"==u){if(a=n.length,o=a==t.length)for(;a--&&(o=I(n[a],t[a],r,e)););}else{var c=n.constructor,f=t.constructor;if(c!==f&&!(w.isFunction(c)&&c instanceof c&&w.isFunction(f)&&f instanceof f))return!1;for(var s in n)if(w.has(n,s)&&(a++,!(o=w.has(t,s)&&I(n[s],t[s],r,e))))break;if(o){for(s in t)if(w.has(t,s)&&!a--)break;o=!a}}return r.pop(),e.pop(),o};w.isEqual=function(n,t){return I(n,t,[],[])},w.isEmpty=function(n){if(null==n)return!0;if(w.isArray(n)||w.isString(n))return 0===n.length;for(var t in n)if(w.has(n,t))return!1;return!0},w.isElement=function(n){return!(!n||1!==n.nodeType)},w.isArray=x||function(n){return"[object Array]"==l.call(n)},w.isObject=function(n){return n===Object(n)},A(["Arguments","Function","String","Number","Date","RegExp"],function(n){w["is"+n]=function(t){return l.call(t)=="[object "+n+"]"}}),w.isArguments(arguments)||(w.isArguments=function(n){return!(!n||!w.has(n,"callee"))}),"function"!=typeof/./&&(w.isFunction=function(n){return"function"==typeof n}),w.isFinite=function(n){return isFinite(n)&&!isNaN(parseFloat(n))},w.isNaN=function(n){return w.isNumber(n)&&n!=+n},w.isBoolean=function(n){return n===!0||n===!1||"[object Boolean]"==l.call(n)},w.isNull=function(n){return null===n},w.isUndefined=function(n){return n===void 0},w.has=function(n,t){return f.call(n,t)},w.noConflict=function(){return n._=t,this},w.identity=function(n){return n},w.times=function(n,t,r){for(var e=Array(n),u=0;n>u;u++)e[u]=t.call(r,u);return e},w.random=function(n,t){return null==t&&(t=n,n=0),n+Math.floor(Math.random()*(t-n+1))};var M={escape:{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","/":"&#x2F;"}};M.unescape=w.invert(M.escape);var S={escape:RegExp("["+w.keys(M.escape).join("")+"]","g"),unescape:RegExp("("+w.keys(M.unescape).join("|")+")","g")};w.each(["escape","unescape"],function(n){w[n]=function(t){return null==t?"":(""+t).replace(S[n],function(t){return M[n][t]})}}),w.result=function(n,t){if(null==n)return null;var r=n[t];return w.isFunction(r)?r.call(n):r},w.mixin=function(n){A(w.functions(n),function(t){var r=w[t]=n[t];w.prototype[t]=function(){var n=[this._wrapped];return a.apply(n,arguments),D.call(this,r.apply(w,n))}})};var N=0;w.uniqueId=function(n){var t=++N+"";return n?n+t:t},w.templateSettings={evaluate:/<%([\s\S]+?)%>/g,interpolate:/<%=([\s\S]+?)%>/g,escape:/<%-([\s\S]+?)%>/g};var T=/(.)^/,q={"'":"'","\\":"\\","\r":"r","\n":"n","	":"t","\u2028":"u2028","\u2029":"u2029"},B=/\\|'|\r|\n|\t|\u2028|\u2029/g;w.template=function(n,t,r){var e;r=w.defaults({},r,w.templateSettings);var u=RegExp([(r.escape||T).source,(r.interpolate||T).source,(r.evaluate||T).source].join("|")+"|$","g"),i=0,a="__p+='";n.replace(u,function(t,r,e,u,o){return a+=n.slice(i,o).replace(B,function(n){return"\\"+q[n]}),r&&(a+="'+\n((__t=("+r+"))==null?'':_.escape(__t))+\n'"),e&&(a+="'+\n((__t=("+e+"))==null?'':__t)+\n'"),u&&(a+="';\n"+u+"\n__p+='"),i=o+t.length,t}),a+="';\n",r.variable||(a="with(obj||{}){\n"+a+"}\n"),a="var __t,__p='',__j=Array.prototype.join,"+"print=function(){__p+=__j.call(arguments,'');};\n"+a+"return __p;\n";try{e=Function(r.variable||"obj","_",a)}catch(o){throw o.source=a,o}if(t)return e(t,w);var c=function(n){return e.call(this,n,w)};return c.source="function("+(r.variable||"obj")+"){\n"+a+"}",c},w.chain=function(n){return w(n).chain()};var D=function(n){return this._chain?w(n).chain():n};w.mixin(w),A(["pop","push","reverse","shift","sort","splice","unshift"],function(n){var t=e[n];w.prototype[n]=function(){var r=this._wrapped;return t.apply(r,arguments),"shift"!=n&&"splice"!=n||0!==r.length||delete r[0],D.call(this,r)}}),A(["concat","join","slice"],function(n){var t=e[n];w.prototype[n]=function(){return D.call(this,t.apply(this._wrapped,arguments))}}),w.extend(w.prototype,{chain:function(){return this._chain=!0,this},value:function(){return this._wrapped}})}).call(this);
 (function(global) {
 var define, requireModule, require, requirejs;
@@ -45282,106 +45031,79 @@ EPUBJS.Unarchiver.prototype.saveEntryFileToStorage = function(entry, callback){
         return { hash: hash };
     }
 }());
-var epubLibrary = angular.module('epubLibrary', ['onsen.directives', 'ngCordova']);
+zip.workerScriptsPath = "js/";
+var epubLibrary = angular.module('epubLibrary', ['onsen.directives']);
+epubLibrary.config(function($compileProvider){
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|chrome-extension):/);
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|chrome-extension):|data:image\//);
+});
+epubLibrary.config(function($sceDelegateProvider) {
+    $sceDelegateProvider.resourceUrlWhitelist([
+        'self',
+        'filesystem:**',
+        'chrome-extension:**'
+    ]);
+    $sceDelegateProvider.resourceUrlBlacklist([
+    ]);
+});
+var filer = new Filer();
 
-epubLibrary.controller('LibraryCtrl', ['$scope', '$http', '$cordovaFile', function($scope, $http, $cordovaFile) {
+epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function($scope, $location, $http) {
     angular.element(document).ready(function() {
         $scope.library = {
             loading: false,
             progress: 0,
             books: []
         };
-        $cordovaFile.createDir('Readiator', false).then(function(result) {
-            $cordovaFile.createDir('Readiator/epub', false).then(function(result) {}, onError);
-            $cordovaFile.createDir('Readiator/books', false).then(function(result) {}, onError);
+        filer.init({persistent: true, size: 1024 * 1024 * 1000}, function(fs) {
+          filer.mkdir('readiator/epub', false, function(dirEntry) {
+          }, onError);
+          filer.mkdir('readiator/books', false, function(dirEntry) {
+          }, onError);
+          scanBooks($scope);
         }, onError);
-        scanBooks($scope, $cordovaFile);
     });
     $scope.upload = function() {
         document.getElementById("epub-file").click();
     }
     $scope.refresh = function() {
-        scanBooks($scope, $cordovaFile);
+        scanBooks($scope);
     }
     $scope.removeBook = function(name) {
-        clearDirectory('Readiator/books/' + name);
-        $cordovaFile.removeFile('Readiator/epub/' + name).then(function(result) {
-            console.log(result);
-        }, onError);
-    };
-
-    function clearDirectory(dir) {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-            fileSystem.root.getDirectory(dir, {
-                create: true,
-                exclusive: false
-            }, function(entry) {
-                entry.removeRecursively(function() {
-                    console.log("Remove Recursively Succeeded");
-                }, onError);
+        filer.cd('/', function(entries) {
+            filer.rm('readiator/books/' + name, function() {
+            }, onError); 
+            filer.rm('readiator/epub/' + name, function() {
             }, onError);
         }, onError);
-    }
+    };
 }]);
 
-var app = {
-    initialize: function() {
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-
-    },
-
-    receivedEvent: function(id) {
-        angular.bootstrap(document.body, ['epubLibrary']);
-        console.log('Received Event: ' + id);
-    }
-};
-
-epubLibrary.directive('epubFilesBind', ['$cordovaFile', function($cordovaFile) {
+epubLibrary.directive('epubFilesBind', function() {
     return function($scope, element, attrs) {
         element.bind('change', function(evt) {
             $scope.$apply(function() {
-                $scope.library.loading = true;
                 var files = evt.target.files;
                 //console.log(files);
-                //openFiles(files);
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
-                    sha1(file, function(uuid) {
-                        $scope.library.progress = 0;
-                        $cordovaFile.writeFile('Readiator/epub/' + uuid + '.epub', file).then(function(result) {
-                            //console.log(result);
-                            var zipfile = 'cdvfile://localhost/persistent/Readiator/epub/' + result.target.localURL.substring(result.target.localURL.lastIndexOf('/') + 1);
-                            var dir = 'cdvfile://localhost/persistent/Readiator/books/' + result.target.localURL.substring(result.target.localURL.lastIndexOf('/') + 1) + '/';
-                            zip.unzip(zipfile, dir, function(error) {
-                                $scope.library.loading = false;
-                                if (error) {
-                                    console.log(error);
-                                } else {
-                                    console.log('unziped');
-                                }
-                                scanBooks($scope, $cordovaFile);
-                            }, function(progressEvent) {
-                                $scope.library.progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                                $scope.$apply();
-                            });
-                        }, onError);
-                    });
-                }
+                openFiles($scope, files);
             });
         });
     };
-}]);
+});
+
+epubLibrary.directive('ngFilesDrop', function() {
+  return function($scope, element, attrs) {
+    element.bind('dragover', function(evt) {
+      evt.preventDefault();
+    });
+    element.bind('drop', function(evt) {
+      evt.preventDefault();
+      $scope.$apply(function() {
+        openFiles($scope, evt.dataTransfer.files);
+      });
+    });
+  };
+});
 
 function onError(e) {
     console.log(e);
@@ -45391,41 +45113,78 @@ function sha1(file, callback) {
     var reader = new FileReader();
     var pos = 0;
     var _rush = new Rusha();
-    reader.onprogress = function(progress) {
+    reader.onprogress = function(p) {
     }
     reader.onload = function() {
         var chunk = new Uint8Array(reader.result, 0, file.size);
         //console.log(chunk);
         var uuid = _rush.digestFromBuffer(chunk);
-        console.log(uuid);
-        callback(uuid);
+        callback(uuid, file);
     };
     reader.readAsArrayBuffer(file);
 }
 
-function scanBooks($scope, $cordovaFile) {
+function openFiles($scope, files) {
+    //console.log(files);
+    if (files.length > 0) {
+        var i = 0;
+        //for (var i = 0; i < files.length; i++) {
+        function loopFiles (files) {
+            $scope.library.loading = true;
+            sha1(files[i], function(uuid, file){
+                filer.cd('/', function() {
+                    filer.write('/readiator/epub/' + uuid + '.epub', {data: file, type: file.type}, function(fileEntry, fileWriter) {}, onError);
+                    filer.mkdir('/readiator/books/' + uuid + '.epub/', false, function(dirEntry) {
+                        $scope.library.progress = 0;
+                        var zipFs = new zip.fs.FS();
+                        zipFs.importBlob(file, function() {
+                            zipFs.root.getFileEntry(dirEntry, function() {
+                                //$scope.library.progress = Math.round((i+1/files.length) * 100);
+                                $scope.library.loading = false;
+                                scanBooks($scope);
+                                i++;
+                                if(i < files.length) {
+                                    loopFiles(files);   
+                                }
+                            }, function(p, max){
+                                $scope.library.progress = Math.round((p/max) * 100);
+                                $scope.$apply();
+                            }, onError);
+                        }, onError);
+                    }, onError);
+                }, onError);
+            });
+        }
+        loopFiles(files);
+    }
+}
+
+function scanBooks($scope) {
     $scope.library.books = [];
-    $cordovaFile.listDir('Readiator/books').then(function(entries) {
-        entries.forEach(function(entry) {
-            //console.log(entry);
-            if (entry.isDirectory) {
-                var book = ePub(entry.nativeURL, {
-                    restore: false
-                });
-                book.on("book:ready", function() {
-                    //console.log(book);
-                    var cover = book.contents.coverPath ? book.cover : 'img/Epub_logo_color.svg.png';
-                    $scope.library.books.push({
-                        name: entry.name,
-                        title: book.metadata.bookTitle,
-                        author: book.metadata.creator,
-                        url: 'viewer.html?epub=' + entry.nativeURL,
-                        cover: cover
+    filer.cd('/', function(entries) {
+        filer.ls('/readiator/books/', function(entries) {
+            //console.log(filer);
+            entries.forEach(function(entry) {
+                if (entry.isDirectory) {
+                    var url = 'filesystem:' + location.protocol + '//' + location.host + '/persistent' + entry.fullPath + '/';
+                    var book = ePub(url, {
+                        restore: false
                     });
-                    $scope.$apply();
-                    //console.log($scope.library);
-                });
-            }
-        });
+                    book.on("book:ready", function() {
+                        var cover = book.contents.coverPath ? book.cover : 'img/Epub_logo_color.svg.png';
+                        $scope.library.books.push({
+                            name: entry.name,
+                            title: book.metadata.bookTitle,
+                            author: book.metadata.creator,
+                            url: 'viewer.html?epub=' + url,
+                            cover: cover
+                        });
+                        $scope.$apply();
+                    });
+                }
+            });
+            $scope.$apply();
+        }, onError);
     }, onError);
 }
+

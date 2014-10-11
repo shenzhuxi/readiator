@@ -1,6 +1,6 @@
 var epubLibrary = angular.module('epubLibrary', ['onsen.directives', 'ngCordova']);
 
-epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', '$cordovaFile', function($scope, $location, $http, $cordovaFile) {
+epubLibrary.controller('LibraryCtrl', ['$scope', '$http', '$cordovaFile', function($scope, $http, $cordovaFile) {
     angular.element(document).ready(function() {
         $scope.library = {
             loading: false,
@@ -11,13 +11,13 @@ epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', '$cordova
             $cordovaFile.createDir('Readiator/epub', false).then(function(result) {}, onError);
             $cordovaFile.createDir('Readiator/books', false).then(function(result) {}, onError);
         }, onError);
-        scanBooks($scope, $cordovaFile, 'Readiator/books');
+        scanBooks($scope, $cordovaFile);
     });
     $scope.upload = function() {
         document.getElementById("epub-file").click();
     }
     $scope.refresh = function() {
-        scanBooks($scope, $cordovaFile, 'Readiator/books');
+        scanBooks($scope, $cordovaFile);
     }
     $scope.removeBook = function(name) {
         clearDirectory('Readiator/books/' + name);
@@ -33,7 +33,6 @@ epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', '$cordova
                 exclusive: false
             }, function(entry) {
                 entry.removeRecursively(function() {
-                    //scanBooks($scope, $cordovaFile, 'Readiator/books');
                     console.log("Remove Recursively Succeeded");
                 }, onError);
             }, onError);
@@ -87,7 +86,7 @@ epubLibrary.directive('epubFilesBind', ['$cordovaFile', function($cordovaFile) {
                                 } else {
                                     console.log('unziped');
                                 }
-                                scanBooks($scope, $cordovaFile, 'Readiator/books');
+                                scanBooks($scope, $cordovaFile);
                             }, function(progressEvent) {
                                 $scope.library.progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
                                 $scope.$apply();
@@ -120,9 +119,9 @@ function sha1(file, callback) {
     reader.readAsArrayBuffer(file);
 }
 
-function scanBooks($scope, $cordovaFile, dir) {
+function scanBooks($scope, $cordovaFile) {
     $scope.library.books = [];
-    $cordovaFile.listDir(dir).then(function(entries) {
+    $cordovaFile.listDir('Readiator/books').then(function(entries) {
         entries.forEach(function(entry) {
             //console.log(entry);
             if (entry.isDirectory) {

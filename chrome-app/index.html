@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="epubLibrary">
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
@@ -16,16 +16,16 @@
             <div class="center">Library</div>
             <ons-toolbar-button class="right" ng-click="refresh()"><ons-icon icon="refresh"></ons-icon></ons-toolbar-button>
           </ons-toolbar>
-          <ons-row>
+          <ons-row ng-files-drop>
             <ons-col align="center">
-                <input type="file" accept=".epub" name="epub-file" id="epub-file" style="display:none;" epub-files-bind/>
+                <input type="file" multiple="multiple" accept=".epub" name="epub-file" id="epub-file" style="display:none;" epub-files-bind/>
                 <progress style="width:100%;" value="{{library.progress}}" max="100" ng-show="library.loading"></progress>
                   <input type="search" class="search-input" ng-model="q" placeholder="Search">
                   <ons-list class="book-list" ng-cloak>
-                    <ons-list-item class="animate-show" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide">
+                    <ons-list-item class="animate-show" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide" style="width:400px; float:left;">
                       <ons-row align="center" style="text-align: left">
                         <ons-col width="25%">
-                          <a ng-href="{{book.url}}">
+                          <a ng-href="{{book.url}}" target="_blank">
                             <img class="cover" ng-src="{{book.cover}}" width="100%"></img>
                           </a>
                         </ons-col>
@@ -38,10 +38,10 @@
                         </ons-col>
                       </ons-row>
                     </ons-list-item>
-                    <ons-list-item ng-if="library.books.length == 0">
+                    <ons-list-item ng-if="library.books.length == 0" style="width:400px">
                       <ons-row align="center" style="text-align: left">
                         <ons-col width="25%">
-                          <a ng-href="viewer.html?epub=books/epub30_spec/">
+                          <a ng-href="viewer.html?epub=books/epub30_spec/" target="_blank">
                             <img class="cover" ng-src="books/epub30_spec/EPUB/img/epub_logo_color.jpg" width="100%"></img>
                           </a>
                         </ons-col>
@@ -56,9 +56,5 @@
           </ons-row>
         </ons-page>
         <script src="js/index.js"></script>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
     </body>
 </html>

@@ -11,7 +11,8 @@ install [node.js](http://nodejs.org/)
 install [gulp](http://gulpjs.com) and dependences with npm
 
 ```
-npm install --save-dev gulp gulp-useref gulp-if gulp-uglify gulp-minify-css
+npm install -g gulp
+npm install --save-dev gulp-useref gulp-if gulp-uglify gulp-minify-css
 ```
 
 install [Cordova](http://cordova.apache.org/)
@@ -20,7 +21,7 @@ install [Cordova](http://cordova.apache.org/)
 npm install -g cordova
 ```
 
-Install [bower](http://bower.io/) and use bower install libraries
+install [bower](http://bower.io/) and use bower install libraries
 
 ```
 npm install -g bower
