@@ -3,6 +3,8 @@ Readiator
 
 Readiator is a cross-platform epub reader app based on [epub.js](https://github.com/futurepress/epub.js/), [Onsen UI](http://onsenui.io/) and [Apache Cordova](http://cordova.apache.org/).
 
+-
+
 Getting Started
 -------------------------
 
@@ -47,3 +49,6 @@ cordova platform add android
 cordova run android
 ```
 
+Chrome App
+-------------------------
+https://chrome.google.com/webstore/detail/readiator/ecoaijekbhjbbojbkgliclceljlgelbf
