@@ -1,7 +1,7 @@
 zip.workerScriptsPath = "bower_components/zip.js/WebContent/";
 var epubLibrary = angular.module('epubLibrary', ['onsen.directives']);
 epubLibrary.config(function($compileProvider){
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|chrome-extension):/);
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|filesystem|chrome-extension):/);
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|chrome-extension):|data:image\//);
 });
 epubLibrary.config(function($sceDelegateProvider) {
@@ -14,6 +14,7 @@ epubLibrary.config(function($sceDelegateProvider) {
     ]);
 });
 var filer = new Filer();
+var service, tracker;
 
 epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function($scope, $location, $http) {
     angular.element(document).ready(function() {
@@ -29,6 +30,7 @@ epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function(
           }, onError);
           scanBooks($scope);
         }, onError);
+        googleAnalytics();
     });
     $scope.upload = function() {
         document.getElementById("epub-file").click();
@@ -63,7 +65,7 @@ epubLibrary.directive('ngFilesDrop', function() {
     element.bind('dragover', function(evt) {
       evt.preventDefault();
     });
-    element.bind('drop', function(evt) {
+    element.bind('drop', function(evt) {chrome-extension
       evt.preventDefault();
       $scope.$apply(function() {
         openFiles($scope, evt.dataTransfer.files);
@@ -92,35 +94,35 @@ function sha1(file, callback) {
 }
 
 function openFiles($scope, files) {
-    //console.log(files);
     if (files.length > 0) {
         var i = 0;
-        //for (var i = 0; i < files.length; i++) {
         function loopFiles (files) {
-            $scope.library.loading = true;
-            sha1(files[i], function(uuid, file){
-                filer.cd('/', function() {
-                    filer.write('/readiator/epub/' + uuid + '.epub', {data: file, type: file.type}, function(fileEntry, fileWriter) {}, onError);
-                    filer.mkdir('/readiator/books/' + uuid + '.epub/', false, function(dirEntry) {
-                        $scope.library.progress = 0;
-                        var zipFs = new zip.fs.FS();
-                        zipFs.importBlob(file, function() {
-                            zipFs.root.getFileEntry(dirEntry, function() {
-                                //$scope.library.progress = Math.round((i+1/files.length) * 100);
-                                $scope.library.loading = false;
-                                scanBooks($scope);
-                                i++;
-                                if(i < files.length) {
-                                    loopFiles(files);   
-                                }
-                            }, function(p, max){
-                                $scope.library.progress = Math.round((p/max) * 100);
-                                $scope.$apply();
+            if (files[i].name.split(".").pop().toLowerCase() == 'epub') {
+                $scope.library.loading = true;
+                sha1(files[i], function(uuid, file){
+                    filer.cd('/', function() {
+                        filer.write('/readiator/epub/' + uuid + '.epub', {data: file, type: file.type}, function(fileEntry, fileWriter) {}, onError);
+                        filer.mkdir('/readiator/books/' + uuid + '.epub/', false, function(dirEntry) {
+                            $scope.library.progress = 0;
+                            var zipFs = new zip.fs.FS();
+                            zipFs.importBlob(file, function() {
+                                zipFs.root.getFileEntry(dirEntry, function() {
+                                    //$scope.library.progress = Math.round((i+1/files.length) * 100);
+                                    $scope.library.loading = false;
+                                    scanBooks($scope);
+                                    i++;
+                                    if(i < files.length) {
+                                        loopFiles(files);   
+                                    }
+                                }, function(p, max){
+                                    $scope.library.progress = Math.round((p/max) * 100);
+                                    $scope.$apply();
+                                }, onError);
                             }, onError);
                         }, onError);
                     }, onError);
-                }, onError);
-            });
+                });
+            }
         }
         loopFiles(files);
     }
@@ -130,7 +132,7 @@ function scanBooks($scope) {
     $scope.library.books = [];
     filer.cd('/', function(entries) {
         filer.ls('/readiator/books/', function(entries) {
-            //console.log(filer);
+            //console.log(entries);
             entries.forEach(function(entry) {
                 if (entry.isDirectory) {
                     var url = 'filesystem:' + location.protocol + '//' + location.host + '/persistent' + entry.fullPath + '/';
@@ -143,8 +145,9 @@ function scanBooks($scope) {
                             name: entry.name,
                             title: book.metadata.bookTitle,
                             author: book.metadata.creator,
-                            url: 'viewer.html?epub=' + url,
-                            cover: cover
+                            url: 'viewer.html?epub=' + url + '&uuid=' + entry.name,
+                            cover: cover,
+                            file: 'filesystem:' + location.protocol + '//' + location.host + '/persistent/readiator/epub/' + entry.name
                         });
                         $scope.$apply();
                     });
@@ -153,5 +156,15 @@ function scanBooks($scope) {
             $scope.$apply();
         }, onError);
     }, onError);
+}
+
+function googleAnalytics() {
+    service = analytics.getService('Readiator');
+    //service.getConfig().addCallback(initAnalyticsConfig);
+    tracker = service.getTracker('UA-331449-9');
+    tracker.sendAppView('index');
+    var timing = tracker.startTiming('Analytics Performance', 'Send Event');
+    tracker.sendEvent('Browsing', 'Browsed the app');
+    timing.send();
 }
 

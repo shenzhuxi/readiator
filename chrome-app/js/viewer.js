@@ -41736,6 +41736,9 @@ EPUBJS.Renderer.prototype.gotoCfi = function(cfi){
 		if(range) {
 			pg = this.render.getPageNumberByRect(range.getBoundingClientRect());
 			this.page(pg);
+			
+			// Reset the current location cfi to requested cfi
+			this.currentLocationCfi = cfi.str;
 		}
 	}
 };
@@ -42301,13 +42304,21 @@ var Book = ePub({
 
 epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($scope, $location, $http) {
     angular.element(document).ready(function() {
-        //console.log($location);
-        $scope.book = {
-            begin: true,
-            end: false,
-            chapter: '',
-            spinePos: 0 //$location.hash() ? $location.hash() : 0
-        };
+        $uuid = $location.search().uuid;
+        if (localStorage[$uuid]) {
+            console.log(JSON.parse(localStorage[$uuid]));
+            $scope.book = JSON.parse(localStorage[$uuid]);
+        } 
+        else {
+            $scope.book = {
+                begin: true,
+                end: false,
+                chapter: '',
+                spinePos: $location.hash() ? $location.hash() : 0,
+                pageXOffset: 0,
+                pageYOffset: 0
+            };
+        }
         if ($location.search().epub) {
             Book.open($location.search().epub);
         }
@@ -42348,7 +42359,6 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
             docfrag = document.createDocumentFragment();
         var items = generateTocItems(Book.toc);
         docfrag.appendChild(items);
-        //console.log(docfrag);
         $select.appendChild(docfrag);
         $scope.book.metadata = Book.metadata;
         $scope.$apply();
@@ -42359,24 +42369,20 @@ epubViewer.directive('ngOnload', ['$location', function($location) {
     return function($scope, element, attrs) {
         element.bind('load', function() {
             if (attrs.name = 'epubjs-iframe') {
-                var appURL = (document.URL.substring(0, (document.URL.lastIndexOf("/")) + 1));
-                var myscript = document.createElement('script');
-                myscript.type = 'text/javascript';
-                myscript.src = appURL + 'app/iframe.js';
-                //element[0].contentDocument.getElementsByTagName("head")[0].appendChild(myscript);
+              console.log($location);
+                if ($scope.book.pageXOffset || $scope.book.pageYOffset) {
+                    element[0].contentWindow.scrollTo($scope.book.pageXOffset, $scope.book.pageYOffset);
+                    $scope.book.pageXOffset = 0;
+                    $scope.book.pageYOffset = 0;
+                }
 
-                var cssLink = document.createElement("link")
-                cssLink.rel = 'stylesheet';
-                cssLink.type = 'text/css';
-                cssLink.href = appURL + 'styles/iframe.css';
-                //element[0].contentDocument.getElementsByTagName("head")[0].appendChild(cssLink);
                 if (Book.spine) {
                     var i = 0;
                     for (i in Book.spine) {
                         if (element[0].contentWindow.location.href.split('#')[0].indexOf(Book.spine[i].url) > -1) {
                             $scope.book.spinePos = parseInt(i);
                             Book.spinePos = parseInt(i);
-                            //$location.hash(i);
+                            $location.hash(i);
                             break;
                         }
                     }
@@ -42425,3 +42431,19 @@ function generateTocItems(contents) {
     });
     return list;
 }
+
+window.onbeforeunload = function (event) {
+    var $scope = angular.element(document.body).scope();
+    var iframe = document.getElementById("epubjs-iframe");
+    $scope.book.pageXOffset = iframe.contentWindow.pageXOffset;
+    $scope.book.pageYOffset = iframe.contentWindow.pageYOffset;
+    localStorage.setItem($uuid, JSON.stringify($scope.book));
+}
+
+function _get_window_Yscroll() {
+    var iframe = document.getElementById("epubjs-iframe");
+    return iframe.contentWindow.pageYOffset || 
+           iframe.contentDocument.body.scrollTop ||
+           iframe.contentDocument.documentElement.scrollTop || 0;
+}
+

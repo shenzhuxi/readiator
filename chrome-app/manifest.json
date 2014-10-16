@@ -1,27 +1,28 @@
 {
-   "name":"Readiator",
-   "description":"epub reader",
-   "version":"0.1",
-   "manifest_version": 2,
-   //"default_locale": "en",
-   "app":{
-      "launch":{
-         "local_path":"index.html"
-      }
-   },
-   "background":{
-      "scripts":[
-         "background.js"
-      ]
-   },
-   "icons":{
-      "16": "assets/icon-16.png",
-      "128": "assets/icon-128.png"
-   },
-   "permissions": [
-      "unlimitedStorage"
-   ],
-   "offline_enabled":true,
-   "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
-   "author":"shenzhuxi"
+    "name":"Readiator",
+    "description": "Open source epub reader",
+    "version": "0.1",
+    "manifest_version": 2,
+    "app":{
+        "launch":{
+           "local_path":"index.html"
+        }
+    },
+    "background":{
+        "scripts":[
+            "background.js"
+        ]
+    },
+    "icons":{
+        "16": "assets/icon-16.png",
+        "128": "assets/icon-128.png"
+    },
+    "permissions" : [
+        "storage",
+        "unlimitedStorage",
+        "https://www.google-analytics.com/"
+        ],
+    "offline_enabled":true,
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://ssl.google-analytics.com; object-src 'self'",
+    "author":"shenzhuxi"
 }
