@@ -18,9 +18,9 @@
     <body ng-controller="LibraryCtrl">
         <ons-page ng-files-drop>
           <ons-toolbar ng-cloak>
-            <ons-toolbar-button class="left" ng-click="upload()"><ons-icon icon="folder-open"></ons-icon></ons-toolbar-button>
+            <ons-toolbar-button class="left"><ons-icon icon="folder-open" ng-click="upload()"></ons-icon></ons-toolbar-button>
             <div class="center">Library</div>
-            <ons-toolbar-button class="right" ng-click="refresh()"><ons-icon icon="refresh"></ons-icon></ons-toolbar-button>
+            <ons-toolbar-button class="right"><ons-icon icon="refresh" ng-click="refresh()"></ons-icon></ons-toolbar-button>
           </ons-toolbar>
           <ons-row>
             <ons-col align="center">
@@ -44,7 +44,7 @@
                         <ons-col class="right op" width="30px">
                           <a href="#"><ons-icon icon="times-circle" class="del" ng-click="hide=true;removeBook(book.name);"></ons-icon></a>
                           <a ng-href="{{book.file}}"><ons-icon icon="download" class="download"></ons-icon></a>
-                          <a ng-href="#"><ons-icon icon="search" class="search"></ons-icon></a>
+                          <!--a ng-href="#"><ons-icon icon="search" class="search" ng-click=""></ons-icon></a-->
                         </ons-col>
                       </ons-row>
                     </ons-list-item>

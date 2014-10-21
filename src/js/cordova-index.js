@@ -107,11 +107,12 @@ function sha1(file, callback) {
     var reader = new FileReader();
     var pos = 0;
     var _rush = new Rusha();
-    reader.onprogress = function(progress) {
+    reader.onprogress = function(evt) {
+        var $scope = angular.element(document.body).scope();
+        $scope.library.progress = Math.round((evt.loaded/evt.total)*10);
     }
     reader.onload = function() {
         var chunk = new Uint8Array(reader.result, 0, file.size);
-        //console.log(chunk);
         var uuid = _rush.digestFromBuffer(chunk);
         console.log(uuid);
         callback(uuid);

@@ -35,6 +35,9 @@ gulp.task('chrome', function () {
     images(config.chrome);
     fonts(config.chrome);
     books(config.chrome);
+    return gulp.src('src/bower_components/zip.js/WebContent/inflate.js')
+        .pipe(gulpif('*.js', uglify({mangle: false})))
+        .pipe(gulp.dest('chrome-app/js/'));
 });
 
 function index(cfg) {
@@ -42,7 +45,7 @@ function index(cfg) {
     return gulp.src(cfg.src)
         .pipe(rename('index.html'))
         .pipe(assets)
-        //.pipe(gulpif('*.js', uglify()))
+        .pipe(gulpif('*.js', uglify({mangle: false})))
         .pipe(gulpif('*.css', minifyCss()))
         .pipe(assets.restore())
         .pipe(useref())
@@ -53,7 +56,7 @@ function viewer(cfg) {
     var assets = useref.assets();
     return gulp.src('src/viewer.html')
         .pipe(assets)
-        //.pipe(gulpif('*.js', uglify()))
+        .pipe(gulpif('*.js', uglify({mangle: false})))
         .pipe(gulpif('*.css', minifyCss()))
         .pipe(assets.restore())
         .pipe(useref())

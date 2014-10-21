@@ -30,7 +30,6 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
     angular.element(document).ready(function() {
         $uuid = $location.search().uuid;
         if (localStorage[$uuid]) {
-            console.log(JSON.parse(localStorage[$uuid]));
             $scope.book = JSON.parse(localStorage[$uuid]);
         } 
         else {
@@ -71,8 +70,6 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         }
     }
     Book.on("book:ready", function() {
-        //console.log(Book);
-
         $scope.book.metadata = Book.metadata;
         if (Book.contents.coverPath) {
             //scope.book.chapter = Book.cover;
@@ -93,7 +90,6 @@ epubViewer.directive('ngOnload', ['$location', function($location) {
     return function($scope, element, attrs) {
         element.bind('load', function() {
             if (attrs.name = 'epubjs-iframe') {
-              console.log($location);
                 if ($scope.book.pageXOffset || $scope.book.pageYOffset) {
                     element[0].contentWindow.scrollTo($scope.book.pageXOffset, $scope.book.pageYOffset);
                     $scope.book.pageXOffset = 0;

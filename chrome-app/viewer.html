@@ -59,6 +59,16 @@
       <ons-list-item>
         <ons-row>
           <ons-col class="label">
+            <span>Title</span>
+          </ons-col>
+          <ons-col align="center">
+            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.bookTitle}}</textarea>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item>
+        <ons-row>
+          <ons-col class="label">
             <span>Creator</span>
           </ons-col>
           <ons-col align="center">
@@ -96,6 +106,17 @@
           </ons-col>
         </ons-row>
       </ons-list-item>
+      <ons-list-item>
+        <ons-row>
+          <ons-col class="label">
+            <span>Pub date</span>
+          </ons-col>
+          <ons-col>
+            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.pubdate}}</textarea>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+
       <ons-list-item>
         <ons-row>
           <ons-col class="label">

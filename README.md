@@ -44,11 +44,12 @@ Setup Cordova [plugins and platforms](https://cordova.apache.org/docs/en/edge/gu
 
 ```
 cordova plugin add org.apache.cordova.file
-cordova plugin add org.chromium.zip 2.1.0
+cordova plugin add org.chromium.zip
 cordova platform add android
 cordova run android
 ```
 
 Chrome App
 -------------------------
+The build Readiator Chrome App can be downloaded from Chrome web store. 
 https://chrome.google.com/webstore/detail/readiator/ecoaijekbhjbbojbkgliclceljlgelbf
