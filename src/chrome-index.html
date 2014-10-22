@@ -17,53 +17,61 @@
     </head>
     <body ng-controller="LibraryCtrl">
         <ons-page ng-files-drop>
-          <ons-toolbar ng-cloak>
-            <ons-toolbar-button class="left"><ons-icon icon="folder-open" ng-click="upload()"></ons-icon></ons-toolbar-button>
-            <div class="center">Library</div>
-            <ons-toolbar-button class="right"><ons-icon icon="refresh" ng-click="refresh()"></ons-icon></ons-toolbar-button>
-          </ons-toolbar>
-          <ons-row>
-            <ons-col align="center">
-                <input type="file" multiple="multiple" accept=".epub" name="epub-file" id="epub-file" style="display:none;" epub-files-bind/>
-                <progress value="{{library.progress}}" max="100" ng-show="library.loading"></progress>
-                  <input type="search" class="search-input" ng-model="q" placeholder="Search">
-                  <ons-list class="book-list" ng-cloak>
-                    <ons-list-item class="animate-show" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide">
-                      <ons-row align="center" class="left">
-                        <ons-col width="25%">
-                          <a ng-href="{{book.url}}" target="_blank">
-                            <img class="cover" ng-src="{{book.cover}}"></img>
-                          </a>
-                        </ons-col>
-                        <ons-col align="left">
-                          <div class="meta">
-                            <div class="book-title"><b>{{book.title}}</b></div>
-                            <div class="author">{{book.author}}</div>
-                          </div>
-                        </ons-col>
-                        <ons-col class="right op" width="30px">
-                          <a href="#"><ons-icon icon="times-circle" class="del" ng-click="hide=true;removeBook(book.name);"></ons-icon></a>
-                          <a ng-href="{{book.file}}"><ons-icon icon="download" class="download"></ons-icon></a>
-                          <!--a ng-href="#"><ons-icon icon="search" class="search" ng-click=""></ons-icon></a-->
-                        </ons-col>
-                      </ons-row>
-                    </ons-list-item>
-                    <ons-list-item ng-if="library.books.length == 0">
-                      <ons-row align="center" class="left">
-                        <ons-col width="25%">
-                          <a ng-href="viewer.html?epub=books/epub30_spec/" target="_blank">
-                            <img class="cover" ng-src="books/epub30_spec/EPUB/img/epub_logo_color.jpg"></img>
-                          </a>
-                        </ons-col>
-                        <ons-col>
-                          <div><b>EPUB 3.0 Specification</b></div>
-                          <div>Demo</div>
-                        </ons-col>
-                      </ons-row>
-                    </ons-list-item>
-                  </ons-list>
-            </ons-col>
-          </ons-row>
+            <ons-toolbar ng-cloak>
+                <ons-toolbar-button class="left"><ons-icon icon="folder-open" ng-click="upload()"></ons-icon></ons-toolbar-button>
+                <div class="center">Library</div>
+                <ons-toolbar-button class="right"><ons-icon icon="refresh" ng-click="refresh()"></ons-icon></ons-toolbar-button>
+            </ons-toolbar>
+            <ons-row>
+                <ons-col align="center">
+                    <input type="file" multiple="multiple" accept=".epub" name="epub-file" id="epub-file" style="display:none;" epub-files-bind/>
+                    <input type="search" class="search-input" ng-model="q" placeholder="Search">
+                    <progress value="{{library.progress}}" max="100" ng-show="library.loading" ng-cloak></progress>
+                    <div id="drop_zone" ng-if="library.books.length == 0" ng-cloak>
+                        <div>Drag and drop EPUB files to add them</div>
+                    </div>
+                    <ons-list class="book-list" ng-cloak>
+                      <ons-list-item class="animate-show" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide">
+                        <ons-row align="center" class="left">
+                          <ons-col width="25%">
+                            <a ng-href="{{book.url}}" target="_blank">
+                              <img class="cover" ng-src="{{book.cover}}"></img>
+                            </a>
+                          </ons-col>
+                          <ons-col align="left">
+                            <div class="meta">
+                              <div class="book-title"><b>{{book.title}}</b></div>
+                              <div class="author">{{book.author}}</div>
+                            </div>
+                          </ons-col>
+                          <ons-col class="right op" width="30px">
+                            <a href="#"><ons-icon icon="times-circle" class="del" ng-click="hide=true;removeBook(book.name);"></ons-icon></a>
+                            <a ng-href="{{book.file}}"><ons-icon icon="download" class="download"></ons-icon></a>
+                            <a ng-href="http://books.google.com/books?isbn={{book.isbn}}" target="_blank"><ons-icon icon="search" class="search"></ons-icon></a>
+                          </ons-col>
+                        </ons-row>
+                      </ons-list-item>
+                      <!--ons-list-item ng-if="library.books.length == 0">
+                        <ons-row align="center" class="left">
+                          <ons-col width="25%">
+                            <a ng-href="viewer.html?epub=books/epub30_spec/" target="_blank">
+                              <img class="cover" ng-src="books/epub30_spec/EPUB/img/epub_logo_color.jpg"></img>
+                            </a>
+                          </ons-col>
+                          <ons-col>
+                            <div><b>EPUB 3.0 Specification</b></div>
+                            <div>Demo</div>
+                          </ons-col>
+                        </ons-row>
+                      </ons-list-item-->
+                    </ons-list>
+              </ons-col>
+            </ons-row>
+            <!--ons-bottom-toolbar ng-cloak>
+                <ons-toolbar-button class="right">
+                    <ons-icon icon="gear"></ons-icon>
+                </ons-toolbar-button>
+            </ons-bottom-toolbar-->
         </ons-page>
         <!-- build:js js/index.js -->
         <script src="bower_components/angular/angular.js"></script>

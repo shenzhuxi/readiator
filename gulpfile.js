@@ -34,7 +34,7 @@ gulp.task('chrome', function () {
     viewer(config.chrome);
     images(config.chrome);
     fonts(config.chrome);
-    books(config.chrome);
+    //books(config.chrome);
     return gulp.src('src/bower_components/zip.js/WebContent/inflate.js')
         .pipe(gulpif('*.js', uglify({mangle: false})))
         .pipe(gulp.dest('chrome-app/js/'));

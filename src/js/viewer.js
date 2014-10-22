@@ -45,6 +45,7 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         if ($location.search().epub) {
             Book.open($location.search().epub);
         }
+        googleAnalytics();
     });
     $scope.prevChapter = function() {
         if ($scope.book.spinePos > 0) {
@@ -75,12 +76,16 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
             //scope.book.chapter = Book.cover;
         }
         $scope.book.chapter = Book.spine[$scope.book.spinePos].url;
-
-        var $select = document.getElementById("book-toc"),
-            docfrag = document.createDocumentFragment();
-        var items = generateTocItems(Book.toc);
-        docfrag.appendChild(items);
-        $select.appendChild(docfrag);
+        try {
+            var $select = document.getElementById("book-toc"),
+                docfrag = document.createDocumentFragment();
+            var items = generateTocItems(Book.toc);
+            docfrag.appendChild(items);
+            $select.appendChild(docfrag);
+        }
+        catch(err) {
+            console.log(err);
+        }
         $scope.book.metadata = Book.metadata;
         $scope.$apply();
     });
@@ -167,3 +172,9 @@ function _get_window_Yscroll() {
            iframe.contentDocument.documentElement.scrollTop || 0;
 }
 
+function googleAnalytics() {
+    service = analytics.getService('Readiator');
+    //service.getConfig().addCallback(initAnalyticsConfig);
+    tracker = service.getTracker('UA-331449-9');
+    tracker.sendAppView('viewer');
+}

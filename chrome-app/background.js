@@ -30,6 +30,6 @@ function onClickHandler(info, tab) {
         var meta = ' from ' + tab.url;
     }
     var sText = info.selectionText;
-    var url = 'https://twitter.com/share?text=' + encodeURIComponent(sText + meta + ' via ') + '&url=http://' + 'https://chrome.google.com/webstore/detail/readiator/ecoaijekbhjbbojbkgliclceljlgelbf?utm_source=twitter';
+    var url = 'https://twitter.com/share?text=' + encodeURIComponent(sText + meta + ' via ') + '&url=https://chrome.google.com/webstore/detail/readiator/ecoaijekbhjbbojbkgliclceljlgelbf?utm_source=twitter';
     window.open(url, '_blank');
 };

@@ -100,6 +100,8 @@ function openFiles($scope, files) {
         function loopFiles(files) {
             if (files[i].name.split(".").pop().toLowerCase() == 'epub') {
                 $scope.library.loading = true;
+                //var uuid = EPUBJS.core.uuid();
+                //var file = files[i];
                 sha1(files[i], function(uuid, file) {
                     filer.cd('/', function() {
                         filer.write('/readiator/epub/' + uuid + '.epub', {

@@ -30,4 +30,14 @@ img.cover {
     display: block;
 }
 
-
+#drop_zone {
+    border: 2px dashed #bbb;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 5px;
+    padding: 25px;
+    margin: 5px;
+    font: 20pt bold;
+    color: #bbb;
+    height: 400px
+}
