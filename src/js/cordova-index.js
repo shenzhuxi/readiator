@@ -69,14 +69,12 @@ epubLibrary.directive('epubFilesBind', ['$cordovaFile', function($cordovaFile) {
             $scope.$apply(function() {
                 $scope.library.loading = true;
                 var files = evt.target.files;
-                //console.log(files);
-                //openFiles(files);
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
+                    //var uuid = EPUBJS.core.uuid();
                     sha1(file, function(uuid) {
                         $scope.library.progress = 0;
                         $cordovaFile.writeFile('Readiator/epub/' + uuid + '.epub', file).then(function(result) {
-                            //console.log(result);
                             var zipfile = 'cdvfile://localhost/persistent/Readiator/epub/' + result.target.localURL.substring(result.target.localURL.lastIndexOf('/') + 1);
                             var dir = 'cdvfile://localhost/persistent/Readiator/books/' + result.target.localURL.substring(result.target.localURL.lastIndexOf('/') + 1) + '/';
                             zip.unzip(zipfile, dir, function(error) {
@@ -124,23 +122,20 @@ function scanBooks($scope, $cordovaFile) {
     $scope.library.books = [];
     $cordovaFile.listDir('Readiator/books').then(function(entries) {
         entries.forEach(function(entry) {
-            //console.log(entry);
             if (entry.isDirectory) {
                 var book = ePub(entry.nativeURL, {
                     restore: false
                 });
                 book.on("book:ready", function() {
-                    //console.log(book);
                     var cover = book.contents.coverPath ? book.cover : 'img/Epub_logo_color.svg.png';
                     $scope.library.books.push({
                         name: entry.name,
                         title: book.metadata.bookTitle,
                         author: book.metadata.creator,
-                        url: 'viewer.html?epub=' + entry.nativeURL,
+                        url: 'viewer.html?epub=' + entry.nativeURL + '&uuid=' + entry.name,
                         cover: cover
                     });
                     $scope.$apply();
-                    //console.log($scope.library);
                 });
             }
         });

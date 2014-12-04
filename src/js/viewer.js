@@ -31,6 +31,9 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         $uuid = $location.search().uuid;
         if (localStorage[$uuid]) {
             $scope.book = JSON.parse(localStorage[$uuid]);
+            if ($scope.book.textSize === undefined) {
+              $scope.book.textSize = 100;
+            }
         } 
         else {
             $scope.book = {
@@ -38,6 +41,7 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
                 end: false,
                 chapter: '',
                 spinePos: $location.hash() ? $location.hash() : 0,
+                textSize: 100,
                 pageXOffset: 0,
                 pageYOffset: 0
             };
@@ -58,6 +62,11 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
             $scope.book.spinePos = $scope.book.spinePos + 1;
             $scope.book.chapter = Book.spine[$scope.book.spinePos].url;
         }
+    };
+    $scope.fontChange = function(zoom) {
+      $scope.book.textSize = $scope.book.textSize + zoom;
+      var iframe = document.getElementById("epubjs-iframe");
+      iframe.contentWindow.document.body.style.fontSize=$scope.book.textSize + '%';
     };
     $scope.search = function(keyEvent) {
         if (keyEvent.which === 13) {
@@ -95,6 +104,7 @@ epubViewer.directive('ngOnload', ['$location', function($location) {
     return function($scope, element, attrs) {
         element.bind('load', function() {
             if (attrs.name = 'epubjs-iframe') {
+                element[0].contentWindow.document.body.style.fontSize = $scope.book.textSize + '%';
                 if ($scope.book.pageXOffset || $scope.book.pageYOffset) {
                     element[0].contentWindow.scrollTo($scope.book.pageXOffset, $scope.book.pageYOffset);
                     $scope.book.pageXOffset = 0;
@@ -173,8 +183,8 @@ function _get_window_Yscroll() {
 }
 
 function googleAnalytics() {
-    service = analytics.getService('Readiator');
+    var service = analytics.getService('Readiator');
     //service.getConfig().addCallback(initAnalyticsConfig);
-    tracker = service.getTracker('UA-331449-9');
+    var tracker = service.getTracker('UA-331449-9');
     tracker.sendAppView('viewer');
 }

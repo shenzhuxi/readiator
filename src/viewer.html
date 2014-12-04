@@ -41,9 +41,9 @@
       <ons-toolbar ng-cloak>
         <div class="left">
           <ons-toolbar-button ng-click="ons.splitView.toggle()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button>
-          <ons-toolbar-button id="show-modal" ng-click="metadata.show()"><ons-icon icon="info"></ons-icon></ons-toolbar-button>
+          <ons-toolbar-button ng-click="setting.show()"><ons-icon icon="gear"></ons-icon></ons-toolbar-button>
         </div>
-        <div class="book-title center">{{book.metadata.bookTitle}}</div>
+        <div class="book-title center" ng-click="metadata.show()">{{book.metadata.bookTitle}}</div>
         <div class="right">
           <ons-toolbar-button ng-click="prevChapter()" ng-style="{opacity : book.begin ? '0.4' : '1'}" ng-disabled="{{book.begin}}">
             <ons-icon icon="arrow-left"></ons-icon>
@@ -57,7 +57,26 @@
       </iframe>
     </ons-page>
   </ons-template>
-
+  <ons-modal var="setting">
+    <ons-list> 
+      <ons-list-header>Settings</ons-list-header>
+      <ons-list-item>
+        <ons-row>
+          <ons-col>
+          <span>Text size</span></ons-col>
+          </ons-col>
+          <ons-col>
+            <ons-button style="font-family: monospace;" ng-click="fontChange(10)">+</ons-button>
+            <span>{{book.textSize}}%</span>
+            <ons-button style="font-family: monospace;" ng-click="fontChange(-10)">-</ons-button>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list> 
+    <div class="content-padded">
+      <ons-button modifier="large" ng-click="setting.hide()">Close</ons-button>
+    </div>
+  </ons-modal>
   <ons-modal var="metadata">
     <ons-list> 
       <ons-list-header>Metadata</ons-list-header>

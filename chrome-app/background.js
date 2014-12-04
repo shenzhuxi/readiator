@@ -18,18 +18,18 @@ function onClickHandler(info, tab) {
     var baseURL = chrome.extension.getURL('');
     if (tab.url.indexOf(baseURL) == 0) {
         var uuid = tab.url.substring(tab.url.lastIndexOf("uuid=")+5, tab.url.lastIndexOf("#"));
+        var meta = '';
         if (localStorage[uuid]) {
             Book = JSON.parse(localStorage[uuid]);
-            var meta = ' from ' + Book.metadata.bookTitle;
-        }
-        else {
-            var meta = '';
+            if (Book.metadata.creator && Book.metadata.bookTitle) {
+              var meta = '\nFrom: ' + Book.metadata.creator + ', ' + Book.metadata.bookTitle;
+            }
         }
     }
     else {
         var meta = ' from ' + tab.url;
     }
     var sText = info.selectionText;
-    var url = 'https://twitter.com/share?text=' + encodeURIComponent(sText + meta + ' via ') + '&url=https://chrome.google.com/webstore/detail/readiator/ecoaijekbhjbbojbkgliclceljlgelbf?utm_source=twitter';
+    var url = 'https://twitter.com/share?text=' + encodeURIComponent(sText + meta + '\nvia ') + '&url=https://chrome.google.com/webstore/detail/readiator/ecoaijekbhjbbojbkgliclceljlgelbf?utm_source=twitter';
     window.open(url, '_blank');
 };

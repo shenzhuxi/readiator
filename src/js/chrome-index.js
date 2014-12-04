@@ -13,7 +13,6 @@ epubLibrary.config(function($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlBlacklist([]);
 });
 var filer = new Filer();
-var service, tracker;
 
 epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function($scope, $location, $http) {
     angular.element(document).ready(function() {
@@ -51,7 +50,6 @@ epubLibrary.directive('epubFilesBind', function() {
         element.bind('change', function(evt) {
             $scope.$apply(function() {
                 var files = evt.target.files;
-                //console.log(files);
                 openFiles($scope, files);
             });
         });
@@ -86,7 +84,6 @@ function sha1(file, callback) {
     }
     reader.onload = function() {
         var chunk = new Uint8Array(reader.result, 0, file.size);
-        //console.log(chunk);
         var uuid = _rush.digestFromBuffer(chunk);
         callback(uuid, file);
     };
@@ -96,7 +93,6 @@ function sha1(file, callback) {
 function openFiles($scope, files) {
     if (files.length > 0) {
         var i = 0;
-
         function loopFiles(files) {
             if (files[i].name.split(".").pop().toLowerCase() == 'epub') {
                 $scope.library.loading = true;
@@ -138,7 +134,6 @@ function scanBooks($scope) {
     $scope.library.books = [];
     filer.cd('/', function(entries) {
         filer.ls('/readiator/books/', function(entries) {
-            //console.log(entries);
             entries.forEach(function(entry) {
                 if (entry.isDirectory) {
                     var url = 'filesystem:' + location.protocol + '//' + location.host + '/persistent' + entry.fullPath + '/';
@@ -166,9 +161,9 @@ function scanBooks($scope) {
 }
 
 function googleAnalytics() {
-    service = analytics.getService('Readiator');
+    var service = analytics.getService('Readiator');
     //service.getConfig().addCallback(initAnalyticsConfig);
-    tracker = service.getTracker('UA-331449-9');
+    var tracker = service.getTracker('UA-331449-9');
     tracker.sendAppView('index');
     var timing = tracker.startTiming('Analytics Performance', 'Send Event');
     tracker.sendEvent('Browsing', 'Browsed the app');
