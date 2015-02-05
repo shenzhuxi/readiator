@@ -51,5 +51,5 @@ cordova run android
 
 Chrome App
 -------------------------
-The build Readiator Chrome App can be downloaded from Chrome web store. 
+Readiator Chrome App can be downloaded from Chrome web store. 
 https://chrome.google.com/webstore/detail/readiator/ecoaijekbhjbbojbkgliclceljlgelbf

@@ -2,7 +2,7 @@ zip.workerScriptsPath = "bower_components/zip.js/WebContent/";
 var epubLibrary = angular.module('epubLibrary', ['onsen.directives']);
 epubLibrary.config(function($compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|filesystem|chrome-extension):/);
-    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|chrome-extension):|data:image\//);
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|filesystem|chrome-extension):|data:image\//);
 });
 epubLibrary.config(function($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist([
@@ -106,6 +106,28 @@ function openFiles($scope, files) {
                         }, function(fileEntry, fileWriter) {}, onError);
                         filer.mkdir('/readiator/books/' + uuid + '.epub/', false, function(dirEntry) {
                             $scope.library.progress = 0;
+                            /*var reader = new FileReader();
+                            reader.onload = function() {
+                              var zip = new JSZip(reader.result);
+                              for (var entry in zip.files) {
+                                  if (zip.files[entry].options.dir) {
+                                      console.log('/readiator/epub/' + uuid + '/' + entry);
+                                      filer.mkdir('/readiator/epub/' + uuid + '/' + entry, false, function(dirEntry) {
+                                      }, onError);
+                                  }
+                                  else {
+                                      //console.log(zip.files[entry]);
+                                      var uint8 = zip.files[entry].asText();
+                                      console.log(zip.files[entry]);
+                                          filer.write('/readiator/epub/' + uuid + '/' + entry, {
+                                              data: 'uint8',
+                                              type: 'text/txt'
+                                          }, function(fileEntry, fileWriter) {}, onError);
+                                  }
+                              }
+                            };
+                            reader.readAsArrayBuffer(file);
+                            */
                             var zipFs = new zip.fs.FS();
                             zipFs.importBlob(file, function() {
                                 zipFs.root.getFileEntry(dirEntry, function() {
@@ -166,6 +188,6 @@ function googleAnalytics() {
     var tracker = service.getTracker('UA-331449-9');
     tracker.sendAppView('index');
     var timing = tracker.startTiming('Analytics Performance', 'Send Event');
-    tracker.sendEvent('Browsing', 'Browsed the app');
+    tracker.sendEvent('Browsing', 'Browsed the library');
     timing.send();
 }

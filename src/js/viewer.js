@@ -49,7 +49,6 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         if ($location.search().epub) {
             Book.open($location.search().epub);
         }
-        googleAnalytics();
     });
     $scope.prevChapter = function() {
         if ($scope.book.spinePos > 0) {
@@ -66,7 +65,7 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
     $scope.fontChange = function(zoom) {
       $scope.book.textSize = $scope.book.textSize + zoom;
       var iframe = document.getElementById("epubjs-iframe");
-      iframe.contentWindow.document.body.style.fontSize=$scope.book.textSize + '%';
+      iframe.contentWindow.document.body.style.fontSize = $scope.book.textSize + '%';
     };
     $scope.search = function(keyEvent) {
         if (keyEvent.which === 13) {
@@ -76,10 +75,10 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
                 //$scope.book.spinePos = $scope.book.spinePos + 1;
                 //$scope.book.chapter = Book.spine[$scope.book.spinePos].url;
             }
-            //console.log(Index.search(query));
         }
     }
     Book.on("book:ready", function() {
+        console.log(Book);
         $scope.book.metadata = Book.metadata;
         if (Book.contents.coverPath) {
             //scope.book.chapter = Book.cover;
@@ -97,6 +96,7 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         }
         $scope.book.metadata = Book.metadata;
         $scope.$apply();
+        googleAnalytics(Book.contents);
     });
 }]);
 
@@ -182,9 +182,10 @@ function _get_window_Yscroll() {
            iframe.contentDocument.documentElement.scrollTop || 0;
 }
 
-function googleAnalytics() {
+function googleAnalytics(book) {
     var service = analytics.getService('Readiator');
     //service.getConfig().addCallback(initAnalyticsConfig);
     var tracker = service.getTracker('UA-331449-9');
     tracker.sendAppView('viewer');
+    tracker.sendEvent('Reading', book.metadata.bookTitle);
 }

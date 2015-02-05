@@ -14,6 +14,10 @@ img.cover {
     margin: 5px;
 }
 
+.book-list ons-row {
+    height: 150px;
+}
+
 .cover {
     width: 25%;
 }
