@@ -1,3 +1,24 @@
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(../bower_components/material-design-icons/iconfont/MaterialIcons-Regular.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  word-wrap: normal;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
 a {
     text-decoration: none;
 }
@@ -11,14 +32,22 @@ textarea {
     width: 100%;
 }
 
-.page__content {
-    height: 100%;
+/*
+main {
+    position:fixed !important;
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
 }
-
+*/
 iframe#epubjs-iframe, #book-render iframe {
-    position: absolute;
+    position: fixed;
+    border: none;
     height: 100%;
-    width: 100%;
+    width:100%;
+    overflow-y: auto;
 }
 
 ::-webkit-scrollbar {
@@ -53,7 +82,7 @@ iframe#epubjs-iframe, #book-render iframe {
     -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,0.3);
 }
 
-.onsen-split-view__secondary *::-webkit-scrollbar:vertical {
+main *::-webkit-scrollbar:vertical {
     display: block;
 }
 
@@ -77,11 +106,11 @@ iframe#epubjs-iframe, #book-render iframe {
   display: block;
 }
 
-#book-toc ons-list-item {
+#book-toc list-item {
   padding: 0px;
 }
 
-#book-toc ons-list{
+#book-toc .list{
   list-style-type: none;
   margin-left: 0 0 0 10px;
   padding: 0;
@@ -89,28 +118,28 @@ iframe#epubjs-iframe, #book-render iframe {
   overflow:hidden;
 }
 
-#book-toc ons-list-item{
+#book-toc .list-item{
   margin: 0;
   padding: 0 0 0 10px;
   position: relative;
 }
 
-#book-toc ons-list-item::before, #book-toc ons-list-item::after{
+#book-toc .list-item::before, #book-toc .list-item::after{
   content: '';
   position: absolute;
   left: 0;
 }
 
 /* horizontal line on inner list items */
-#book-toc ons-list-item::before{
+#book-toc .list-item::before{
   border-top: 1px solid #999;
-  top: 22px;
+  top: 12px;
   width: 10px;
   height: 0;
 }
 
 /* vertical line on list items */
-#book-toc ons-list-item:after{
+#book-toc .list-item:after{
   border-left: 1px solid #999;
   height: 100%;
   width: 0px;
@@ -118,16 +147,16 @@ iframe#epubjs-iframe, #book-render iframe {
 }
 
 /* lower line on list items from the first level because they don't have parents */
-#book-toc > ons-list-item::after{
+#book-toc > .list-item::after{
   top: 22px;
 }
 
 /* hide line from the last of the first level list items */
-#book-toc > ons-list-item:last-child::after{
+#book-toc > .list-item:last-child::after{
   display: none;
 }
 
 
-#book-toc ons-list:last-child ons-list-item:last-child:after{
-  height: 44px;
+#book-toc .list:last-child .list-item:last-child:after{
+  height: 35px;
 }

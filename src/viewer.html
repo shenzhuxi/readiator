@@ -7,159 +7,77 @@
   <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
   <!-- build:css css/viewer.css -->
-  <link rel="stylesheet" href="bower_components/onsenui/build/css/onsenui.css">  
-  <link rel="stylesheet" href="bower_components/onsenui/build/css/onsen-css-components.css">  
-  <link rel="stylesheet" href="bower_components/onsenui/build/css/font_awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css"> 
   <link rel="stylesheet" href="css/viewer.css">
   <!-- endbuild -->
   <title>Viewer</title>
 </head>
 <body ng-controller="BookCtrl">
-  <ons-split-view
-    var="app.splitView"
-    secondary-page="menu.html"
-    main-page="book.html"
-    main-page-width="70%"
-    collapse="width 800px">
-  </ons-split-view>
-  <ons-template id="menu.html">
-    <ons-page>
-      <ons-list>
-        <ons-list-item>
-          <a href="index.html" target="_self"><i class="fa fa-home fa-lg" style="color: #666"></i> Library </a>
-        </ons-list-item>
-        <input type="search" class="search-input" placeholder="Keyword" ng-keypress="search($event)"/>
-      </ons-list>
-      <ons-list-header>Table of Contents</ons-list-header>
-      <div id="book-toc" class="tree">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+      <header class="mdl-layout__header" ng-cloak>
+        <div class="mdl-layout__header-row">
+          <div class="mdl-layout-spacer"></div>
+          <span class="mdl-layout-title">{{book.metadata.bookTitle}}</span>
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+            <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
+              <i class="material-icons">search</i>
+            </label>
+            <div class="mdl-textfield__expandable-holder">
+              <input class="mdl-textfield__input" type="text" id="search" ng-keypress="search($event)"/>
+              <label class="mdl-textfield__label" for="search">Enter your query...</label>
+            </div>
+          </div>
+          <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="prevChapter()" ng-style="{opacity : book.begin ? '0.4' : '1'}" ng-disabled="{{book.begin}}">
+            <i class="material-icons">arrow_backward</i>
+          </button>
+          <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="nextChapter()" ng-style="{opacity : book.end ? '0.4' : '1'}" ng-disabled="{{book.end}}">
+            <i class="material-icons">arrow_forward</i>
+          </button>
+          <!--button class="mdl-button mdl-js-button mdl-button--icon" ng-click="" ng-disabled="{{}}">
+            <i class="material-icons">bookmark</i>
+          </button>
+          <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="" ng-disabled="{{}}">
+            <i class="material-icons">settings</i>
+          </button-->
+          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+            <li class="mdl-menu__item">
+              <button class="mdl-button mdl-js-button mdl-button--icon"style="font-family: monospace;" ng-click="fontChange(10)">
+                <i class="material-icons">add</i>
+              </button>
+              <span>Text: {{book.textSize}}%</span>
+              <button class="mdl-button mdl-js-button mdl-button--icon" style="font-family: monospace;" ng-click="fontChange(-10)">
+                <i class="material-icons">remove</i>
+              </button>
+            </li>
+            <li class="mdl-menu__item"><a href="https://github.com/shenzhuxi/readiator" target="_blank">About Readiator</a></li>
+          </ul-->
+        </div>
+      </header>
+      <div class="mdl-layout__drawer">
+        <!--header class="mdl-layout__header">
+          <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">TOC</span>
+          </div>
+        </header-->
+        <span class="mdl-layout-title">TOC</span>
+        <div id="book-toc" class="tree">
+        </div>
       </div>
-    </ons-page>
-  </ons-template>
-
-  <ons-template id="book.html">
-    <ons-page ng-cloak>
-      <ons-toolbar ng-cloak>
-        <div class="left">
-          <ons-toolbar-button ng-click="ons.splitView.toggle()"><ons-icon icon="bars"></ons-icon></ons-toolbar-button>
-          <ons-toolbar-button ng-click="setting.show()"><ons-icon icon="gear"></ons-icon></ons-toolbar-button>
+      <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="">
+          <iframe name="epubjs-iframe" id="epubjs-iframe" ng-onload ng-src={{book.chapter}} scrolling="yes" frameBorder="none">
+          </iframe>
         </div>
-        <div class="book-title center" ng-click="metadata.show()">{{book.metadata.bookTitle}}</div>
-        <div class="right">
-          <ons-toolbar-button ng-click="prevChapter()" ng-style="{opacity : book.begin ? '0.4' : '1'}" ng-disabled="{{book.begin}}">
-            <ons-icon icon="arrow-left"></ons-icon>
-          </ons-toolbar-button>
-          <ons-toolbar-button ng-click="nextChapter()" ng-style="{opacity : book.end ? '0.4' : '1'}" ng-disabled="{{book.end}}">
-            <ons-icon icon="arrow-right"></ons-icon>
-          </ons-toolbar-button>
-        </div>
-      </ons-toolbar>
-      <iframe name="epubjs-iframe" id="epubjs-iframe" ng-onload ng-src={{book.chapter}} scrolling="yes" frameBorder="none">
-      </iframe>
-    </ons-page>
-  </ons-template>
-  <ons-modal var="setting">
-    <ons-list> 
-      <ons-list-header>Settings</ons-list-header>
-      <ons-list-item>
-        <ons-row>
-          <ons-col>
-          <span>Text size</span></ons-col>
-          </ons-col>
-          <ons-col>
-            <ons-button style="font-family: monospace;" ng-click="fontChange(10)">+</ons-button>
-            <span>{{book.textSize}}%</span>
-            <ons-button style="font-family: monospace;" ng-click="fontChange(-10)">-</ons-button>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-    </ons-list> 
-    <div class="content-padded">
-      <ons-button modifier="large" ng-click="setting.hide()">Close</ons-button>
+      </main>
     </div>
-  </ons-modal>
-  <ons-modal var="metadata">
-    <ons-list> 
-      <ons-list-header>Metadata</ons-list-header>
-      <ons-list-item>
-        <ons-row>
-          <ons-col class="label">
-            <span>Title</span>
-          </ons-col>
-          <ons-col align="center">
-            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.bookTitle}}</textarea>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col class="label">
-            <span>Creator</span>
-          </ons-col>
-          <ons-col align="center">
-            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.creator}}</textarea>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col class="label">
-            <span>Description</span>
-          </ons-col>
-          <ons-col>
-            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.discription}}</textarea>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col class="label">
-            <span>Identifier</span>
-          </ons-col>
-          <ons-col>
-            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.identifier}}</textarea>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col class="label">
-            <span>Publisher</span>
-          </ons-col>
-          <ons-col>
-            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.publisher}}</textarea>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item>
-        <ons-row>
-          <ons-col class="label">
-            <span>Pub date</span>
-          </ons-col>
-          <ons-col>
-            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.pubdate}}</textarea>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-
-      <ons-list-item>
-        <ons-row>
-          <ons-col class="label">
-            <span>Rights</span>
-          </ons-col>
-          <ons-col>
-            <textarea class="textarea" id="my-textarea" readonly="readonly">{{book.metadata.rights}}</textarea>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-    </ons-list> 
-    <div class="content-padded">
-      <ons-button modifier="large" ng-click="metadata.hide()">Close</ons-button>
-    </div>
-  </ons-modal>
 </body>
   <!-- build:js js/viewer.js -->
+  <script src="bower_components/material-design-lite/material.min.js"></script>
   <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/onsenui/build/js/onsenui.js"></script>
   <script src="bower_components/epub.js/build/epub.js"></script>
   <script src="bower_components/chrome-platform-analytics/google-analytics-bundle.js"></script>
   <script src="js/viewer.js"></script>

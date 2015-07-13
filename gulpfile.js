@@ -2,8 +2,9 @@ var gulp = require('gulp'),
     useref = require('gulp-useref'),
     gulpif = require('gulp-if'),
     uglify = require('gulp-uglify'),
-    minifyCss = require('gulp-minify-css');
-    rename = require("gulp-rename");
+    minifyCss = require('gulp-minify-css'),
+    rename = require("gulp-rename"),
+    replace = require('gulp-replace');
 
 var config = {
     cordova : {
@@ -46,7 +47,9 @@ function index(cfg) {
         .pipe(rename('index.html'))
         .pipe(assets)
         .pipe(gulpif('*.js', uglify({mangle: false})))
+        .pipe(replace('bower_components/zip.js/WebContent/', 'js/'))
         .pipe(gulpif('*.css', minifyCss({processImport: false})))
+        .pipe(replace('../bower_components/material-design-icons/iconfont/MaterialIcons-Regular.woff2', '../fonts/MaterialIcons-Regular.woff2'))
         .pipe(assets.restore())
         .pipe(useref())
         .pipe(gulp.dest(cfg.dest));
@@ -58,6 +61,7 @@ function viewer(cfg) {
         .pipe(assets)
         .pipe(gulpif('*.js', uglify({mangle: false})))
         .pipe(gulpif('*.css', minifyCss({processImport: false})))
+        .pipe(replace('../bower_components/material-design-icons/iconfont/MaterialIcons-Regular.woff2', '../fonts/MaterialIcons-Regular.woff2'))
         .pipe(assets.restore())
         .pipe(useref())
         .pipe(gulp.dest(cfg.dest));
@@ -69,7 +73,7 @@ function images(cfg) {
 }
 
 function fonts(cfg) {
-    return gulp.src(['src/bower_components/onsenui/build/css/font_awesome/fonts/*'])
+    return gulp.src(['src/bower_components/material-design-icons/iconfont/MaterialIcons-Regular.woff2'])
         .pipe(gulp.dest(cfg.dest + '/fonts/'));
 }
 

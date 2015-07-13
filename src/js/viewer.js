@@ -1,4 +1,4 @@
-var epubViewer = angular.module('epubViewer', ['onsen.directives']);
+var epubViewer = angular.module('epubViewer', []);
 
 epubViewer.config(['$locationProvider', function($locationProvider) {
     $locationProvider.html5Mode(true);
@@ -137,12 +137,11 @@ epubViewer.directive('ngOnload', ['$location', function($location) {
 }]);
 
 function generateTocItems(contents) {
-    var list = document.createElement("ons-list");
-    list.className = "list ons-list-inner";
+    var list = document.createElement("ul");
+    list.className = "list";
     contents.forEach(function(chapter) {
-        var listItem = document.createElement("ons-list-item");
-        listItem.className = "list__item ons-list-item";
-        //listItem.setAttribute('modifier', "chevron");
+        var listItem = document.createElement("li");
+        listItem.className = "list-item";
         var item = document.createElement("a");
         item.textContent = chapter.label;
         if (Book.contents.navPath) {

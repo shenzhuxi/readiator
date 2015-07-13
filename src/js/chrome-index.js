@@ -1,5 +1,5 @@
 zip.workerScriptsPath = "bower_components/zip.js/WebContent/";
-var epubLibrary = angular.module('epubLibrary', ['onsen.directives']);
+var epubLibrary = angular.module('epubLibrary', []);
 epubLibrary.config(function($compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|filesystem|chrome-extension):/);
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|filesystem|chrome-extension):|data:image\//);
@@ -174,6 +174,7 @@ function scanBooks($scope) {
                             file: 'filesystem:' + location.protocol + '//' + location.host + '/persistent/readiator/epub/' + entry.name
                         });
                         $scope.$apply();
+                        componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                     });
                 }
             });
@@ -187,7 +188,7 @@ function googleAnalytics() {
     //service.getConfig().addCallback(initAnalyticsConfig);
     var tracker = service.getTracker('UA-331449-9');
     tracker.sendAppView('index');
-    var timing = tracker.startTiming('Analytics Performance', 'Send Event');
+    //var timing = tracker.startTiming('Analytics Performance', 'Send Event');
     tracker.sendEvent('Browsing', 'Browsed the library');
-    timing.send();
+    //timing.send();
 }
