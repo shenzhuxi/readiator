@@ -1,7 +1,7 @@
 Readiator
 =========
 
-Readiator is a cross-platform epub reader app based on [epub.js](https://github.com/futurepress/epub.js/), [Onsen UI](http://onsenui.io/) and [Apache Cordova](http://cordova.apache.org/).
+Readiator is a cross-platform epub reader app based on [epub.js](https://github.com/futurepress/epub.js/), [Material Design Lite](https://github.com/google/material-design-lite) and [Apache Cordova](http://cordova.apache.org/).
 
 -
 
@@ -10,11 +10,11 @@ Getting Started
 
 install [node.js](http://nodejs.org/)
 
-install [gulp](http://gulpjs.com) and dependences with npm
+install [Gulp](http://gulpjs.com) and dependences with npm
 
 ```
 npm install -g gulp
-npm install --save-dev gulp-useref gulp-if gulp-uglify gulp-minify-css
+npm install --save-dev gulp-useref gulp-replace gulp-if gulp-uglify gulp-minify-css
 ```
 
 install [Cordova](http://cordova.apache.org/)
@@ -23,7 +23,7 @@ install [Cordova](http://cordova.apache.org/)
 npm install -g cordova
 ```
 
-install [bower](http://bower.io/) and use bower install libraries
+install [Bower](http://bower.io/), and install install required libraries with Bower
 
 ```
 npm install -g bower
@@ -34,7 +34,7 @@ bower
 Building App 
 -------------------------
 
-Use gulp to generate files in ./www/ for Cordova
+Use Gulp to generate files in ./www/ for Cordova
 
 ```
 gulp
@@ -43,8 +43,7 @@ gulp
 Setup Cordova [plugins and platforms](https://cordova.apache.org/docs/en/edge/guide_cli_index.md.html#The%20Command-Line%20Interface)
 
 ```
-cordova plugin add org.apache.cordova.file
-cordova plugin add org.chromium.zip
+cordova plugin add cordova-plugin-file cordova-plugin-zip
 cordova platform add android
 cordova run android
 ```

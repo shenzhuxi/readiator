@@ -13,8 +13,11 @@
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="mdl-layout__header" ng-cloak>
         <div class="mdl-layout__header-row">
+          <!--button class="mdl-button mdl-js-button mdl-button--icon" ng-href="./index.html">
+            <i class="material-icons">library_books</i>
+          </button-->
           <div class="mdl-layout-spacer"></div>
-          <span class="mdl-layout-title">{{book.metadata.bookTitle}}</span>
+          <!--span class="mdl-layout-title book-title">{{book.metadata.bookTitle}}</span-->
           <div class="mdl-layout-spacer"></div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
@@ -33,14 +36,24 @@
           </button>
           <!--button class="mdl-button mdl-js-button mdl-button--icon" ng-click="" ng-disabled="{{}}">
             <i class="material-icons">bookmark</i>
+          </button>
+          <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="" ng-disabled="{{}}">
+            <i class="material-icons">settings</i>
           </button-->
-          <!--button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
             <i class="material-icons">more_vert</i>
           </button>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-            <li class="mdl-menu__item">About</li>
-            <li class="mdl-menu__item">Contact</li>
-            <li class="mdl-menu__item">Legal information</li>
+            <li class="mdl-menu__item">
+              <button class="mdl-button mdl-js-button mdl-button--icon"style="font-family: monospace;" ng-click="fontChange(10)">
+                <i class="material-icons">add</i>
+              </button>
+              <span>Text: {{book.textSize}}%</span>
+              <button class="mdl-button mdl-js-button mdl-button--icon" style="font-family: monospace;" ng-click="fontChange(-10)">
+                <i class="material-icons">remove</i>
+              </button>
+            </li>
+            <li class="mdl-menu__item"><a href="https://github.com/shenzhuxi/readiator" target="_blank">About Readiator</a></li>
           </ul-->
         </div>
       </header>
@@ -50,15 +63,13 @@
             <span class="mdl-layout-title">TOC</span>
           </div>
         </header-->
-        <span class="mdl-layout-title">TOC</span>
+        <span class="mdl-layout-title">{{book.metadata.bookTitle}}</span>
         <div id="book-toc" class="tree">
         </div>
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="">
-          <iframe name="epubjs-iframe" id="epubjs-iframe" ng-onload ng-src={{book.chapter}} scrolling="yes" frameBorder="none">
-          </iframe>
-        </div>
+        <iframe name="epubjs-iframe" id="epubjs-iframe" ng-onload ng-src={{book.chapter}} scrolling="yes" frameBorder="none">
+        </iframe>
       </main>
     </div>
 </body>

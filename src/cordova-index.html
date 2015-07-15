@@ -7,62 +7,76 @@
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
         <!-- build:css css/index.css -->
+        <link rel="stylesheet" href="bower_components/material-design-lite/material.min.css">
         <link rel="stylesheet" href="bower_components/angular/angular-csp.css">
-        <link rel="stylesheet" href="bower_components/onsenui/build/css/onsenui.css">  
-        <link rel="stylesheet" href="bower_components/onsenui/build/css/onsen-css-components.css">  
-        <link rel="stylesheet" href="bower_components/onsenui/build/css/font_awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css"/>
         <!-- endbuild -->
         <title>Library</title>
     </head>
     <body ng-controller="LibraryCtrl">
-        <ons-page>
-          <ons-toolbar ng-cloak>
-            <ons-toolbar-button class="left" ng-click="upload()"><ons-icon icon="folder-open"></ons-icon></ons-toolbar-button>
-            <div class="center">Library</div>
-            <ons-toolbar-button class="right" ng-click="refresh()"><ons-icon icon="refresh"></ons-icon></ons-toolbar-button>
-          </ons-toolbar>
-          <ons-row>
-            <ons-col align="center">
-                <input type="file" accept=".epub" name="epub-file" id="epub-file" style="display:none;" epub-files-bind/>
-                <progress style="width:100%;" value="{{library.progress}}" max="100" ng-show="library.loading"></progress>
-                  <input type="search" class="search-input" ng-model="q" placeholder="Search">
-                  <ons-list class="book-list" ng-cloak>
-                    <ons-list-item class="animate-show" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide">
-                      <ons-row align="center" style="text-align: left">
-                        <ons-col width="25%">
-                          <a ng-href="{{book.url}}">
-                            <img class="cover" ng-src="{{book.cover}}" width="100%"></img>
-                          </a>
-                        </ons-col>
-                        <ons-col>
-                          <div class="book-title"><b>{{book.title}}</b></div>
-                          <div class="author">{{book.author}}</div>
-                        </ons-col>
-                        <ons-col class="right" width="30px">
-                          <ons-icon icon="times-circle" ng-click="hide=true;removeBook(book.name);"></ons-icon>
-                        </ons-col>
-                      </ons-row>
-                    </ons-list-item>
-                    <ons-list-item ng-if="library.books.length == 0">
-                      <ons-row align="center" style="text-align: left">
-                        <ons-col width="25%">
-                          <a ng-href="viewer.html?epub=books/epub30_spec/">
-                            <img class="cover" ng-src="books/epub30_spec/EPUB/img/epub_logo_color.jpg" width="100%"></img>
-                          </a>
-                        </ons-col>
-                        <ons-col>
-                          <div><b>EPUB 3.0 Specification</b></div>
-                          <div>Demo</div>
-                        </ons-col>
-                      </ons-row>
-                    </ons-list-item>
-                  </ons-list>
-            </ons-col>
-          </ons-row>
-        </ons-page>
+      <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header" ng-cloak>
+          <div class="mdl-layout__header-row">
+            <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="upload()">
+              <i class="material-icons">add_circle</i>
+            </button>
+            <div class="mdl-layout-spacer"></div>
+            <span class="mdl-layout-title">Readiator</span>
+            <div class="mdl-layout-spacer"></div>
+            <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="refresh()">
+              <i class="material-icons">refresh</i>
+            </button>
+          </div>
+        </header>
+        <main class="mdl-layout__content">
+          <input type="file" multiple="multiple" accept=".epub" name="epub-file" id="epub-file" style="display:none;" epub-files-bind/>
+          <input type="search" class="search-input mdl-textfield__input" ng-model="q" placeholder="Search">
+          <progress class="" value="{{library.progress}}" max="100" ng-show="library.loading" ng-cloak></progress>
+          <div class="mdl-grid book-list" ng-cloak>
+            <div class="animate-show mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone" ng-if="library.books.length == 0">
+              <div class="mdl-card mdl-shadow--2dp">
+                <div class="image-wrapper" style="background: url('books/epub30_spec/EPUB/img/epub_logo_color.jpg') left top / cover;">
+                  <a ng-href="viewer.html?epub=books/epub30_spec/" target=""></a>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <a class="mdl-js-button book-title" ng-href="viewer.html?epub=books/epub30_spec/" target="_blank">EPUB 3.0 Specification</a>
+                  <button id="book-action-demo" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                  </button>
+                  <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="book-action-demo">
+                    <li class="mdl-menu__item" ng-click="hide=true;removeBook(book.name);">
+                      <a href="#">Delete</a>
+                    </li>
+                  </ul>
+                  <div class="book-author">{{book.author}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="animate-show mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide">
+              <div class="mdl-card mdl-shadow--2dp">
+                <div class="image-wrapper" style="background: url('{{book.cover}}') left top / cover;">
+                  <a ng-href="{{book.url}}" target=""></a>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <a class="mdl-js-button book-title" ng-href="{{book.url}}" target="">{{book.title}}</a>
+                  <button id="book-action-{{$index}}" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                  </button>
+                  <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="book-action-{{$index}}">
+                    <!--li class="mdl-menu__item"><a ng-href="{{book.file}}">Download</a></li-->
+                    <li class="mdl-menu__item" ng-click="hide=true;removeBook(book.name);">
+                      <a href="#">Delete</a>
+                    </li>
+                  </ul>
+                  <div class="book-author">{{book.author}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
         <!-- build:js js/index.js -->
         <script src="bower_components/angular/angular.js"></script>
-        <script src="bower_components/onsenui/build/js/onsenui.js"></script>
         <script src="bower_components/ngCordova/dist/ng-cordova.js"></script>
         <script src="bower_components/epub.js/build/epub.js"></script>
         <script src="bower_components/rusha/rusha.js"></script>

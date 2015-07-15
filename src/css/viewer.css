@@ -19,35 +19,22 @@
   -webkit-font-smoothing: antialiased;
 }
 
-a {
-    text-decoration: none;
-}
-
 /* Reader */
-textarea {
-    width: 100%;
+.book-title{
+    clear: both;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-.text-input {
-    width: 100%;
+.mdl-layout__header-row {
+    padding: 0 16px 0 16px;
 }
 
-/*
-main {
-    position:fixed !important;
-    position:absolute;
-    top:0;
-    right:0;
-    bottom:0;
-    left:0;
-}
-*/
 iframe#epubjs-iframe, #book-render iframe {
-    position: fixed;
     border: none;
-    height: 100%;
-    width:100%;
-    overflow-y: auto;
+    height: calc(100vh - 64px);
+    width: 100%;
+    overflow: auto;
 }
 
 ::-webkit-scrollbar {
@@ -84,10 +71,6 @@ iframe#epubjs-iframe, #book-render iframe {
 
 main *::-webkit-scrollbar:vertical {
     display: block;
-}
-
-.book-title {
-  overflow: hidden;
 }
 
 /*

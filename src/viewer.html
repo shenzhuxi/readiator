@@ -16,8 +16,11 @@
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="mdl-layout__header" ng-cloak>
         <div class="mdl-layout__header-row">
+          <!--button class="mdl-button mdl-js-button mdl-button--icon" ng-href="./index.html">
+            <i class="material-icons">library_books</i>
+          </button-->
           <div class="mdl-layout-spacer"></div>
-          <span class="mdl-layout-title">{{book.metadata.bookTitle}}</span>
+          <!--span class="mdl-layout-title book-title">{{book.metadata.bookTitle}}</span-->
           <div class="mdl-layout-spacer"></div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
@@ -63,15 +66,13 @@
             <span class="mdl-layout-title">TOC</span>
           </div>
         </header-->
-        <span class="mdl-layout-title">TOC</span>
+        <span class="mdl-layout-title">{{book.metadata.bookTitle}}</span>
         <div id="book-toc" class="tree">
         </div>
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="">
-          <iframe name="epubjs-iframe" id="epubjs-iframe" ng-onload ng-src={{book.chapter}} scrolling="yes" frameBorder="none">
-          </iframe>
-        </div>
+        <iframe name="epubjs-iframe" id="epubjs-iframe" ng-onload ng-src={{book.chapter}} scrolling="yes" frameBorder="none">
+        </iframe>
       </main>
     </div>
 </body>

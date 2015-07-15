@@ -1,4 +1,4 @@
-var epubLibrary = angular.module('epubLibrary', ['onsen.directives', 'ngCordova']);
+var epubLibrary = angular.module('epubLibrary', ['ngCordova']);
 
 epubLibrary.controller('LibraryCtrl', ['$scope', '$http', '$cordovaFile', function($scope, $http, $cordovaFile) {
     angular.element(document).ready(function() {
@@ -136,6 +136,7 @@ function scanBooks($scope, $cordovaFile) {
                         cover: cover
                     });
                     $scope.$apply();
+                    componentHandler.upgradeDom('MaterialMenu', 'mdl-menu');
                 });
             }
         });
