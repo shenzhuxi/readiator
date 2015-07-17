@@ -52,3 +52,4 @@ Chrome App
 -------------------------
 Readiator Chrome App can be downloaded from Chrome web store. 
 https://chrome.google.com/webstore/detail/readiator/ecoaijekbhjbbojbkgliclceljlgelbf
+![alt tag](https://lh3.googleusercontent.com/FMEFHeoA-3Q_uuvlFM4LjSox5aTYGGQhFs0b2KMJOOdHnJpT0vO2vWq50iW5O25bPpspaozq=s640-h400-e365-rw)
