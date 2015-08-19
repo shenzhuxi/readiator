@@ -30,6 +30,10 @@
     padding: 0 16px 0 16px;
 }
 
+.mdl-textfield__input {
+    color: black;
+}
+
 iframe#epubjs-iframe, #book-render iframe {
     border: none;
     height: calc(100vh - 64px);

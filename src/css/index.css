@@ -46,7 +46,7 @@ img.cover {
 
 .book-list .mdl-card {
     width: 98%;
-    height: 240px;
+    height: 250px;
     /*overflow: visible;*/
 }
 
@@ -69,6 +69,9 @@ img.cover {
 .book-list .image-wrapper {
     display: block;
     height: 200px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left top;
 }
 
 .book-list .image-wrapper a{

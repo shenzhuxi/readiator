@@ -1,7 +1,10 @@
 var epubViewer = angular.module('epubViewer', []);
 
 epubViewer.config(['$locationProvider', function($locationProvider) {
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
 }]);
 
 epubViewer.config(function($sceDelegateProvider) {
@@ -78,7 +81,7 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         }
     }
     Book.on("book:ready", function() {
-        console.log(Book);
+        //console.log(Book);
         $scope.book.metadata = Book.metadata;
         if (Book.contents.coverPath) {
             //scope.book.chapter = Book.cover;

@@ -37,7 +37,7 @@
           <div class="mdl-grid book-list" ng-cloak>
             <div class="animate-show mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide">
               <div class="mdl-card mdl-shadow--2dp">
-                <div class="image-wrapper" style="background: url('{{book.cover}}') left top / cover;">
+                <div class="image-wrapper" style="background-image: url('{{book.cover}}');">
                   <a ng-href="{{book.url}}" target="_blank">
                     <!--img class="cover" ng-src="{{book.cover}}"></img-->
                   </a>
