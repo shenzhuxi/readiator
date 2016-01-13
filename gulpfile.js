@@ -42,28 +42,22 @@ gulp.task('chrome', function () {
 });
 
 function index(cfg) {
-    var assets = useref.assets();
     return gulp.src(cfg.src)
         .pipe(rename('index.html'))
-        .pipe(assets)
+        .pipe(useref())
         .pipe(replace('bower_components/zip.js/WebContent/', 'js/'))
         .pipe(gulpif('*.js', uglify({mangle: false})))
         .pipe(gulpif('*.css', minifyCss({processImport: false})))
         .pipe(replace('../bower_components/material-design-icons/iconfont/MaterialIcons-Regular.woff2', '../fonts/MaterialIcons-Regular.woff2'))
-        .pipe(assets.restore())
-        .pipe(useref())
         .pipe(gulp.dest(cfg.dest));
 }
 
 function viewer(cfg) {
-    var assets = useref.assets();
     return gulp.src('src/viewer.html')
-        .pipe(assets)
-        //.pipe(gulpif('*.js', uglify({mangle: false})))
+        .pipe(useref())
+        .pipe(gulpif('*.js', uglify({mangle: false})))
         .pipe(gulpif('*.css', minifyCss({processImport: false})))
         .pipe(replace('../bower_components/material-design-icons/iconfont/MaterialIcons-Regular.woff2', '../fonts/MaterialIcons-Regular.woff2'))
-        .pipe(assets.restore())
-        .pipe(useref())
         .pipe(gulp.dest(cfg.dest));
 }
 

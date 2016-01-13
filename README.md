@@ -14,7 +14,7 @@ install [Gulp](http://gulpjs.com) and dependences with npm
 
 ```
 npm install -g gulp
-npm install --save-dev gulp-useref gulp-replace gulp-if gulp-uglify gulp-minify-css
+npm install --save-dev gulp-useref gulp-replace gulp-if gulp-uglify gulp-minify-css gulp-rename
 ```
 
 install [Cordova](http://cordova.apache.org/)
