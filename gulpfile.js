@@ -47,7 +47,7 @@ function index(cfg) {
         .pipe(useref())
         .pipe(replace('bower_components/zip.js/WebContent/', 'js/'))
         .pipe(gulpif('*.js', uglify({mangle: false})))
-        .pipe(gulpif('*.css', minifyCss({processImport: false})))
+        .pipe(gulpif('*.css', minifyCss()))
         .pipe(replace('../bower_components/material-design-icons/iconfont/MaterialIcons-Regular.woff2', '../fonts/MaterialIcons-Regular.woff2'))
         .pipe(gulp.dest(cfg.dest));
 }

@@ -35,7 +35,6 @@ img.cover {
     border-radius: 5px;
     padding: 25px;
     margin: 5px;
-    font: 20pt bold;
     color: #bbb;
     height: 400px
 }
@@ -46,7 +45,7 @@ img.cover {
 
 .book-list .mdl-card {
     width: 98%;
-    height: 250px;
+    /*height: 250px;*/
     /*overflow: visible;*/
 }
 
@@ -57,7 +56,7 @@ img.cover {
 .book-list .book-title, .book-list .book-author {
     clear: both;
     overflow: hidden;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 
 .book-list .mdl-card__actions button {

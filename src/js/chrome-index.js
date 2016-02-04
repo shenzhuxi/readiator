@@ -12,6 +12,13 @@ epubLibrary.config(function($sceDelegateProvider) {
     ]);
     $sceDelegateProvider.resourceUrlBlacklist([]);
 });
+epubLibrary.config(['$locationProvider', function($locationProvider) {
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
+}]);
+
 var filer = new Filer();
 
 epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function($scope, $location, $http) {
@@ -29,6 +36,19 @@ epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function(
             filer.mkdir('readiator/books', false, function(dirEntry) {}, onError);
             scanBooks($scope);
         }, onError);
+        if ($location.search().epub) {
+            $http({
+                url: $location.search().epub,
+                method: "GET",
+                responseType: "blob"
+            }).success(function(response){
+                var fileInput = document.getElementById("epub-file");
+                var file = new File([response], "tmp.epub");
+                openFiles($scope, [file]);
+            }).error(function(errorResp){
+                console.log('error');
+            });
+        }
         googleAnalytics();
     });
     $scope.upload = function() {
@@ -91,6 +111,7 @@ function sha1(file, callback) {
 }
 
 function openFiles($scope, files) {
+    console.log(files);
     if (files.length > 0) {
         var i = 0;
         function loopFiles(files) {
@@ -142,7 +163,11 @@ function openFiles($scope, files) {
                                     $scope.library.progress = Math.round((p / max) * 100);
                                     $scope.$apply();
                                 }, onError);
-                            }, onError);
+                            }, function(){
+                                filer.rm(dirEntry.fullPath, function() {}, onError);
+                                //TODO: Modal message
+                                onError;
+                            });
                         }, onError);
                     }, onError);
                 });

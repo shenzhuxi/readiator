@@ -16,15 +16,17 @@
       <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header" ng-files-drop>
         <header class="mdl-layout__header" ng-cloak>
           <div class="mdl-layout__header-row">
-            <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="upload()">
+            <button class="mdl-button mdl-js-button mdl-button--icon" id="tooltip-upload" ng-click="upload()">
               <i class="material-icons">add_circle</i>
             </button>
+            <div class="mdl-tooltip mdl-tooltip--large" for="tooltip-upload">Add new books</div>
             <div class="mdl-layout-spacer"></div>
             <span class="mdl-layout-title">Readiator</span>
             <div class="mdl-layout-spacer"></div>
-            <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="refresh()">
+            <button class="mdl-button mdl-js-button mdl-button--icon" id="tooltip-refresh" ng-click="refresh()">
               <i class="material-icons">refresh</i>
             </button>
+            <div class="mdl-tooltip mdl-tooltip--large" for="tooltip-refresh">Refresh</div>
           </div>
         </header>
         <main class="mdl-layout__content">
@@ -32,7 +34,29 @@
           <input type="search" class="search-input mdl-textfield__input" ng-model="q" placeholder="Search">
           <progress class="" value="{{library.progress}}" max="100" ng-show="library.loading" ng-cloak></progress>
           <div id="drop_zone" ng-if="library.books.length == 0" ng-cloak>
-              <div>Drag and drop EPUB files to add them</div>
+              <b>Tips</b>
+              <div>
+                <ul class="mdl-list">
+                  <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                      Drag and drop EPUB files here to add them
+                    </span>
+                  </li>
+                  <li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                      (New Feature!) Keyboard shortcuts: N for the next chapter, and P for the previous chapter
+                    </span>
+                  </li>
+                  <!--li class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">
+                      (New Feature!) Directly import epub files from web links
+                      <p>
+                      <img height="300px" src="https://lh3.googleusercontent.com/edD3lJbnp9y3_alRVAz4bWZEAdR8W5Xa8T_KaAU0uC7k3tnpaZ3WUH4NHj4S23rzie2qiR7x-w=s640-h400-e365-rw"></img>
+                      </p>
+                    </span>
+                  </li-->
+                </ul>
+              </div>
           </div>
           <div class="mdl-grid book-list" ng-cloak>
             <div class="animate-show mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone" ng-repeat="book in library.books | orderBy:'title' | filter: q" ng-show="!hide">

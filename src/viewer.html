@@ -19,8 +19,8 @@
           <!--button class="mdl-button mdl-js-button mdl-button--icon" ng-href="./index.html">
             <i class="material-icons">library_books</i>
           </button-->
-          <div class="mdl-layout-spacer"></div>
-          <!--span class="mdl-layout-title book-title">{{book.metadata.bookTitle}}</span-->
+          <!--div class="mdl-layout-spacer"></div-->
+          <span class="mdl-layout-title book-title">{{book.metadata.bookTitle}}</span>
           <div class="mdl-layout-spacer"></div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
@@ -31,12 +31,14 @@
               <label class="mdl-textfield__label" for="search">Enter your query...</label>
             </div>
           </div>
-          <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="prevChapter()" ng-style="{opacity : book.begin ? '0.4' : '1'}" ng-disabled="{{book.begin}}">
+          <button id="tooltip-backward" class="mdl-button mdl-js-button mdl-button--icon" ng-click="prevChapter()" ng-style="{opacity : book.begin ? '0.4' : '1'}" ng-disabled="{{book.begin}}">
             <i class="material-icons">arrow_backward</i>
           </button>
-          <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="nextChapter()" ng-style="{opacity : book.end ? '0.4' : '1'}" ng-disabled="{{book.end}}">
+          <div class="mdl-tooltip mdl-tooltip--large" for="tooltip-backward">Previous <br/>chapter (P)</div>
+          <button id="tooltip-forward" class="mdl-button mdl-js-button mdl-button--icon" ng-click="nextChapter()" ng-style="{opacity : book.end ? '0.4' : '1'}" ng-disabled="{{book.end}}">
             <i class="material-icons">arrow_forward</i>
           </button>
+          <div class="mdl-tooltip mdl-tooltip--large" for="tooltip-forward">Next  <br/>chapter (N)</div>
           <!--button class="mdl-button mdl-js-button mdl-button--icon" ng-click="" ng-disabled="{{}}">
             <i class="material-icons">bookmark</i>
           </button>
@@ -66,7 +68,7 @@
             <span class="mdl-layout-title">TOC</span>
           </div>
         </header-->
-        <span class="mdl-layout-title">{{book.metadata.bookTitle}}</span>
+        <span class="mdl-layout-title">Table of Contents</span>
         <div id="book-toc" class="tree">
         </div>
       </div>

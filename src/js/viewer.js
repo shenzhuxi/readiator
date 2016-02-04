@@ -53,6 +53,9 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
             Book.open($location.search().epub);
         }
     });
+    angular.element(window).on('keypress', function(e) {
+        shortcutKey(e, $scope);
+    });
     $scope.prevChapter = function() {
         if ($scope.book.spinePos > 0) {
             $scope.book.spinePos = $scope.book.spinePos - 1;
@@ -107,6 +110,9 @@ epubViewer.directive('ngOnload', ['$location', function($location) {
     return function($scope, element, attrs) {
         element.bind('load', function() {
             if (attrs.name = 'epubjs-iframe') {
+                element[0].contentWindow.addEventListener('keypress', function(e){
+                    shortcutKey(e, $scope);
+                });
                 element[0].contentWindow.document.body.style.fontSize = $scope.book.textSize + '%';
                 if ($scope.book.pageXOffset || $scope.book.pageYOffset) {
                     element[0].contentWindow.scrollTo($scope.book.pageXOffset, $scope.book.pageYOffset);
@@ -138,6 +144,22 @@ epubViewer.directive('ngOnload', ['$location', function($location) {
         });
     };
 }]);
+
+function shortcutKey(element, scope) {
+    if (element.target.tagName == 'INPUT' || element.target.tagName == 'SELECT' || element.target.tagName == 'TEXTAREA' || element.target.isContentEditable) {
+        return;
+    } else {
+        switch (element.code) {
+            case "KeyP":
+                scope.prevChapter();
+                break;
+            case "KeyN":
+                scope.nextChapter();
+                break;
+        }
+        scope.$apply();
+    }
+}
 
 function generateTocItems(contents) {
     var list = document.createElement("ul");
