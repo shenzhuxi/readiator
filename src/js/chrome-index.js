@@ -45,8 +45,8 @@ epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function(
                 var fileInput = document.getElementById("epub-file");
                 var file = new File([response], "tmp.epub");
                 openFiles($scope, [file]);
-            }).error(function(errorResp){
-                console.log('error');
+            }).error(function(err){
+                console.log(err);
             });
         }
         googleAnalytics();

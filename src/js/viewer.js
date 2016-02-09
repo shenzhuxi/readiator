@@ -1,4 +1,9 @@
 var epubViewer = angular.module('epubViewer', []);
+        var index = lunr(function () {
+            this.field('title', {boost: 10})
+            this.field('body')
+            this.ref('id')
+        });
 
 epubViewer.config(['$locationProvider', function($locationProvider) {
     $locationProvider.html5Mode({
@@ -76,11 +81,12 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
     $scope.search = function(keyEvent) {
         if (keyEvent.which === 13) {
             var query = keyEvent.srcElement.value;
-            var iframe = document.getElementById("epubjs-iframe");
-            if (iframe.contentWindow.find(query) == false) {
+            console.log(index.search(query));
+            //var iframe = document.getElementById("epubjs-iframe");
+            //if (iframe.contentWindow.find(query) == false) {
                 //$scope.book.spinePos = $scope.book.spinePos + 1;
                 //$scope.book.chapter = Book.spine[$scope.book.spinePos].url;
-            }
+            //}
         }
     }
     Book.on("book:ready", function() {
@@ -102,8 +108,31 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         }
         $scope.book.metadata = Book.metadata;
         $scope.$apply();
+        indexSpine(0);
         googleAnalytics(Book.contents);
     });
+    function indexSpine(i) {
+        href = Book.settings.contentsPath + Book.spine[i].href;
+        $http({
+            url: href,
+            method: "GET",
+            responseType: "document"
+        }).success(function(response){
+            var text = response.body.innerText;
+            index.add({
+                id: i,
+                title: '',
+                body: text
+            });
+            if (i+1 < Book.spine.length) {
+                indexSpine(i+1);
+            } else {
+                console.log("Index accomplished!");
+            }
+        }).error(function(err){
+            console.log(err);
+        });
+    }
 }]);
 
 epubViewer.directive('ngOnload', ['$location', function($location) {
