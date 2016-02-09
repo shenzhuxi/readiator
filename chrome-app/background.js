@@ -12,15 +12,15 @@ chrome.runtime.onInstalled.addListener(function(details){
 });
 // Set up context menu at install time.
 chrome.runtime.onInstalled.addListener(function() {
-//    chrome.contextMenus.create({
-        //"targetUrlPatterns": ["*://*/*.epub"],
-//        "title": "Open the EPUB file",//chrome.i18n.getMessage('open_in_new_tab'),
-//        "contexts": ["link"],
-//        "onclick": openEpubHandler
-//    });
+    /*
+    chrome.contextMenus.create({
+        "title": "Open the EPUB file",
+        "contexts": ["link"],
+        "onclick": openEpubHandler
+    });*/
 
     chrome.contextMenus.create({
-        "title": "Share to Twitter",
+        "title": "Share to Twitter",//chrome.i18n.getMessage('open_in_new_tab'),
         "contexts": ["selection"],
         "onclick": shareSelectionHandler
     });
