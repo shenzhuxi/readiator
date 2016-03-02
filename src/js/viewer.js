@@ -68,6 +68,17 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
             $scope.book.chapter = Book.spine[$scope.book.spinePos].url;
         }
     };
+    $scope.dialogShow = function(target){
+        var dialog = document.querySelector(target);
+        dialog.showModal();
+        var service = analytics.getService('Readiator');
+        var tracker = service.getTracker('UA-331449-9');
+        tracker.sendEvent('Click', target);
+    };
+    $scope.dialogHide = function(target){
+        var dialog = document.querySelector(target);
+        dialog.close();
+    };
     $scope.fontChange = function(zoom) {
       $scope.book.textSize = $scope.book.textSize + zoom;
       var iframe = document.getElementById("epubjs-iframe");
@@ -102,7 +113,10 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         }
         $scope.book.metadata = Book.metadata;
         $scope.$apply();
-        googleAnalytics(Book.contents);
+        var service = analytics.getService('Readiator');
+        var tracker = service.getTracker('UA-331449-9');
+        tracker.sendAppView('viewer');
+        tracker.sendEvent('Reading', book.metadata.bookTitle);
     });
 }]);
 
@@ -207,9 +221,4 @@ function _get_window_Yscroll() {
 }
 
 function googleAnalytics(book) {
-    var service = analytics.getService('Readiator');
-    //service.getConfig().addCallback(initAnalyticsConfig);
-    var tracker = service.getTracker('UA-331449-9');
-    tracker.sendAppView('viewer');
-    tracker.sendEvent('Reading', book.metadata.bookTitle);
 }

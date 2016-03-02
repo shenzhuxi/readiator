@@ -46,16 +46,9 @@
             <i class="material-icons">more_vert</i>
           </button>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-            <li class="mdl-menu__item">
-              <button class="mdl-button mdl-js-button mdl-button--icon"style="font-family: monospace;" ng-click="fontChange(10)">
-                <i class="material-icons">add</i>
-              </button>
-              <span>Text: {{book.textSize}}%</span>
-              <button class="mdl-button mdl-js-button mdl-button--icon" style="font-family: monospace;" ng-click="fontChange(-10)">
-                <i class="material-icons">remove</i>
-              </button>
-            </li>
-            <li class="mdl-menu__item"><a href="https://github.com/shenzhuxi/readiator" target="_blank">About Readiator</a></li>
+            <li class="mdl-menu__item" ng-click="dialogShow('#metadata');">Book information</li>
+            <li class="mdl-menu__item" ng-click="dialogShow('#settings');">Settings</li>
+            <li class="mdl-menu__item" ng-click="dialogShow('#about');">About Readiator</li>
           </ul-->
         </div>
       </header>
@@ -74,6 +67,45 @@
         </iframe>
       </main>
     </div>
+     <dialog id="metadata" class="mdl-dialog">
+      <h3 class="mdl-dialog__title">{{book.metadata.bookTitle}}</h3>
+      <div class="mdl-dialog__content">
+        <div>Creator: {{book.metadata.creator}}</div>
+        <div>Description: {{book.metadata.discription}}</div>
+        <div>ID: {{book.metadata.identifier}}</div>
+        <div>Publisher: {{book.metadata.publisher}}</div>
+        <div>{{book.metadata.pubdate}}</div>
+        <div>{{book.metadata.rights}}</div>
+      </div>
+      <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button" ng-click="dialogHide('#metadata');">Close</button>
+      </div>
+    </dialog>
+    <dialog id="settings" class="mdl-dialog">
+      <h3 class="mdl-dialog__title">Settings</h3>
+      <div class="mdl-dialog__content">
+        Text size: 
+        <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="fontChange(10)">
+          <i class="material-icons">add</i>
+        </button>
+        <span>{{book.textSize}}%</span>
+        <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="fontChange(-10)">
+          <i class="material-icons">remove</i>
+        </button>
+      </div>
+      <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button" ng-click="dialogHide('#settings');">OK</button>
+      </div>
+    </dialog>
+    <dialog id="about" class="mdl-dialog">
+      <h3 class="mdl-dialog__title">Readiator EPUB Reader</h3>
+      <div class="mdl-dialog__content">
+        <p>If you have any problems or suggestions, please check out <a href="https://github.com/shenzhuxi/readiator" target="_blank">GitHub</a>.</p> 
+      </div>
+      <div class="mdl-dialog__actions">
+        <button type="button" class="mdl-button" ng-click="dialogHide('#about');">Close</button>
+      </div>
+    </dialog>
 </body>
   <script src="js/viewer.js"></script>
 </html>
