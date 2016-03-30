@@ -23,7 +23,8 @@ install [Cordova](http://cordova.apache.org/)
 npm install -g cordova
 ```
 
-install [Bower](http://bower.io/), and install install required libraries with Bower
+install [Bower](http://bower.io/)
+install required libraries with Bower
 
 ```
 npm install -g bower
