@@ -1,3 +1,11 @@
+try {
+    var service = analytics.getService('Readiator');
+    var tracker = service.getTracker('UA-331449-9');
+}
+catch(err) {
+    console.log(err);
+}
+
 var epubViewer = angular.module('epubViewer', []);
 
 epubViewer.config(['$locationProvider', function($locationProvider) {
@@ -71,9 +79,7 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
     $scope.dialogShow = function(target){
         var dialog = document.querySelector(target);
         dialog.showModal();
-        var service = analytics.getService('Readiator');
-        var tracker = service.getTracker('UA-331449-9');
-        tracker.sendEvent('Click', target);
+        tracker.sendEvent('Reading', 'Click', target);
     };
     $scope.dialogHide = function(target){
         var dialog = document.querySelector(target);
@@ -113,10 +119,8 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         }
         $scope.book.metadata = Book.metadata;
         $scope.$apply();
-        var service = analytics.getService('Readiator');
-        var tracker = service.getTracker('UA-331449-9');
         tracker.sendAppView('viewer');
-        tracker.sendEvent('Reading', book.metadata.bookTitle);
+        tracker.sendEvent('Reading', 'Read', book.metadata.bookTitle);
     });
 }]);
 

@@ -1,5 +1,14 @@
+try {
+    var service = analytics.getService('Readiator');
+    var tracker = service.getTracker('UA-331449-9');
+}
+catch(err) {
+    console.log(err);
+}
+
 zip.workerScriptsPath = "bower_components/zip.js/WebContent/";
 var epubLibrary = angular.module('epubLibrary', []);
+
 epubLibrary.config(function($compileProvider) {
     $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|filesystem|chrome-extension):/);
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|filesystem|chrome-extension):|data:image\//);
@@ -49,7 +58,8 @@ epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function(
                 console.log('error');
             });
         }
-        googleAnalytics();
+        tracker.sendAppView('index');
+        tracker.sendEvent('Browsing', 'Browse the library');
     });
     $scope.upload = function() {
         document.getElementById("epub-file").click();
@@ -206,14 +216,4 @@ function scanBooks($scope) {
             $scope.$apply();
         }, onError);
     }, onError);
-}
-
-function googleAnalytics() {
-    var service = analytics.getService('Readiator');
-    //service.getConfig().addCallback(initAnalyticsConfig);
-    var tracker = service.getTracker('UA-331449-9');
-    tracker.sendAppView('index');
-    //var timing = tracker.startTiming('Analytics Performance', 'Send Event');
-    tracker.sendEvent('Browsing', 'Browsed the library');
-    //timing.send();
 }
