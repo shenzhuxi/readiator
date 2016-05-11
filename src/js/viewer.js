@@ -120,7 +120,7 @@ epubViewer.controller('BookCtrl', ['$scope', '$location', '$http', function($sco
         $scope.book.metadata = Book.metadata;
         $scope.$apply();
         tracker.sendAppView('viewer');
-        tracker.sendEvent('Reading', 'Read', book.metadata.bookTitle);
+        tracker.sendEvent('Reading', 'Read', Book.metadata.bookTitle);
     });
 }]);
 
