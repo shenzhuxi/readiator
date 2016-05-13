@@ -88,12 +88,12 @@
       <h3 class="mdl-dialog__title">Settings</h3>
       <div class="mdl-dialog__content">
         Text size: 
-        <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="fontChange(10)">
-          <i class="material-icons">add</i>
-        </button>
-        <span>{{book.textSize}}%</span>
         <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="fontChange(-10)">
           <i class="material-icons">remove</i>
+        </button>
+        <span>{{book.textSize}}%</span>
+        <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="fontChange(10)">
+          <i class="material-icons">add</i>
         </button>
       </div>
       <div class="mdl-dialog__actions">

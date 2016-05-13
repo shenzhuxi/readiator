@@ -31,6 +31,10 @@ epubLibrary.config(['$locationProvider', function($locationProvider) {
 var filer = new Filer();
 
 epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function($scope, $location, $http) {
+    if ($location.search().update) {
+        var dialog = document.querySelector('#update');
+        dialog.showModal();
+    }
     angular.element(document).ready(function() {
         $scope.library = {
             loading: false,
