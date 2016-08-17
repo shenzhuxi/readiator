@@ -1,13 +1,15 @@
 var Book;
 chrome.runtime.onInstalled.addListener(function(details){
+    window.open(chrome.extension.getURL('index.html'), '_blank');
     if (details.reason == "install") {
-        window.open(chrome.extension.getURL('index.html'), '_blank');
         //console.log("This is a first install!");
     }
     else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version;
-        window.open(chrome.extension.getURL('index.html'), '_blank');
-        //console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
+        if (thisVersion != details.previousVersion) {
+            window.open(chrome.extension.getURL('index.html?update=' + thisVersion), '_blank');
+            //console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
+        }
     }
 });
 // Set up context menu at install time.

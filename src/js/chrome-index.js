@@ -65,6 +65,9 @@ epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function(
         tracker.sendAppView('index');
         tracker.sendEvent('Browsing', 'Browse the library');
     });
+    $scope.closeDialog = function() {
+        document.querySelector('dialog').close();
+    }
     $scope.upload = function() {
         document.getElementById("epub-file").click();
     }

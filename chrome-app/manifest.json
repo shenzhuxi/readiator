@@ -2,7 +2,7 @@
     "name": "Readiator EPUB Reader",
     "short_name": "Readiator",
     "description": "Open source EPUB reader with full EPUB3 support, works offline",
-    "version": "0.4.7",
+    "version": "0.4.9",
     "manifest_version": 2,
     "app": {
         "launch": {
