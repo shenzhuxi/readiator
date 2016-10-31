@@ -140,8 +140,9 @@ epubViewer.directive('ngOnload', ['$location', function($location) {
 
                 if (Book.spine) {
                     var i = 0;
+                    var currentURI = decodeURI(element[0].contentWindow.location.href.split('#')[0]);
                     for (i in Book.spine) {
-                        if (element[0].contentWindow.location.href.split('#')[0].indexOf(Book.spine[i].url) > -1) {
+                        if (currentURI.indexOf(Book.spine[i].url) > -1) {
                             $scope.book.spinePos = parseInt(i);
                             Book.spinePos = parseInt(i);
                             $location.hash(i);
