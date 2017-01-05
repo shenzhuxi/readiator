@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="bower_components/angular/angular-csp.css"/>
         <link rel="stylesheet" type="text/css" href="css/index.css"/>
         <!-- endbuild -->
+        <link rel="icon" href="https://raw.githubusercontent.com/shenzhuxi/readiator/master/chrome-app/assets/icon-128.png">
         <title>Library</title>
     </head>
     <body ng-controller="LibraryCtrl">
@@ -93,13 +94,16 @@
       <dialog id="update" class="mdl-dialog">
       <h3 class="mdl-dialog__title">Readiator has been updated!</h3>
       <div class="mdl-dialog__content">
-        <div>Book or Facebook, that is the question.</div>
+        <div>
+          <p>Starting in November 2016, apps will be restricted to Chrome OS, and will not be available to users on Windows, Mac or Linux. - <a href="https://blog.chromium.org/2016/08/from-chrome-apps-to-web.html">More Info</a></p>
+          <p>Please let us know <a href="https://github.com/shenzhuxi/readiator/issues">what do you want for the future of Readiator</a>. </p>
+          <a href="https://twitter.com/readiator" class="twitter-follow-button" data-show-count="false">Follow @readiator</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
       </div>
       <div class="mdl-dialog__actions">
         <button type="button" class="mdl-button" ng-click="closeDialog()">Close</button>
       </div>
     </dialog>
-
         <!-- build:js js/index.js -->
         <script src="bower_components/material-design-lite/material.min.js"></script>
         <script src="bower_components/angular/angular.js"></script>

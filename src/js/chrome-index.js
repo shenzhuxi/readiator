@@ -62,6 +62,7 @@ epubLibrary.controller('LibraryCtrl', ['$scope', '$location', '$http', function(
                 console.log('error');
             });
         }
+        snackbarContainer.MaterialSnackbar.showSnackbar(data);
         tracker.sendAppView('index');
         tracker.sendEvent('Browsing', 'Browse the library');
     });
@@ -209,7 +210,7 @@ function scanBooks($scope) {
                         $scope.library.books.push({
                             name: entry.name,
                             title: book.metadata.bookTitle,
-                            author: book.metadata.creator,
+                            author: book.metadata.creator ? book.metadata.creator : 'Unknown',
                             url: 'viewer.html?epub=' + url + '&uuid=' + entry.name,
                             cover: cover,
                             isbn: book.metadata.identifier,
@@ -221,6 +222,7 @@ function scanBooks($scope) {
                 }
             });
             $scope.$apply();
+            tracker.sendEvent('Browsing', 'Scan the library', entries.length);
         }, onError);
     }, onError);
 }

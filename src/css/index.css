@@ -62,7 +62,6 @@ img.cover {
 .book-list .mdl-card__actions button {
     position: absolute;
     right: 8px;
-    top: 8px;
 }
 
 .book-list .image-wrapper {
@@ -79,3 +78,7 @@ img.cover {
     height: 100%;
 }
 
+.mdl-card, .mdl-card__supporting-text{
+    overflow: inherit;
+    z-index: inherit;
+}
