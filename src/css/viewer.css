@@ -91,6 +91,7 @@ main *::-webkit-scrollbar:vertical {
 
 #book-toc a {
   display: block;
+  color: #757575;
 }
 
 #book-toc list-item {

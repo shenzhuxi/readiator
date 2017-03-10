@@ -82,3 +82,7 @@ img.cover {
     overflow: inherit;
     z-index: inherit;
 }
+
+.mdl-menu__item a {
+    color: #757575;
+}
